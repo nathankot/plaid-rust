@@ -1,16 +1,13 @@
 //! User module
 
-use super::product::{ Product }; //, Auth, Info, Income, Risk };
+use super::product::*; //, Auth, Info, Income, Risk };
 use super::client::{ Client };
 use super::error::Error;
 use super::types::*;
+use super::mfa::{ MFAChallenge, MFAChallengedUser };
 
-use std::io;
 use std::io::Read;
 use std::result::{ Result };
-
-use std::any::Any;
-use std::fmt::Debug;
 
 use rustc_serialize::{Decodable, Decoder, Encodable, Encoder};
 use rustc_serialize::json;
@@ -23,62 +20,6 @@ pub struct User<P: Product> {
     pub status: Status<P>,
     /// The access token for this user
     pub access_token: AccessToken
-}
-
-/// Used internally to provide an alternative decode method
-/// when there is an MFA challenge.
-struct MFAChallengedUser<P: Product>(User<P>);
-
-/// Represents one of the different types of multi-factor-authentication
-/// challenges Plaid supports.
-///
-/// Todo: support all mfa challenges
-#[derive(Debug, Eq, PartialEq)]
-pub enum MFAChallenge {
-    /// A token-based authorization, this token will be sent to one of
-    /// the user's registered devices.
-    Code
-}
-
-impl<'a, P: Product> Decodable for MFAChallengedUser<P> {
-
-    fn decode<D: Decoder>(decoder: &mut D) -> Result<MFAChallengedUser<P>, D::Error> {
-        decoder.read_struct("root", 0, |decoder| {
-            let access_token = try!(decoder.read_struct_field("access_token", 0, |d| Decodable::decode(d)));
-            let challenge_type = try!(decoder.read_struct_field("type", 0, |d| {
-                let t: String = try!(Decodable::decode(d));
-                match t.as_ref() {
-                    "device" => Ok(MFAChallenge::Code),
-                    _ => Err(d.error("Un-supported mfa preference"))
-                }
-            }));
-
-            Ok(MFAChallengedUser(User {
-                access_token: access_token,
-                status: Status::MFAChallenged(challenge_type)
-            }))
-        })
-    }
-
-}
-
-impl<'a, P: Product> Decodable for User<P> {
-
-    fn decode<D: Decoder>(decoder: &mut D) -> Result<User<P>, D::Error> {
-        decoder.read_struct("root", 3, |decoder| {
-            let access_token = try!(decoder.read_struct_field("access_token", 0, |d| Decodable::decode(d)));
-
-            let status = {
-                Status::Unknown
-            };
-
-            Ok(User {
-                access_token: access_token,
-                status: status
-            })
-        })
-    }
-
 }
 
 /// # Status
@@ -136,7 +77,8 @@ impl<P: Product> User<P> {
     /// #
     /// use plaid::api::client;
     /// use plaid::api::product;
-    /// use plaid::api::user::{User, Status, MFAChallenge};
+    /// use plaid::api::user::{User, Status };
+    /// use plaid::api::mfa::{ MFAChallenge, MFAChallengedUser };
     ///
     /// let client = client::Client { endpoint:  "https://tartan.plaid.com",
     ///                               client_id: "testclient",
@@ -225,6 +167,25 @@ impl<'a> Encodable for UserCreateRequest<'a> {
             try!(encoder.emit_struct_field("password", 3, |e| self.password.encode(e)));
             try!(encoder.emit_struct_field("type", 4, |e| self.institution.encode(e)));
             Ok(())
+        })
+    }
+
+}
+
+impl<'a, P: Product> Decodable for User<P> {
+
+    fn decode<D: Decoder>(decoder: &mut D) -> Result<User<P>, D::Error> {
+        decoder.read_struct("root", 3, |decoder| {
+            let access_token = try!(decoder.read_struct_field("access_token", 0, |d| Decodable::decode(d)));
+
+            let status = {
+                Status::Unknown
+            };
+
+            Ok(User {
+                access_token: access_token,
+                status: status
+            })
         })
     }
 
