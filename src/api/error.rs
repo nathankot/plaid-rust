@@ -11,21 +11,16 @@ use rustc_serialize::json::{DecoderError, EncoderError};
 
 /// # Error
 /// Represents possible errors returned from the API.
-/// `D` is the `Data` associated type in `Product`.
+/// `P` represents the product that the error is scoped for.
 #[derive(Debug)]
-pub enum Error<'a, Data: 'a> {
-    /// Returned when a request is made for a `Product` that is not
-    /// currently enabled for the given `User`.
-    ///
-    /// If this occurs, you should upgrade the `User` so that they have
-    /// access to the `Product`.
-    ProductNotEnabled(&'a Product<Data=Data>),
+pub enum Error {
+    /// Represents bad HTTP status codes, or codes that we don't support.
+    BadResponse(hyper::status::StatusCode),
     /// Represents errors forwarded from `rustc_serialize`, usually indicating
-    /// that the response returned something that could not be decoded, or that
-    /// the response returned an HTTP failure.
+    /// that the response returned something that could not be decoded.
     InvalidResponse(DecoderError),
     /// Represents an error forwarded from `hyper`, which means it is most
-    /// likely HTTP related.
+    /// likely HTTP (protocol, rather than status code) related.
     HTTP(hyper::Error),
     /// Returned for errors that are forwarded from `std::io::Error`
     IO(IOError),
@@ -34,7 +29,7 @@ pub enum Error<'a, Data: 'a> {
     InternalError,
 }
 
-impl<'a, Data: Debug + Any> fmt::Display for Error<'a, Data> {
+impl fmt::Display for Error {
 
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.write_str(self.description())
@@ -42,11 +37,11 @@ impl<'a, Data: Debug + Any> fmt::Display for Error<'a, Data> {
 
 }
 
-impl<'a, Data: Debug + Any> StdError for Error<'a, Data> {
+impl StdError for Error {
 
     fn description(&self) -> &str {
         match *self {
-            Error::ProductNotEnabled(ref p) => p.description(),
+            Error::BadResponse(s) => "Received bad status code",
             Error::InvalidResponse(ref err) => err.description(),
             Error::HTTP(ref err) => err.description(),
             Error::IO(ref err) => err.description(),
@@ -56,33 +51,33 @@ impl<'a, Data: Debug + Any> StdError for Error<'a, Data> {
 
 }
 
-impl<'a, Data> From<IOError> for Error<'a, Data> {
+impl From<IOError> for Error {
 
-    fn from(err: IOError) -> Error<'a, Data> {
+    fn from(err: IOError) -> Error {
         Error::IO(err)
     }
 
 }
 
-impl<'a, Data> From<hyper::Error> for Error<'a, Data> {
+impl From<hyper::Error> for Error {
 
-    fn from(err: hyper::Error) -> Error<'a, Data> {
+    fn from(err: hyper::Error) -> Error {
         Error::HTTP(err)
     }
 
 }
 
-impl<'a, Data> From<DecoderError> for Error<'a, Data> {
+impl From<DecoderError> for Error {
 
-    fn from(err: DecoderError) -> Error<'a, Data> {
+    fn from(err: DecoderError) -> Error {
         Error::InvalidResponse(err)
     }
 
 }
 
-impl<'a, Data> From<EncoderError> for Error<'a, Data> {
+impl From<EncoderError> for Error {
 
-    fn from(err: EncoderError) -> Error<'a, Data> {
+    fn from(err: EncoderError) -> Error {
         Error::InternalError
     }
 

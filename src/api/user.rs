@@ -1,6 +1,6 @@
 //! User module
 
-use super::product::{ Product, Connect, Auth, Info, Income, Risk };
+use super::product::{ Product }; //, Auth, Info, Income, Risk };
 use super::client::{ Client };
 use super::error::Error;
 use super::types::*;
@@ -17,33 +17,96 @@ use rustc_serialize::json;
 
 /// # User
 /// Represents an authorized user for a given product.
-#[derive(RustcDecodable, Debug)]
-pub struct User {
+#[derive(Debug)]
+pub struct User<P: Product> {
+    /// The result of the previous api request that returned this `Struct`
+    pub status: Status<P>,
     /// The access token for this user
     pub access_token: AccessToken
+}
+
+/// Used internally to provide an alternative decode method
+/// when there is an MFA challenge.
+struct MFAChallengedUser<P: Product>(User<P>);
+
+/// Represents one of the different types of multi-factor-authentication
+/// challenges Plaid supports.
+///
+/// Todo: support all mfa challenges
+#[derive(Debug, Eq, PartialEq)]
+pub enum MFAChallenge {
+    /// A token-based authorization, this token will be sent to one of
+    /// the user's registered devices.
+    Code
+}
+
+impl<'a, P: Product> Decodable for MFAChallengedUser<P> {
+
+    fn decode<D: Decoder>(decoder: &mut D) -> Result<MFAChallengedUser<P>, D::Error> {
+        decoder.read_struct("root", 0, |decoder| {
+            let access_token = try!(decoder.read_struct_field("access_token", 0, |d| Decodable::decode(d)));
+            let challenge_type = try!(decoder.read_struct_field("type", 0, |d| {
+                let t: String = try!(Decodable::decode(d));
+                match t.as_ref() {
+                    "device" => Ok(MFAChallenge::Code),
+                    _ => Err(d.error("Un-supported mfa preference"))
+                }
+            }));
+
+            Ok(MFAChallengedUser(User {
+                access_token: access_token,
+                status: Status::MFAChallenged(challenge_type)
+            }))
+        })
+    }
+
+}
+
+impl<'a, P: Product> Decodable for User<P> {
+
+    fn decode<D: Decoder>(decoder: &mut D) -> Result<User<P>, D::Error> {
+        decoder.read_struct("root", 3, |decoder| {
+            let access_token = try!(decoder.read_struct_field("access_token", 0, |d| Decodable::decode(d)));
+
+            let status = {
+                Status::Unknown
+            };
+
+            Ok(User {
+                access_token: access_token,
+                status: status
+            })
+        })
+    }
+
 }
 
 /// # Status
 /// Represents the status of the last API request for this user.
 /// This does not encapsulate any errors, rather it indicates different
 /// stages of the user lifecycle.
-pub enum Status<D: Debug + Any> {
+#[derive(Debug)]
+pub enum Status<P: Product> {
     /// Nothing is known about the user and no requests have been made
     Unknown,
     /// Waiting on MFA authentication code from the user
-    MFARequested,
-    /// Indicates that the user needs to upgrade in order to use
-    /// the previously queries `Product`
-    UpgradeRequired(Product<Data=D>),
-    /// We have data related to the given product
-    Data
+    MFAChallenged(MFAChallenge),
+    /// Returned when a request is made for a `Product` that is not
+    /// currently enabled for the given `User`.
+    ///
+    /// If this occurs, you should upgrade the `User` so that they have
+    /// access to the `Product`.
+    ProductNotEnabled(P),
+    /// User is authenticated successfully and we have data available
+    Success
 }
 
 use hyper as h;
 use hyper::header::{ContentType, Accept, ContentLength, qitem};
 use hyper::mime::{Mime, TopLevel, SubLevel, Attr, Value};
+use hyper::status::StatusCode;
 
-impl User {
+impl<P: Product> User<P> {
 
     /// Create a new `User` using their provided credentials and institution.
     /// You only need to call this once for a given user. There-after you should
@@ -61,7 +124,7 @@ impl User {
     /// #
     /// # fn main() {
     /// #
-    /// http_stub!(StubPolicy, 200, r##"
+    /// http_stub!(StubPolicy, 201, r##"
     ///   {
     ///     "access_token": "test",
     ///     "mfa": { "message": "Code sent to ...e@nathankot.com" },
@@ -73,33 +136,33 @@ impl User {
     /// #
     /// use plaid::api::client;
     /// use plaid::api::product;
-    /// use plaid::api::user;
+    /// use plaid::api::user::{User, Status, MFAChallenge};
     ///
     /// let client = client::Client { endpoint:  "https://tartan.plaid.com",
     ///                               client_id: "testclient",
     ///                               secret:    "testsecret" };
     ///
-    /// let user = user::User::create(
+    /// let user = User::create(
     ///   client,
     ///   product::Connect,
     ///   "chase".to_string(),
-    ///   "nathankot1".to_string(),
+    ///   "username".to_string(),
     ///   "password".to_string(),
-    ///   hyper
-    /// );
+    ///   hyper).unwrap();
     ///
-    /// assert_eq!(user.unwrap().access_token, "test".to_string());
+    /// assert_eq!(user.access_token, "test".to_string());
+    /// assert_eq!(format!("{:?}", user.status), "MFAChallenged(Code)");
     /// # }
     /// ```
     ///
     /// Todo: allow options and passing webhooks
-    pub fn create<P: Product>(
-        client: Client,
+    pub fn create<'a>(
+        client: Client<'a>,
         product: P,
         institution: Institution,
         username: Username,
         password: Password,
-        hyper: h::Client) -> Result<User, Error<P::Data>> {
+        hyper: h::Client) -> Result<Self, Error> {
 
         let mut buffer = String::new();
         let endpoint = client.endpoint;
@@ -121,13 +184,30 @@ impl User {
                  .body(h::client::Body::BufBody(&mut body, body_capacity))
                  .send());
 
-        try!(res.read_to_string(&mut buffer));
-        let user: User = try!(json::decode(&mut buffer));
-        Ok(user)
+        match res.status {
+            // A `201` indicates that the `User` has been created but
+            // is missing the multi-factor authentication step.
+            StatusCode::Created => {
+                try!(res.read_to_string(&mut buffer));
+                let user: MFAChallengedUser<P> = try!(json::decode(&mut buffer));
+                let MFAChallengedUser(u): MFAChallengedUser<P> = user;
+                Ok(u) as Result<Self, Error>
+            },
+            // All okay, we have
+            StatusCode::Ok => {
+                try!(res.read_to_string(&mut buffer));
+                let user: User<P> = try!(json::decode(&mut buffer));
+                Ok(user)
+            },
+            // By default, we assume a bad response
+            ref s => return Err(Error::BadResponse(*s))
+        }
+
     }
 
 }
 
+/// Represents a request for creating a new user
 struct UserCreateRequest<'a> {
     client: Client<'a>,
     username: Username,
