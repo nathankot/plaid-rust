@@ -4,8 +4,6 @@ use api::product::{Product};
 use std::error::Error as StdError;
 use std::io::Error as IOError;
 use std::fmt;
-use std::fmt::Debug;
-use std::any::Any;
 use hyper;
 use rustc_serialize::json::{DecoderError, EncoderError};
 
@@ -41,7 +39,7 @@ impl StdError for Error {
 
     fn description(&self) -> &str {
         match *self {
-            Error::BadResponse(s) => "Received bad status code",
+            Error::BadResponse(_) => "Received bad status code",
             Error::InvalidResponse(ref err) => err.description(),
             Error::HTTP(ref err) => err.description(),
             Error::IO(ref err) => err.description(),
@@ -77,7 +75,7 @@ impl From<DecoderError> for Error {
 
 impl From<EncoderError> for Error {
 
-    fn from(err: EncoderError) -> Error {
+    fn from(_: EncoderError) -> Error {
         Error::InternalError
     }
 
