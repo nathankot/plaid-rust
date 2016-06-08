@@ -1,0 +1,55 @@
+{
+    "access_token": "test",
+    "accounts": [
+        {
+            "_id": "testaccountid",
+            "_item": "testitemid",
+            "_user": "testuserid",
+            "balance": {
+                "available": 742.93,
+                "current": 742.93
+            },
+            "institution_type": "chase",
+            "meta": {
+                "name": "Total Checking",
+                "number": "0655"
+            },
+            "subtype": "checking",
+            "type": "depository"
+        }
+    ],
+    "transactions": [
+        {
+            "_account": "testaccount",
+            "_id": "testtransactionid",
+            "amount": -700,
+            "category": [
+                "Transfer",
+                "Deposit",
+                "ATM"
+            ],
+            "category_id": "21007002",
+            "date": "2016-06-02",
+            "meta": {
+                "location": {
+                    "address": "595 MARKET ST",
+                    "city": "San Francisco",
+                    "state": "CA"
+                }
+            },
+            "name": "ATM Deposit",
+            "pending": false,
+            "score": {
+                "location": {
+                    "address": 1,
+                    "city": 1,
+                    "state": 1
+                },
+                "name": 1
+            },
+            "type": {
+                "primary": "special"
+            }
+        }
+    ]
+}

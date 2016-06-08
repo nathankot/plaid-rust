@@ -56,7 +56,7 @@ impl<P: Product> User<P> {
     ///
     /// # Examples
     ///
-    /// A successful connection that requires an MFA step:
+    /// ## A successful authorization that requires a MFA step
     ///
     /// ```
     /// # #[macro_use(http_stub)] extern crate plaid;
@@ -65,20 +65,13 @@ impl<P: Product> User<P> {
     /// #
     /// # fn main() {
     /// #
-    /// http_stub!(StubPolicy, 201, r##"
-    ///   {
-    ///     "access_token": "test",
-    ///     "mfa": { "message": "Code sent to ...e@nathankot.com" },
-    ///     "type": "device"
-    ///   }
-    /// "##);
+    /// # http_stub!(StubPolicy, 201, include_str!("fixtures/post_connect_mfa_code.json"));
     /// #
     /// # let hyper = hyper::Client::with_connector(StubPolicy::default());
     /// #
     /// use plaid::api::client;
     /// use plaid::api::product;
-    /// use plaid::api::user::{User, Status };
-    /// use plaid::api::mfa::{ MFAChallenge, MFAChallengedUser };
+    /// use plaid::api::user::{ User };
     ///
     /// let client = client::Client { endpoint:  "https://tartan.plaid.com",
     ///                               client_id: "testclient",
@@ -92,8 +85,41 @@ impl<P: Product> User<P> {
     ///   "password".to_string(),
     ///   hyper).unwrap();
     ///
-    /// assert_eq!(user.access_token, "test".to_string());
-    /// assert_eq!(format!("{:?}", user.status), "MFAChallenged(Code)");
+    /// # assert_eq!(user.access_token, "test".to_string());
+    /// # assert_eq!(format!("{:?}", user.status), "MFAChallenged(Code)");
+    /// # }
+    /// ```
+    ///
+    /// ## A successful authorization without a MFA step
+    ///
+    /// ```
+    /// # #[macro_use(http_stub)] extern crate plaid;
+    /// # #[macro_use] extern crate yup_hyper_mock as hyper_mock;
+    /// # extern crate hyper;
+    /// #
+    /// # fn main() {
+    /// #
+    /// # http_stub!(StubPolicy, 200, include_str!("fixtures/post_connect_success.json"));
+    /// #
+    /// # let hyper = hyper::Client::with_connector(StubPolicy::default());
+    /// #
+    /// use plaid::api::client;
+    /// use plaid::api::product;
+    /// use plaid::api::user::{ User };
+    ///
+    /// let client = client::Client { endpoint:  "https://tartan.plaid.com",
+    ///                               client_id: "testclient",
+    ///                               secret:    "testsecret" };
+    ///
+    /// let user = User::create(
+    ///   client,
+    ///   product::Connect,
+    ///   "chase".to_string(),
+    ///   "username".to_string(),
+    ///   "password".to_string(),
+    ///   hyper).unwrap();
+    /// #
+    /// # assert_eq!(user.access_token, "test".to_string());
     /// # }
     /// ```
     ///

@@ -1,0 +1,5 @@
+{
+  "access_token": "test",
+  "mfa": { "message": "Code sent to ...e@testing.com" },
+  "type": "device"
+}
