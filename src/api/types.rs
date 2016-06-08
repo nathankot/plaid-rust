@@ -1,9 +1,11 @@
 //! Defines a set of type alias that map common Plaid API values to
 //! standard types.
 
-/// Unique identifiers in Plaid are represented as a globally
-/// unique hash.
+/// Unique identifiers in Plaid are represented as a globally unique hash.
 pub type UID = String;
+
+/// Category identifiers are represented by an unsigned integer.
+pub type CategoryID = u32;
 
 /// All amounts are represented in a 64-bit floating-point type.
 /// This is for legacy reasons and may change in the future.

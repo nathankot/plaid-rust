@@ -5,7 +5,7 @@ pub mod account;
 pub mod client;
 pub mod error;
 pub mod product;
-// mod transaction;
+pub mod transaction;
 pub mod endpoints;
 pub mod types;
 pub mod mfa;
