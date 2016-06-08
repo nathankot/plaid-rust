@@ -81,11 +81,7 @@ impl<'a> Encodable for Payload<'a> {
                     try!(encoder.emit_struct_field("client_id", 0, |e| client.client_id.encode(e)));
                     try!(encoder.emit_struct_field("secret", 1, |e| client.secret.encode(e)));
                     try!(encoder.emit_struct_field("access_token", 2, |e| user.access_token.encode(e)));
-                    match *mfa_response {
-                        mfa::Response::Code(ref code) => {
-                            try!(encoder.emit_struct_field("mfa", 3, |e| code.encode(e)))
-                        }
-                    }
+                    try!(encoder.emit_struct_field("mfa", 3, |e| mfa_response.encode(e)));
                     Ok(())
                 })
             },

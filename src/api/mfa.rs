@@ -26,6 +26,16 @@ pub enum Response {
     Code(String)
 }
 
+impl Encodable for Response {
+
+    fn encode<E: Encoder>(&self, e: &mut E) -> Result<(), E::Error> {
+        match *self {
+            Response::Code(ref str) => e.emit_str(str)
+        }
+    }
+
+}
+
 /// An internal `newtype` over `(Device, String)` to help with de-serialization
 struct DeviceAndMask(Device, String);
 
