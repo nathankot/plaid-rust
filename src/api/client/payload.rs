@@ -42,7 +42,6 @@ impl<'a> Payload<'a> {
 
 impl<'a> Encodable for Payload<'a> {
 
-
     fn encode<S: Encoder>(&self, encoder: &mut S) -> Result<(), S::Error> {
         match *self {
             Payload::Authenticate(ref client, ref institution, ref username, ref password) => {
@@ -72,4 +71,47 @@ impl<'a> Encodable for Payload<'a> {
         }
     }
 
+}
+
+/// The device that the user has chosen to use for mfa.
+#[derive(Debug)]
+pub enum SelectedDevice {
+    /// The `mask` returned when authenticating with `AuthenticateOptions { list: true, .. }`,
+    /// e.g "t..t@plaid.com",
+    Mask(String),
+    /// The type of the device as defined under `mfa::Device`.
+    Device(mfa::Device)
+}
+
+impl Encodable for SelectedDevice {
+
+    fn encode<E: Encoder>(&self, e: &mut E) -> Result<(), E::Error> {
+        e.emit_struct("root", 1, |e| {
+            match *self {
+                SelectedDevice::Device(ref d) => e.emit_struct_field("type", 0, |e| d.encode(e)),
+                SelectedDevice::Mask(ref m) => e.emit_struct_field("mask", 0, |e| m.encode(e))
+            }
+        })
+    }
+
+}
+
+/// Options that can be passed along to any given request.
+/// Some of these options only apply to specific endpoints.
+#[derive(Debug, RustcEncodable)]
+pub struct Options {
+    /// A webhook that should be used by Plaid when events are generated.
+    webhook: Option<String>,
+    /// If `true`, initial data will not be fetched
+    login_only: Option<bool>,
+    /// If `true`, a list of possible mfa devices will be presented.
+    /// If `false`, the first possible device will already be chosen for the user.
+    list: Option<bool>,
+    /// If specified, this will select the given `SelectedDevice::Mask` or `SelectedDevice::Device`
+    /// for use in multifactor authentication.
+    send_method: SelectedDevice,
+    /// This will filter out transactions that have occured before the given `Date`
+    start_date: Date,
+    /// This will filter out transactions that have occured after the given `Date`
+    end_date: Date
 }
