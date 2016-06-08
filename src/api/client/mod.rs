@@ -200,7 +200,7 @@ impl<'a> Client<'a> {
     ///                       client_id: "testclient",
     ///                       secret:    "testsecret",
     ///                       hyper:     &hyper };
-    ///
+    ///                       
     /// let user = User { access_token: "testaccesstoken".to_string() };
     ///
     /// let response = client.step(
