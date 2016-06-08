@@ -116,6 +116,20 @@ pub struct AuthenticateOptions {
     send_method: Option<SelectedDevice>
 }
 
+impl AuthenticateOptions {
+
+    /// Generate a default `AuthenticateOptions` struct with every field unset.
+    pub fn default() -> AuthenticateOptions {
+        AuthenticateOptions {
+            webhook: None,
+            login_only: None,
+            list: None,
+            send_method: None
+        }
+    }
+
+}
+
 /// Options that can be passed along to any `Payload::FetchData` request.
 #[derive(Debug, RustcEncodable)]
 pub struct FetchDataOptions {
@@ -123,4 +137,62 @@ pub struct FetchDataOptions {
     start_date: Option<Date>,
     /// This will filter out transactions that have occured after the given `Date`
     end_date: Option<Date>
+}
+
+impl FetchDataOptions {
+
+    /// Generate a default `FetchDataOptions` struct with every field unset.
+    pub fn default() -> FetchDataOptions {
+        FetchDataOptions {
+            start_date: None,
+            end_date: None
+        }
+    }
+
+}
+
+#[cfg(test)]
+mod tests {
+
+    use api::user::User;
+    use api::client::{ Client, Payload };
+    use api::client::payload::{ FetchDataOptions,  AuthenticateOptions };
+    use rustc_serialize::json;
+    use hyper as h;
+
+    #[test]
+    fn test_authenticate_payload_serialization() {
+        let hyper = h::Client::new();
+        let client = Client { endpoint: "https://tartan.plaid.com",
+                              client_id: "testclientid",
+                              secret: "testsecret",
+                              hyper: &hyper };
+
+        assert_eq!(json::encode(
+            &Payload::Authenticate(
+                client,
+                "testinst".to_string(),
+                "username".to_string(),
+                "password".to_string(),
+                Some(AuthenticateOptions { list: Some(true), .. AuthenticateOptions::default() }))).unwrap(),
+            r###"{"client_id":"testclientid","secret":"testsecret","username":"username","password":"password","type":"testinst","options":{"webhook":null,"login_only":null,"list":true,"send_method":null}}"###)
+    }
+
+    #[test]
+    fn test_fetch_data_payload_serialization() {
+        let hyper = h::Client::new();
+        let user = User { access_token: "accesstoken123".to_string() };
+        let client = Client { endpoint: "https://tartan.plaid.com",
+                              client_id: "testclientid",
+                              secret: "testsecret",
+                              hyper: &hyper };
+
+        assert_eq!(json::encode(
+            &Payload::FetchData(
+                client,
+                user,
+                Some(FetchDataOptions { start_date: Some("2015-01-01".to_string()), end_date: Some("2016-01-01".to_string()) }))).unwrap(),
+            r###"{"options":{"start_date":"2015-01-01","end_date":"2016-01-01"}}"###)
+    }
+
 }
