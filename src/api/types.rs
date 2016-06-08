@@ -18,5 +18,5 @@ pub type ClientID = String;
 /// Your client secret from the Plaid dashboard
 pub type ClientSecret = String;
 
-/// A user's institution
+/// A user's institution. See [here for a list](https://plaid.com/docs/api/#institutions)
 pub type Institution = String;
