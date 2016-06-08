@@ -11,6 +11,7 @@ use api::mfa;
 use rustc_serialize::json;
 
 use hyper as h;
+use hyper::method::Method;
 use hyper::header::{ContentType, Accept, ContentLength, qitem};
 use hyper::mime::{Mime, TopLevel, SubLevel, Attr, Value};
 use hyper::status::StatusCode;
@@ -34,6 +35,11 @@ pub struct Client<'a> {
     pub client_id: &'a str,
     /// Your application's `secret`
     pub secret: &'a str,
+    /// The instance of `hyper::Client` to use.
+    /// *In most cases* you simply need `hyper::Client::new()`.
+    /// However this is a good place to configure things like
+    /// proxies, timeouts etc.
+    pub hyper: &'a h::Client
 }
 
 impl<'a> Client<'a> {
@@ -64,14 +70,14 @@ impl<'a> Client<'a> {
     ///
     /// let client = client::Client { endpoint:  "https://tartan.plaid.com",
     ///                               client_id: "testclient",
-    ///                               secret:    "testsecret" };
+    ///                               secret:    "testsecret",
+    ///                               hyper:     &hyper };
     ///
     /// let (user, response) = client.authenticate(
     ///   product::Connect,
     ///   "chase".to_string(),
     ///   "username".to_string(),
-    ///   "password".to_string(),
-    ///   hyper).unwrap();
+    ///   "password".to_string()).unwrap();
     ///
     /// assert_eq!(user.access_token, "test".to_string());
     /// assert_eq!(format!("{:?}", response), "MFA(Code)");
@@ -98,14 +104,14 @@ impl<'a> Client<'a> {
     ///
     /// let client = Client { endpoint:  "https://tartan.plaid.com",
     ///                       client_id: "testclient",
-    ///                       secret:    "testsecret" };
+    ///                       secret:    "testsecret",
+    ///                       hyper:     &hyper };
     ///
     /// let (user, response) = client.authenticate(
     ///   product::Connect,
     ///   "chase".to_string(),
     ///   "username".to_string(),
-    ///   "password".to_string(),
-    ///   hyper).unwrap();
+    ///   "password".to_string()).unwrap();
     ///
     /// assert_eq!(user.access_token, "test".to_string());
     /// match response {
@@ -126,11 +132,8 @@ impl<'a> Client<'a> {
         product: P,
         institution: Institution,
         username: Username,
-        password: Password,
-        hyper: h::Client) -> Result<(User, Response<P>), Error> {
+        password: Password) -> Result<(User, Response<P>), Error> {
 
-        let mut buffer = String::new();
-        let endpoint = self.endpoint;
         let req = payloads::Authenticate { client: self.clone(),
                                            username: username,
                                            password: password,
@@ -140,14 +143,12 @@ impl<'a> Client<'a> {
         let body_capacity = body.len();
 
         let mut res = try!(
-            hyper.post(&format!("{}{}", endpoint, product.endpoint_component()))
-                 .header(ContentType(Mime(TopLevel::Application, SubLevel::Json, vec![])))
-                 .header(ContentLength(body_capacity as u64))
-                 .header(Accept(vec![qitem(Mime(TopLevel::Application, SubLevel::Json,
-                                vec![(Attr::Charset, Value::Utf8)]))]))
-                 .body(h::client::Body::BufBody(&mut body, body_capacity))
-                 .send());
+            self.request( Method::Post, product, "")
+                .header(ContentLength(body_capacity as u64))
+                .body(h::client::Body::BufBody(&mut body, body_capacity))
+                .send());
 
+        let mut buffer = String::new();
         match res.status {
             // A `201` indicates that the `User` has been created but
             // is missing the multi-factor authentication step.
@@ -179,8 +180,7 @@ impl<'a> Client<'a> {
         &self,
         user: User,
         product: P,
-        response: mfa::Response,
-        hyper: h::Client) -> Result<Response<P>, Error> {
+        response: mfa::Response) -> Result<Response<P>, Error> {
 
         let req = payloads::MFAStep { client: self.clone(),
                                       user: user,
@@ -190,7 +190,7 @@ impl<'a> Client<'a> {
         let body_capacity = body.len();
 
         let mut res = try!(
-            self.request(&hyper, Method::Patch, product, "/step")
+            self.request(Method::Patch, product, "/step")
                 .header(ContentLength(body_capacity as u64))
                 .body(h::client::Body::BufBody(&mut body, body_capacity))
                 .send());
@@ -202,17 +202,21 @@ impl<'a> Client<'a> {
         }
     }
 
-    fn request<'b, P: Product>(
+    fn request<P: Product>(
         &self,
-        hyper: &'b h::Client,
         method: Method,
         product: P,
-        component: &str) -> h::client::RequestBuilder<'b> {
+        component: &str) -> h::client::RequestBuilder<'a> {
 
-        hyper.request(method, &format!("{}{}{}", self.endpoint, product.endpoint_component(), component))
-             .header(ContentType(Mime(TopLevel::Application, SubLevel::Json, vec![])))
-             .header(Accept(vec![qitem(Mime(TopLevel::Application, SubLevel::Json,
-                            vec![(Attr::Charset, Value::Utf8)]))]))
+        self.hyper
+            .request(method,
+                     &format!("{}{}{}",
+                              self.endpoint,
+                              product.endpoint_component(),
+                              component))
+            .header(ContentType(Mime(TopLevel::Application, SubLevel::Json, vec![])))
+            .header(Accept(vec![qitem(Mime(TopLevel::Application, SubLevel::Json,
+                        vec![(Attr::Charset, Value::Utf8)]))]))
     }
 
 }
