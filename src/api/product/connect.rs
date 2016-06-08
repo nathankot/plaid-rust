@@ -1,6 +1,7 @@
 use api::product::{ Product };
 use api::account::Account;
 use api::transaction::Transaction;
+use api::client::Payload;
 
 use rustc_serialize::Decodable;
 
@@ -19,6 +20,8 @@ pub struct ConnectData {
 
 impl Product for Connect {
     type Data = ConnectData;
-    fn endpoint_component<'a>(&self) -> &'a str { "/connect" }
     fn description<'a>(&self) -> &'a str { "Connect" }
+    fn endpoint<'a, 'b>(&self, payload: &'b Payload) -> &'a str {
+        "/connect"
+    }
 }

@@ -16,10 +16,11 @@ use hyper::header::{ContentType, Accept, ContentLength, qitem};
 use hyper::mime::{Mime, TopLevel, SubLevel, Attr, Value};
 use hyper::status::StatusCode;
 
-mod payloads;
+pub use self::payload::Payload;
+pub mod payload;
 
 pub use self::response::Response;
-mod response;
+pub mod response;
 
 /// # Client
 ///
@@ -66,21 +67,26 @@ impl<'a> Client<'a> {
     /// #
     /// use plaid::api::client;
     /// use plaid::api::product;
-    /// use plaid::api::user::{ User };
+    /// use plaid::api::client::payload::Payload;
+    /// use plaid::api::client::response::Response;
     ///
     /// let client = client::Client { endpoint:  "https://tartan.plaid.com",
     ///                               client_id: "testclient",
     ///                               secret:    "testsecret",
     ///                               hyper:     &hyper };
     ///
-    /// let (user, response) = client.authenticate(
+    /// let response = client.request(
     ///   product::Connect,
-    ///   "chase".to_string(),
-    ///   "username".to_string(),
-    ///   "password".to_string()).unwrap();
+    ///   Payload::Authenticate(client, "case".to_string(), "username".to_string(), "password".to_string()))
+    ///   .unwrap();
     ///
-    /// assert_eq!(user.access_token, "test".to_string());
-    /// assert_eq!(format!("{:?}", response), "MFA(Code)");
+    /// match response {
+    ///     Response::MFA(ref user, ref challenge) => {
+    ///         assert_eq!(user.access_token, "test".to_string());
+    ///         assert_eq!(format!("{:?}", challenge), "Code");
+    ///     },
+    ///     _ => panic!("Unexpected response")
+    /// };
     /// # }
     /// ```
     ///
@@ -97,25 +103,27 @@ impl<'a> Client<'a> {
     /// #
     /// # let hyper = hyper::Client::with_connector(StubPolicy::default());
     /// #
-    /// use plaid::api::client::{ Client, Response };
+    /// use plaid::api::client::{ Client, Response, Payload };
     /// use plaid::api::product;
     /// use plaid::api::types::*;
-    /// use plaid::api::user::{ User };
     ///
     /// let client = Client { endpoint:  "https://tartan.plaid.com",
     ///                       client_id: "testclient",
     ///                       secret:    "testsecret",
     ///                       hyper:     &hyper };
     ///
-    /// let (user, response) = client.authenticate(
+    /// let response = client.request(
     ///   product::Connect,
-    ///   "chase".to_string(),
-    ///   "username".to_string(),
-    ///   "password".to_string()).unwrap();
+    ///   Payload::Authenticate(
+    ///       client,
+    ///       "chase".to_string(),
+    ///       "username".to_string(),
+    ///       "password".to_string()))
+    ///   .unwrap();
     ///
-    /// assert_eq!(user.access_token, "test".to_string());
     /// match response {
-    ///     Response::ProductData(ref data) => {
+    ///     Response::Authenticated(ref user, ref data) => {
+    ///         assert_eq!(user.access_token, "test".to_string());
     ///         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
     ///         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
     ///         assert_eq!(data.transactions[0].amount, -700 as Amount);
@@ -126,58 +134,7 @@ impl<'a> Client<'a> {
     /// # }
     /// ```
     ///
-    /// Todo: allow options and passing webhooks
-    pub fn authenticate<P: Product>(
-        &self,
-        product: P,
-        institution: Institution,
-        username: Username,
-        password: Password) -> Result<(User, Response<P>), Error> {
-
-        let req = payloads::Authenticate { client: self.clone(),
-                                           username: username,
-                                           password: password,
-                                           institution: institution };
-        let body = try!(json::encode(&req));
-        let mut body = body.into_bytes();
-        let body_capacity = body.len();
-
-        let mut res = try!(
-            self.request( Method::Post, product, "")
-                .header(ContentLength(body_capacity as u64))
-                .body(h::client::Body::BufBody(&mut body, body_capacity))
-                .send());
-
-        let mut buffer = String::new();
-        match res.status {
-            // A `201` indicates that the `User` has been created but
-            // is missing the multi-factor authentication step.
-            StatusCode::Created => {
-                try!(res.read_to_string(&mut buffer));
-                let mut buffer_copy = buffer.clone();
-                let user: User = try!(json::decode(&mut buffer));
-                let mfa_challenge: mfa::Challenge = try!(json::decode(&mut buffer));
-                Ok((user, Response::MFA(mfa_challenge)))
-            },
-            // A `200` response is accompanied with the endpoint data that
-            // was requested for.
-            StatusCode::Ok => {
-                try!(res.read_to_string(&mut buffer));
-                let mut buffer_copy = buffer.clone();
-                let user: User = try!(json::decode(&mut buffer));
-                let data: P::Data = try!(json::decode(&mut buffer_copy));
-                Ok((user, Response::ProductData(data)))
-            },
-            // By default, we assume a bad response
-            ref s => return Err(Error::UnsuccessfulResponse(*s))
-        }
-
-    }
-
-    /// Given a `User` that has received an `Response::MFA`, you
-    /// can use this method to complete the `mfa::Challenge`.
-    ///
-    /// # Examples
+    /// ## A successful product data retrieval
     ///
     /// ```
     /// # #[macro_use(http_stub)] extern crate plaid;
@@ -190,7 +147,7 @@ impl<'a> Client<'a> {
     /// #
     /// # let hyper = hyper::Client::with_connector(StubPolicy::default());
     /// #
-    /// use plaid::api::client::{ Client, Response };
+    /// use plaid::api::client::{ Client, Response, Payload };
     /// use plaid::api::product;
     /// use plaid::api::types::*;
     /// use plaid::api::user::{ User };
@@ -203,13 +160,14 @@ impl<'a> Client<'a> {
     ///                       
     /// let user = User { access_token: "testaccesstoken".to_string() };
     ///
-    /// let response = client.step(
+    /// let response = client.request(
     ///   product::Connect,
-    ///   user,
-    ///   mfa::Response::Code("1234".to_string())).unwrap();
+    ///   Payload::StepMFA(client, user, mfa::Response::Code("1234".to_string())))
+    ///   .unwrap();
     ///
     /// match response {
-    ///     Response::ProductData(ref data) => {
+    ///     Response::Authenticated(ref user, ref data) => {
+    ///         assert_eq!(user.access_token, "test".to_string());
     ///         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
     ///         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
     ///         assert_eq!(data.transactions[0].amount, -700 as Amount);
@@ -219,53 +177,56 @@ impl<'a> Client<'a> {
     /// };
     /// # }
     /// ```
-    pub fn step<P: Product>(
-        &self,
-        product: P,
-        user: User,
-        response: mfa::Response) -> Result<Response<P>, Error> {
-
-        let req = payloads::MFAStep { client: self.clone(),
-                                      user: user,
-                                      response: response };
-        let body = try!(json::encode(&req));
+    pub fn request<P: Product>(&self, product: P, payload: Payload) -> Result<Response<P>, Error> {
+        
+        let body = try!(json::encode(&payload));
         let mut body = body.into_bytes();
         let body_capacity = body.len();
+        let endpoint = payload.endpoint(&self, product);
+        let method = payload.method();
 
-        let mut res = try!(
-            self.request(Method::Patch, product, "/step")
-                .header(ContentLength(body_capacity as u64))
+        let mut res: h::client::Response = try!(
+            self.hyper
+                .request(method, endpoint.as_ref() as &str)
+                .header(ContentType(Mime(TopLevel::Application, SubLevel::Json, vec![])))
+                .header(Accept(vec![qitem(Mime(TopLevel::Application, SubLevel::Json,
+                                               vec![(Attr::Charset, Value::Utf8)]))]))
                 .body(h::client::Body::BufBody(&mut body, body_capacity))
                 .send());
 
         let mut buffer = String::new();
-        match res.status {
-            StatusCode::Ok => {
+        match (res.status, payload) {
+            // A `201` indicates that the `User` has been created but
+            // is missing the multi-factor authentication step.
+            (StatusCode::Created, _) => {
                 try!(res.read_to_string(&mut buffer));
-                let data: P::Data = try!(json::decode(&mut buffer));
+                let mut buffer_copy = buffer.clone();
+                let user: User = try!(json::decode(&mut buffer));
+                let mfa_challenge: mfa::Challenge = try!(json::decode(&mut buffer));
+                Ok(Response::MFA(user, mfa_challenge))
+            },
+            // A `200` response for authentication is accompanied with the
+            // endpoint data that was requested for.
+            (StatusCode::Ok, Payload::Authenticate( .. )) |
+            (StatusCode::Ok, Payload::StepMFA( .. )) => {
+                try!(res.read_to_string(&mut buffer));
+                let mut buffer_copy = buffer.clone();
+                let user: User = try!(json::decode(&mut buffer));
+                let data: P::Data = try!(json::decode(&mut buffer_copy));
+                Ok(Response::Authenticated(user, data))
+            },
+            // A `200` response for data requests
+            (StatusCode::Ok, Payload::FetchData( .. )) => {
+                try!(res.read_to_string(&mut buffer));
+                let mut buffer_copy = buffer.clone();
+                let user: User = try!(json::decode(&mut buffer));
+                let data: P::Data = try!(json::decode(&mut buffer_copy));
                 Ok(Response::ProductData(data))
             },
-            ref s => {
-                Err(Error::UnsuccessfulResponse(*s))
-            }
+            // By default, we assume a bad response
+            (ref s, _) => return Err(Error::UnsuccessfulResponse(*s))
         }
-    }
 
-    fn request<P: Product>(
-        &self,
-        method: Method,
-        product: P,
-        component: &str) -> h::client::RequestBuilder<'a> {
-
-        self.hyper
-            .request(method,
-                     &format!("{}{}{}",
-                              self.endpoint,
-                              product.endpoint_component(),
-                              component))
-            .header(ContentType(Mime(TopLevel::Application, SubLevel::Json, vec![])))
-            .header(Accept(vec![qitem(Mime(TopLevel::Application, SubLevel::Json,
-                        vec![(Attr::Charset, Value::Utf8)]))]))
     }
 
 }
