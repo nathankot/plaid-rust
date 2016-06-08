@@ -14,7 +14,7 @@ use hyper::method::Method;
 /// with the associated product.
 pub enum Payload<'a> {
     /// Authenticate a user.
-    Authenticate(Client<'a>, Institution, Username, Password, Option<AuthenticateOptions>),
+    Authenticate(Client<'a>, Institution, Username, Password, Option<PIN>, Option<AuthenticateOptions>),
     /// Send multifactor authentication response.
     StepMFA(Client<'a>, User, mfa::Response),
     /// Retrieve data from the product
@@ -43,14 +43,17 @@ impl<'a> Encodable for Payload<'a> {
 
     fn encode<S: Encoder>(&self, encoder: &mut S) -> Result<(), S::Error> {
         match *self {
-            Payload::Authenticate(ref client, ref institution, ref username, ref password, ref options) => {
-                encoder.emit_struct("Request", 6, |encoder| {
+            Payload::Authenticate(ref client, ref institution, ref username, ref password, ref pin, ref options) => {
+                let fields = if pin.is_some() { 7 } else { 6 };
+                encoder.emit_struct("Request", fields, |encoder| {
                     try!(encoder.emit_struct_field("client_id", 0, |e| client.client_id.encode(e)));
                     try!(encoder.emit_struct_field("secret", 1, |e| client.secret.encode(e)));
                     try!(encoder.emit_struct_field("username", 2, |e| username.encode(e)));
                     try!(encoder.emit_struct_field("password", 3, |e| password.encode(e)));
                     try!(encoder.emit_struct_field("type", 4, |e| institution.encode(e)));
                     try!(encoder.emit_struct_field("options", 5, |e| options.encode(e)));
+                    if pin.is_some() { try!(encoder.emit_struct_field("pin", 6, |e| pin.encode(e))); }
+
                     Ok(())
                 })
             },
@@ -174,8 +177,9 @@ mod tests {
                 "testinst".to_string(),
                 "username".to_string(),
                 "password".to_string(),
+                Some("PINCODE".to_string()),
                 Some(AuthenticateOptions { list: Some(true), .. AuthenticateOptions::default() }))).unwrap(),
-            r###"{"client_id":"testclientid","secret":"testsecret","username":"username","password":"password","type":"testinst","options":{"webhook":null,"login_only":null,"list":true,"send_method":null}}"###)
+                r###"{"client_id":"testclientid","secret":"testsecret","username":"username","password":"password","type":"testinst","options":{"webhook":null,"login_only":null,"list":true,"send_method":null},"pin":"PINCODE"}"###)
     }
 
     #[test]

@@ -80,6 +80,7 @@ impl<'a> Client<'a> {
     ///      "case".to_string(),
     ///      "username".to_string(),
     ///      "password".to_string(),
+    ///      None,
     ///      None))
     ///   .unwrap();
     ///
@@ -122,6 +123,7 @@ impl<'a> Client<'a> {
     ///       "chase".to_string(),
     ///       "username".to_string(),
     ///       "password".to_string(),
+    ///       None,
     ///       None))
     ///   .unwrap();
     ///
