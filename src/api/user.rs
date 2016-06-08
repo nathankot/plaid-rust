@@ -1,6 +1,6 @@
 //! User module
 
-use super::product::*; //, Auth, Info, Income, Risk };
+use super::product::*;
 use super::client::{ Client };
 use super::error::Error;
 use super::types::*;
