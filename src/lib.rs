@@ -18,6 +18,7 @@ macro_rules! http_stub {
             format!(r############"
 HTTP/1.1 {} OK
 Content-Type: application/json; charset=utf-8
+
 {}
             "############, $status.to_string(), $json)
             }
@@ -26,6 +27,7 @@ Content-Type: application/json; charset=utf-8
             format!(r############"
 HTTP/1.1 {} OK
 Content-Type: application/json; charset=utf-8
+
 {}
             "############, $status.to_string(), $json)
             }
