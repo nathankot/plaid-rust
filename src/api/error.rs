@@ -13,7 +13,7 @@ use rustc_serialize::json::{DecoderError, EncoderError};
 #[derive(Debug)]
 pub enum Error {
     /// Represents bad HTTP status codes, or codes that we don't support.
-    BadResponse(hyper::status::StatusCode),
+    UnsuccessfulResponse(hyper::status::StatusCode),
     /// Represents errors forwarded from `rustc_serialize`, usually indicating
     /// that the response returned something that could not be decoded.
     InvalidResponse(DecoderError),
@@ -39,7 +39,7 @@ impl StdError for Error {
 
     fn description(&self) -> &str {
         match *self {
-            Error::BadResponse(_) => "Received bad status code",
+            Error::UnsuccessfulResponse(_) => "Received bad status code",
             Error::InvalidResponse(ref err) => err.description(),
             Error::HTTP(ref err) => err.description(),
             Error::IO(ref err) => err.description(),

@@ -168,19 +168,51 @@ impl<'a> Client<'a> {
                 Ok((user, Response::Success(data)))
             },
             // By default, we assume a bad response
-            ref s => return Err(Error::BadResponse(*s))
+            ref s => return Err(Error::UnsuccessfulResponse(*s))
         }
 
     }
 
     /// Given a `User` that has received an `Response::MFA`, you
-    /// can use this method to complete the `mfa::Challege`.
+    /// can use this method to complete the `mfa::Challenge`.
     pub fn step<P: Product>(
         &self,
         user: User,
+        product: P,
         response: mfa::Response,
-        hyper: h::Client) -> Result<Self, Error> {
-        unimplemented!();
+        hyper: h::Client) -> Result<Response<P>, Error> {
+
+        let req = payloads::MFAStep { client: self.clone(),
+                                      user: user,
+                                      response: response };
+        let body = try!(json::encode(&req));
+        let mut body = body.into_bytes();
+        let body_capacity = body.len();
+
+        let mut res = try!(
+            self.request(&hyper, Method::Patch, product, "/step")
+                .header(ContentLength(body_capacity as u64))
+                .body(h::client::Body::BufBody(&mut body, body_capacity))
+                .send());
+
+        
+        match res.status {
+            StatusCode::Ok => Ok(Response::MFASuccess),
+            ref s => Err(Error::UnsuccessfulResponse(*s))
+        }
+    }
+
+    fn request<'b, P: Product>(
+        &self,
+        hyper: &'b h::Client,
+        method: Method,
+        product: P,
+        component: &str) -> h::client::RequestBuilder<'b> {
+
+        hyper.request(method, &format!("{}{}{}", self.endpoint, product.endpoint_component(), component))
+             .header(ContentType(Mime(TopLevel::Application, SubLevel::Json, vec![])))
+             .header(Accept(vec![qitem(Mime(TopLevel::Application, SubLevel::Json,
+                            vec![(Attr::Charset, Value::Utf8)]))]))
     }
 
 }
