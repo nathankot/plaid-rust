@@ -17,24 +17,8 @@ pub trait Product : Any + Sync + Debug {
     fn description<'a>(&self) -> &'a str;
 }
 
-/// `Connect` is the endpoint you need to fetch transaction for a `User`
-#[derive(Debug)]
-pub struct Connect;
-
-/// Representation of data that is retrieved from the `Connect` product.
-#[derive(Debug, RustcDecodable)]
-pub struct ConnectData {
-    /// List of accounts associated with the user
-    pub accounts: Vec<Account>,
-    /// List of transactions associated with the user
-    pub transactions: Vec<Transaction>
-}
-
-impl Product for Connect {
-    type Data = ConnectData;
-    fn endpoint_component<'a>(&self) -> &'a str { "/connect" }
-    fn description<'a>(&self) -> &'a str { "Connect" }
-}
+pub use self::connect::{ Connect, ConnectData };
+mod connect;
 
 // /// Use `Auth` to authorize ACH payments
 // #[derive(Debug)]
