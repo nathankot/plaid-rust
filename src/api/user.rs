@@ -4,7 +4,7 @@ use super::product::*;
 use super::client::{ Client };
 use super::error::Error;
 use super::types::*;
-use super::mfa::{ MFAChallenge, MFAChallengedUser };
+use super::mfa;
 
 use std::io::Read;
 use std::result::{ Result };
@@ -31,7 +31,7 @@ pub enum Status<P: Product> {
     /// Nothing is known about the user and no requests have been made
     Unknown,
     /// Waiting on MFA authentication code from the user
-    MFAChallenged(MFAChallenge),
+    MFA(mfa::Challenge),
     /// Returned when a request is made for a `Product` that is not
     /// currently enabled for the given `User`.
     ///
@@ -86,7 +86,7 @@ impl<P: Product> User<P> {
     ///   hyper).unwrap();
     ///
     /// assert_eq!(user.access_token, "test".to_string());
-    /// assert_eq!(format!("{:?}", user.status), "MFAChallenged(Code)");
+    /// assert_eq!(format!("{:?}", user.status), "MFA(Code)");
     /// # }
     /// ```
     ///
@@ -166,8 +166,8 @@ impl<P: Product> User<P> {
             // is missing the multi-factor authentication step.
             StatusCode::Created => {
                 try!(res.read_to_string(&mut buffer));
-                let user: MFAChallengedUser<P> = try!(json::decode(&mut buffer));
-                let MFAChallengedUser(u): MFAChallengedUser<P> = user;
+                let user: mfa::User<P> = try!(json::decode(&mut buffer));
+                let mfa::User(u): mfa::User<P> = user;
                 Ok(u) as Result<Self, Error>
             },
             // A `200` response is accompanied with the endpoint data that
