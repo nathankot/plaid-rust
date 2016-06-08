@@ -43,26 +43,3 @@ impl Decodable for Challenge {
     }
 
 }
-
-// /// An intermediate type used to build a request to the
-// /// `/step` endpoint.
-// struct ResponseRequest<'a, P: Product> {
-//     client: Client<'a>>,
-//     user: User<P>,>
-//     response: Response
-// }
-
-// impl<'a, P: Product> Encodable for ResponseRequest<'a, P> {
-
-//     fn encode<S: Encoder>(&self, encoder: &mut S) -> Result<(), S::Error> {
-//         encoder.emit_struct("Request", 5, |encoder| {
-//             try!(encoder.emit_struct_field("client_id", 0, |e| self.client.client_id.encode(e)));
-//             try!(encoder.emit_struct_field("secret", 1, |e| self.client.secret.encode(e)));
-//             try!(encoder.emit_struct_field("username", 2, |e| self.username.encode(e)));
-//             try!(encoder.emit_struct_field("password", 3, |e| self.password.encode(e)));
-//             try!(encoder.emit_struct_field("type", 4, |e| self.institution.encode(e)));
-//             Ok(())
-//         })
-//     }
-
-// }

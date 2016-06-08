@@ -6,10 +6,14 @@ use api::mfa;
 /// Represents the response from the last API request.
 /// This does not encapsulate any errors, rather it indicates different
 /// stages of the user lifecycle.
+///
+/// For error handling, `Result` is used alongside `plaid::api::error::Error`.
 #[derive(Debug)]
 pub enum Response<P: Product> {
-    /// Waiting on MFA authentication code from the user
+    /// Waiting on multifactor authentication code from the user
     MFA(mfa::Challenge),
+    /// Multifactor authentication completed successfully
+    MFASuccess,
     /// Returned when a request is made for a `Product` that is not
     /// currently enabled for the given `User`.
     ///
