@@ -20,3 +20,7 @@ pub type ClientSecret = String;
 
 /// A user's institution. See [here for a list](https://plaid.com/docs/api/#institutions)
 pub type Institution = String;
+
+/// Dates are simply stored as their original `String` representation.
+/// It is up to you to parse it with your favorite date/time library.
+pub type Date = String;
