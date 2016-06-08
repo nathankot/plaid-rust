@@ -2,11 +2,12 @@
 
 use std::fmt::Debug;
 use std::any::Any;
+use rustc_serialize::Decodable;
 
 /// Anything that implements `Product` can be used as a product.
 pub trait Product : Any + Sync + Debug {
     /// The response data that is associated with this product
-    type Data: Debug + Any;
+    type Data: Debug + Any + Decodable;
     /// The endpoint of the product with leading slash, e.g `/connect`
     fn endpoint_component<'a>(&self) -> &'a str;
     /// A textual representation of the product, e.g `Connect`

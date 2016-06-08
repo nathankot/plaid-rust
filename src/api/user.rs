@@ -39,7 +39,7 @@ pub enum Status<P: Product> {
     /// access to the `Product`.
     ProductNotEnabled(P),
     /// User is authenticated successfully and we have data available
-    Success
+    Success(P::Data)
 }
 
 use hyper as h;
@@ -164,8 +164,10 @@ impl<P: Product> User<P> {
             // All okay, we have
             StatusCode::Ok => {
                 try!(res.read_to_string(&mut buffer));
+                let mut buffer_copy = buffer.clone();
                 let user: User<P> = try!(json::decode(&mut buffer));
-                Ok(user)
+                let data: P::Data = try!(json::decode(&mut buffer_copy));
+                Ok(User { status: Status::Success(data), .. user })
             },
             // By default, we assume a bad response
             ref s => return Err(Error::BadResponse(*s))
@@ -203,14 +205,9 @@ impl<'a, P: Product> Decodable for User<P> {
     fn decode<D: Decoder>(decoder: &mut D) -> Result<User<P>, D::Error> {
         decoder.read_struct("root", 3, |decoder| {
             let access_token = try!(decoder.read_struct_field("access_token", 0, |d| Decodable::decode(d)));
-
-            let status = {
-                Status::Unknown
-            };
-
             Ok(User {
                 access_token: access_token,
-                status: status
+                status: Status::Unknown
             })
         })
     }
