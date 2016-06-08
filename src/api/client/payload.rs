@@ -15,6 +15,8 @@ use hyper::method::Method;
 pub enum Payload<'a> {
     /// Authenticate a user.
     Authenticate(Client<'a>, Institution, Username, Password, Option<PIN>, Option<AuthenticateOptions>),
+    /// Delete a user from Plaid
+    RemoveUser(Client<'a>, User),
     /// Send multifactor authentication response.
     StepMFA(Client<'a>, User, mfa::Response),
     /// Retrieve data from the product
@@ -32,8 +34,9 @@ impl<'a> Payload<'a> {
     pub fn method(&self) -> Method {
         match *self {
             Payload::Authenticate(..) => Method::Post,
+            Payload::RemoveUser(..) => Method::Delete,
             Payload::StepMFA(..) => Method::Patch,
-            Payload::FetchData(..) => Method::Get
+            Payload::FetchData(..) => Method::Get,
         }
     }
 
@@ -70,12 +73,13 @@ impl<'a> Encodable for Payload<'a> {
                     Ok(())
                 })
             },
-            Payload::FetchData(_, _, ref options) => {
+            Payload::FetchData(_, _, Some(ref options)) => {
                 encoder.emit_struct("Request", 1, |encoder| {
                     try!(encoder.emit_struct_field("options", 0, |e| options.encode(e)));
                     Ok(())
                 })
-            }
+            },
+            _ => Ok(())
         }
     }
 
