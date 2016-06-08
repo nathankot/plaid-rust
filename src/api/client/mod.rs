@@ -75,7 +75,12 @@ impl<'a> Client<'a> {
     ///
     /// let response = client.request(
     ///   product::Connect,
-    ///   Payload::Authenticate(client, "case".to_string(), "username".to_string(), "password".to_string()))
+    ///   Payload::Authenticate(
+    ///      client,
+    ///      "case".to_string(),
+    ///      "username".to_string(),
+    ///      "password".to_string(),
+    ///      None))
     ///   .unwrap();
     ///
     /// match response {
@@ -116,7 +121,8 @@ impl<'a> Client<'a> {
     ///       client,
     ///       "chase".to_string(),
     ///       "username".to_string(),
-    ///       "password".to_string()))
+    ///       "password".to_string(),
+    ///       None))
     ///   .unwrap();
     ///
     /// match response {
@@ -149,23 +155,21 @@ impl<'a> Client<'a> {
     /// use plaid::api::product;
     /// use plaid::api::types::*;
     /// use plaid::api::user::{ User };
-    /// use plaid::api::mfa;
     ///
     /// let client = Client { endpoint:  "https://tartan.plaid.com",
     ///                       client_id: "testclient",
     ///                       secret:    "testsecret",
     ///                       hyper:     &hyper };
-    ///                       
+    ///
     /// let user = User { access_token: "testaccesstoken".to_string() };
     ///
     /// let response = client.request(
     ///   product::Connect,
-    ///   Payload::StepMFA(client, user, mfa::Response::Code("1234".to_string())))
+    ///   Payload::FetchData(client, user, None))
     ///   .unwrap();
     ///
     /// match response {
-    ///     Response::Authenticated(ref user, ref data) => {
-    ///         assert_eq!(user.access_token, "test".to_string());
+    ///     Response::ProductData(ref data) => {
     ///         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
     ///         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
     ///         assert_eq!(data.transactions[0].amount, -700 as Amount);
@@ -176,7 +180,7 @@ impl<'a> Client<'a> {
     /// # }
     /// ```
     pub fn request<P: Product>(&self, product: P, payload: Payload) -> Result<Response<P>, Error> {
-        
+
         let body = try!(json::encode(&payload));
         let mut body = body.into_bytes();
         let body_capacity = body.len();
@@ -226,4 +230,3 @@ impl<'a> Client<'a> {
     }
 
 }
-
