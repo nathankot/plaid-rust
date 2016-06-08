@@ -96,10 +96,9 @@ impl Encodable for SelectedDevice {
 
 }
 
-/// Options that can be passed along to any given request.
-/// Some of these options only apply to specific endpoints.
+/// Options that can be passed along to any `Payload::Authenticate` request.
 #[derive(Debug, RustcEncodable)]
-pub struct Options {
+pub struct AuthenticateOptions {
     /// A webhook that should be used by Plaid when events are generated.
     webhook: Option<String>,
     /// If `true`, initial data will not be fetched
@@ -109,9 +108,14 @@ pub struct Options {
     list: Option<bool>,
     /// If specified, this will select the given `SelectedDevice::Mask` or `SelectedDevice::Device`
     /// for use in multifactor authentication.
-    send_method: SelectedDevice,
+    send_method: Option<SelectedDevice>
+}
+
+/// Options that can be passed along to any `Payload::FetchData` request.
+#[derive(Debug, RustcEncodable)]
+pub struct FetchDataOptions {
     /// This will filter out transactions that have occured before the given `Date`
-    start_date: Date,
+    start_date: Option<Date>,
     /// This will filter out transactions that have occured after the given `Date`
-    end_date: Date
+    end_date: Option<Date>
 }
