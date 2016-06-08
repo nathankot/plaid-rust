@@ -125,6 +125,8 @@ impl<P: Product> User<P> {
     ///     Status::Success(ref data) => {
     ///         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
     ///         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
+    ///         assert_eq!(data.transactions[0].amount, -700 as Amount);
+    ///         assert_eq!(data.transactions[1].id, "testtransactionid2".to_string());
     ///     },
     ///     _ => panic!("Expected product data")
     /// };
