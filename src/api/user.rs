@@ -85,8 +85,8 @@ impl<P: Product> User<P> {
     ///   "password".to_string(),
     ///   hyper).unwrap();
     ///
-    /// # assert_eq!(user.access_token, "test".to_string());
-    /// # assert_eq!(format!("{:?}", user.status), "MFAChallenged(Code)");
+    /// assert_eq!(user.access_token, "test".to_string());
+    /// assert_eq!(format!("{:?}", user.status), "MFAChallenged(Code)");
     /// # }
     /// ```
     ///
@@ -148,7 +148,6 @@ impl<P: Product> User<P> {
         let body = try!(json::encode(&req));
         let mut body = body.into_bytes();
         let body_capacity = body.len();
-
 
         let mut res = try!(
             hyper.post(&format!("{}{}", endpoint, product.endpoint_component()))
