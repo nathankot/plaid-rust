@@ -97,7 +97,7 @@ impl<'a> Client<'a> {
     /// #
     /// # let hyper = hyper::Client::with_connector(StubPolicy::default());
     /// #
-    /// use plaid::api::client::{ Client, Response};
+    /// use plaid::api::client::{ Client, Response };
     /// use plaid::api::product;
     /// use plaid::api::types::*;
     /// use plaid::api::user::{ User };
@@ -176,10 +176,53 @@ impl<'a> Client<'a> {
 
     /// Given a `User` that has received an `Response::MFA`, you
     /// can use this method to complete the `mfa::Challenge`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// # #[macro_use(http_stub)] extern crate plaid;
+    /// # #[macro_use] extern crate yup_hyper_mock as hyper_mock;
+    /// # extern crate hyper;
+    /// #
+    /// # fn main() {
+    /// #
+    /// # http_stub!(StubPolicy, 200, include_str!("fixtures/post_connect_success.json"));
+    /// #
+    /// # let hyper = hyper::Client::with_connector(StubPolicy::default());
+    /// #
+    /// use plaid::api::client::{ Client, Response };
+    /// use plaid::api::product;
+    /// use plaid::api::types::*;
+    /// use plaid::api::user::{ User };
+    /// use plaid::api::mfa;
+    ///
+    /// let client = Client { endpoint:  "https://tartan.plaid.com",
+    ///                       client_id: "testclient",
+    ///                       secret:    "testsecret",
+    ///                       hyper:     &hyper };
+    ///
+    /// let user = User { access_token: "testaccesstoken".to_string() };
+    ///
+    /// let response = client.step(
+    ///   product::Connect,
+    ///   user,
+    ///   mfa::Response::Code("1234".to_string())).unwrap();
+    ///
+    /// match response {
+    ///     Response::ProductData(ref data) => {
+    ///         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
+    ///         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
+    ///         assert_eq!(data.transactions[0].amount, -700 as Amount);
+    ///         assert_eq!(data.transactions[1].id, "testtransactionid2".to_string());
+    ///     },
+    ///     _ => panic!("Expected product data")
+    /// };
+    /// # }
+    /// ```
     pub fn step<P: Product>(
         &self,
-        user: User,
         product: P,
+        user: User,
         response: mfa::Response) -> Result<Response<P>, Error> {
 
         let req = payloads::MFAStep { client: self.clone(),
@@ -195,10 +238,16 @@ impl<'a> Client<'a> {
                 .body(h::client::Body::BufBody(&mut body, body_capacity))
                 .send());
 
-        
+        let mut buffer = String::new();
         match res.status {
-            StatusCode::Ok => Ok(Response::MFASuccess),
-            ref s => Err(Error::UnsuccessfulResponse(*s))
+            StatusCode::Ok => {
+                try!(res.read_to_string(&mut buffer));
+                let data: P::Data = try!(json::decode(&mut buffer));
+                Ok(Response::ProductData(data))
+            },
+            ref s => {
+                Err(Error::UnsuccessfulResponse(*s))
+            }
         }
     }
 

@@ -12,8 +12,6 @@ use api::mfa;
 pub enum Response<P: Product> {
     /// Waiting on multifactor authentication code from the user
     MFA(mfa::Challenge),
-    /// Multifactor authentication completed successfully
-    MFASuccess,
     /// Returned when a request is made for a `Product` that is not
     /// currently enabled for the given `User`.
     ///
