@@ -77,8 +77,11 @@ impl<'a> Encodable for Payload<'a> {
                     Ok(())
                 })
             },
-            Payload::FetchData(_, _, Some(ref options)) => {
+            Payload::FetchData(ref client, ref user, Some(ref options)) => {
                 encoder.emit_struct("Request", 1, |encoder| {
+                    try!(encoder.emit_struct_field("client_id", 0, |e| client.client_id.encode(e)));
+                    try!(encoder.emit_struct_field("secret", 1, |e| client.secret.encode(e)));
+                    try!(encoder.emit_struct_field("access_token", 2, |e| user.access_token.encode(e)));
                     try!(encoder.emit_struct_field("options", 0, |e| options.encode(e)));
                     Ok(())
                 })
@@ -204,7 +207,7 @@ mod tests {
                 client,
                 user,
                 Some(FetchDataOptions { start_date: Some("2015-01-01".to_string()), end_date: Some("2016-01-01".to_string()) }))).unwrap(),
-            r###"{"options":{"start_date":"2015-01-01","end_date":"2016-01-01"}}"###)
+            r###"{"client_id":"testclientid","secret":"testsecret","access_token":"accesstoken123""options":{"start_date":"2015-01-01","end_date":"2016-01-01"}}"###)
     }
 
 }
