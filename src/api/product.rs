@@ -4,6 +4,8 @@ use std::fmt::Debug;
 use std::any::Any;
 use rustc_serialize::Decodable;
 
+use super::account::Account;
+
 /// Anything that implements `Product` can be used as a product.
 pub trait Product : Any + Sync + Debug {
     /// The response data that is associated with this product
@@ -18,8 +20,15 @@ pub trait Product : Any + Sync + Debug {
 #[derive(Debug)]
 pub struct Connect;
 
+/// Representation of data that is retrieved from the `Connect` product.
+#[derive(Debug, RustcDecodable)]
+pub struct ConnectData {
+    /// List of accounts associated with the user
+    pub accounts: Vec<Account>
+}
+
 impl Product for Connect {
-    type Data = ();
+    type Data = ConnectData;
     fn endpoint_component<'a>(&self) -> &'a str { "/connect" }
     fn description<'a>(&self) -> &'a str { "Connect" }
 }
