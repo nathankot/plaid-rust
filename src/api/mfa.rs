@@ -7,10 +7,6 @@ use api::product::*;
 
 use rustc_serialize::{Decodable, Decoder};
 
-/// Used to provide an alternative decode method
-/// when there is an MFA challenge.
-pub struct User<P: Product>(pub user::User<P>);
-
 /// Represents one of the different types of multi-factor-authentication
 /// challenges Plaid supports.
 ///
@@ -30,23 +26,19 @@ pub enum Response {
     Code(String)
 }
 
-impl<'a, P: Product> Decodable for User<P> {
+impl Decodable for Challenge {
 
-    fn decode<D: Decoder>(decoder: &mut D) -> Result<User<P>, D::Error> {
+    fn decode<D: Decoder>(decoder: &mut D) -> Result<Challenge, D::Error> {
         decoder.read_struct("root", 0, |decoder| {
-            let access_token = try!(decoder.read_struct_field("access_token", 0, |d| Decodable::decode(d)));
             let challenge_type = try!(decoder.read_struct_field("type", 0, |d| {
                 let t: String = try!(Decodable::decode(d));
                 match t.as_ref() {
                     "device" => Ok(Challenge::Code),
-                    _ => Err(d.error("Un-supported mfa preference"))
+                    p => Err(d.error(format!("Un-supported MFA preference: {}", p).as_ref()))
                 }
             }));
 
-            Ok(User(user::User {
-                access_token: access_token,
-                status: client::Response::MFA(challenge_type)
-            }))
+            Ok(challenge_type)
         })
     }
 

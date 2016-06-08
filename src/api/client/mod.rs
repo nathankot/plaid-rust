@@ -66,7 +66,7 @@ impl<'a> Client<'a> {
     ///                               client_id: "testclient",
     ///                               secret:    "testsecret" };
     ///
-    /// let user = client.authenticate(
+    /// let (user, response) = client.authenticate(
     ///   product::Connect,
     ///   "chase".to_string(),
     ///   "username".to_string(),
@@ -74,11 +74,11 @@ impl<'a> Client<'a> {
     ///   hyper).unwrap();
     ///
     /// assert_eq!(user.access_token, "test".to_string());
-    /// assert_eq!(format!("{:?}", user.status), "MFA(Code)");
+    /// assert_eq!(format!("{:?}", response), "MFA(Code)");
     /// # }
     /// ```
     ///
-    /// ## A successful authorization without a MFA step
+    /// ## A successful authorization without an MFA step
     ///
     /// ```
     /// # #[macro_use(http_stub)] extern crate plaid;
@@ -100,7 +100,7 @@ impl<'a> Client<'a> {
     ///                       client_id: "testclient",
     ///                       secret:    "testsecret" };
     ///
-    /// let user = client.authenticate(
+    /// let (user, response) = client.authenticate(
     ///   product::Connect,
     ///   "chase".to_string(),
     ///   "username".to_string(),
@@ -108,7 +108,7 @@ impl<'a> Client<'a> {
     ///   hyper).unwrap();
     ///
     /// assert_eq!(user.access_token, "test".to_string());
-    /// match user.status {
+    /// match response {
     ///     Response::Success(ref data) => {
     ///         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
     ///         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
@@ -127,7 +127,7 @@ impl<'a> Client<'a> {
         institution: Institution,
         username: Username,
         password: Password,
-        hyper: h::Client) -> Result<User<P>, Error> {
+        hyper: h::Client) -> Result<(User, Response<P>), Error> {
 
         let mut buffer = String::new();
         let endpoint = self.endpoint;
@@ -153,18 +153,19 @@ impl<'a> Client<'a> {
             // is missing the multi-factor authentication step.
             StatusCode::Created => {
                 try!(res.read_to_string(&mut buffer));
-                let user: mfa::User<P> = try!(json::decode(&mut buffer));
-                let mfa::User(u): mfa::User<P> = user;
-                Ok(u) as Result<User<P>, Error>
+                let mut buffer_copy = buffer.clone();
+                let user: User = try!(json::decode(&mut buffer));
+                let mfa_challenge: mfa::Challenge = try!(json::decode(&mut buffer));
+                Ok((user, Response::MFA(mfa_challenge)))
             },
             // A `200` response is accompanied with the endpoint data that
             // was requested for.
             StatusCode::Ok => {
                 try!(res.read_to_string(&mut buffer));
                 let mut buffer_copy = buffer.clone();
-                let user: User<P> = try!(json::decode(&mut buffer));
+                let user: User = try!(json::decode(&mut buffer));
                 let data: P::Data = try!(json::decode(&mut buffer_copy));
-                Ok(User { status: Response::Success(data), .. user })
+                Ok((user, Response::Success(data)))
             },
             // By default, we assume a bad response
             ref s => return Err(Error::BadResponse(*s))
@@ -176,7 +177,7 @@ impl<'a> Client<'a> {
     /// can use this method to complete the `mfa::Challege`.
     pub fn step<P: Product>(
         &self,
-        user: User<P>,
+        user: User,
         response: mfa::Response,
         hyper: h::Client) -> Result<Self, Error> {
         unimplemented!();
