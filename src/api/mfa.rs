@@ -1,10 +1,6 @@
 //! This module contains data structures and implementations
 //! related to multi-factor-authentication.
 
-use api::user;
-use api::client;
-use api::product::*;
-
 use rustc_serialize::{Decodable, Decoder};
 
 /// Represents one of the different types of multi-factor-authentication

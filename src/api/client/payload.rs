@@ -6,8 +6,7 @@ use api::user::User;
 use api::client::Client;
 use api::mfa;
 
-use rustc_serialize::{Decodable, Decoder, Encodable, Encoder};
-use rustc_serialize::json;
+use rustc_serialize::{Encodable, Encoder};
 
 use hyper::method::Method;
 

@@ -1,7 +1,5 @@
 //! User module
 
-use api::product::*;
-use api::client::{ Response };
 use api::types::*;
 
 use rustc_serialize::{Decodable, Decoder };

@@ -4,15 +4,13 @@ use std::io::Read;
 
 use api::user::User;
 use api::product::*;
-use api::types::*;
 use api::error::Error;
 use api::mfa;
 
 use rustc_serialize::json;
 
 use hyper as h;
-use hyper::method::Method;
-use hyper::header::{ContentType, Accept, ContentLength, qitem};
+use hyper::header::{ContentType, Accept, qitem};
 use hyper::mime::{Mime, TopLevel, SubLevel, Attr, Value};
 use hyper::status::StatusCode;
 
@@ -200,7 +198,6 @@ impl<'a> Client<'a> {
             // is missing the multi-factor authentication step.
             (StatusCode::Created, _) => {
                 try!(res.read_to_string(&mut buffer));
-                let mut buffer_copy = buffer.clone();
                 let user: User = try!(json::decode(&mut buffer));
                 let mfa_challenge: mfa::Challenge = try!(json::decode(&mut buffer));
                 Ok(Response::MFA(user, mfa_challenge))
@@ -219,7 +216,6 @@ impl<'a> Client<'a> {
             (StatusCode::Ok, Payload::FetchData( .. )) => {
                 try!(res.read_to_string(&mut buffer));
                 let mut buffer_copy = buffer.clone();
-                let user: User = try!(json::decode(&mut buffer));
                 let data: P::Data = try!(json::decode(&mut buffer_copy));
                 Ok(Response::ProductData(data))
             },

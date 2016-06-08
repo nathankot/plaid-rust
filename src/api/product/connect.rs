@@ -3,8 +3,6 @@ use api::account::Account;
 use api::transaction::Transaction;
 use api::client::Payload;
 
-use rustc_serialize::Decodable;
-
 /// `Connect` is the endpoint you need to fetch transaction for a `User`
 #[derive(Debug)]
 pub struct Connect;
