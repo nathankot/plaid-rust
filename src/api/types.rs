@@ -1,4 +1,13 @@
-//! Defines a set of type alias to improve understandability.
+//! Defines a set of type alias that map common Plaid API values to
+//! standard types.
+
+/// Unique identifiers in Plaid are represented as a globally
+/// unique hash.
+pub type UID = String;
+
+/// All amounts are represented in a 64-bit floating-point type.
+/// This is for legacy reasons and may change in the future.
+pub type Amount = f64;
 
 /// A user's bank account username.
 pub type Username = String;

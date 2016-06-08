@@ -105,6 +105,7 @@ impl<P: Product> User<P> {
     /// #
     /// use plaid::api::client;
     /// use plaid::api::product;
+    /// use plaid::api::types::*;
     /// use plaid::api::user::{ User, Status };
     ///
     /// let client = client::Client { endpoint:  "https://tartan.plaid.com",
@@ -122,8 +123,8 @@ impl<P: Product> User<P> {
     /// assert_eq!(user.access_token, "test".to_string());
     /// match user.status {
     ///     Status::Success(ref data) => {
-    ///         assert_eq!(data.accounts[0].current_balance, 742.93 as f64);
-    ///         assert_eq!(data.accounts[1].current_balance, 100030.32 as f64);
+    ///         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
+    ///         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
     ///     },
     ///     _ => panic!("Expected product data")
     /// };
