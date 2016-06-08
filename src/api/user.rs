@@ -134,10 +134,10 @@ impl<P: Product> User<P> {
 
         let mut buffer = String::new();
         let endpoint = client.endpoint;
-        let req = UserCreateRequest { client: client,
-                                      username: username,
-                                      password: password,
-                                      institution: institution };
+        let req = CreateRequest { client: client,
+                                  username: username,
+                                  password: password,
+                                  institution: institution };
         let body = try!(json::encode(&req));
         let mut body = body.into_bytes();
         let body_capacity = body.len();
@@ -178,14 +178,14 @@ impl<P: Product> User<P> {
 }
 
 /// Represents a request for creating a new user
-struct UserCreateRequest<'a> {
+struct CreateRequest<'a> {
     client: Client<'a>,
     username: Username,
     password: Password,
     institution: Institution,
 }
 
-impl<'a> Encodable for UserCreateRequest<'a> {
+impl<'a> Encodable for CreateRequest<'a> {
 
     fn encode<S: Encoder>(&self, encoder: &mut S) -> Result<(), S::Error> {
         encoder.emit_struct("Request", 5, |encoder| {
