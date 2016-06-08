@@ -167,7 +167,8 @@ impl<P: Product> User<P> {
                 let MFAChallengedUser(u): MFAChallengedUser<P> = user;
                 Ok(u) as Result<Self, Error>
             },
-            // All okay, we have
+            // A `200` response is accompanied with the endpoint data that
+            // was requested for.
             StatusCode::Ok => {
                 try!(res.read_to_string(&mut buffer));
                 let mut buffer_copy = buffer.clone();
