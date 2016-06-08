@@ -5,6 +5,7 @@ use std::any::Any;
 use rustc_serialize::Decodable;
 
 use super::account::Account;
+use super::transaction::Transaction;
 
 /// Anything that implements `Product` can be used as a product.
 pub trait Product : Any + Sync + Debug {
@@ -24,7 +25,9 @@ pub struct Connect;
 #[derive(Debug, RustcDecodable)]
 pub struct ConnectData {
     /// List of accounts associated with the user
-    pub accounts: Vec<Account>
+    pub accounts: Vec<Account>,
+    /// List of transactions associated with the user
+    pub transactions: Vec<Transaction>
 }
 
 impl Product for Connect {
