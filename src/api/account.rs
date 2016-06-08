@@ -5,6 +5,7 @@ use rustc_serialize::{ Decodable, Decoder };
 
 /// # Account
 /// Represents one account associated with the given user.
+#[derive(Debug)]
 pub struct Account {
     /// The unique id of the account.
     pub id: String,
@@ -31,22 +32,24 @@ pub struct Account {
 impl Decodable for Account {
 
     fn decode<D: Decoder>(decoder: &mut D) -> Result<Account, D::Error> {
-        decoder.read_struct("root", 0, |decoder| {
+        decoder.read_struct("root", 6, |decoder| {
             let (current_balance, available_balance) =
-                try!(decoder.read_struct_field("balance", 2, |d| {
-                    let c: f64 = try!(d.read_struct_field("current", 0, |d| Decodable::decode(d)));
-                    let a: Option<f64> = try!(d.read_struct_field("available", 0, |d| Decodable::decode(d)));
-                    Ok((c, a))
+                try!(decoder.read_struct_field("balance", 0, |d| {
+                    d.read_struct("balance", 2, |d| {
+                        let c: f64 = try!(d.read_struct_field("current", 0, |d| Decodable::decode(d)));
+                        let a: Option<f64> = try!(d.read_struct_field("available", 1, |d| Decodable::decode(d)));
+                        Ok((c, a))
+                    })
                 }));
 
             Ok(Account {
-                id: try!(decoder.read_struct_field("_id", 0, |d| Decodable::decode(d))),
-                item_id: try!(decoder.read_struct_field("_item", 0, |d| Decodable::decode(d))),
+                id: try!(decoder.read_struct_field("_id", 1, |d| Decodable::decode(d))),
+                item_id: try!(decoder.read_struct_field("_item", 2, |d| Decodable::decode(d))),
                 current_balance: current_balance,
                 available_balance: available_balance,
-                institution: try!(decoder.read_struct_field("institution_type", 0, |d| Decodable::decode(d))),
-                account_type: try!(decoder.read_struct_field("type", 0, |d| Decodable::decode(d))),
-                account_subtype: try!(decoder.read_struct_field("subtype", 0, |d| Decodable::decode(d)))
+                institution: try!(decoder.read_struct_field("institution_type", 3, |d| Decodable::decode(d))),
+                account_type: try!(decoder.read_struct_field("type", 4, |d| Decodable::decode(d))),
+                account_subtype: try!(decoder.read_struct_field("subtype", 5, |d| Decodable::decode(d)))
             })
         })
     }
