@@ -22,6 +22,14 @@ pub enum Challenge {
     Code
 }
 
+/// Represents a response to a previously given MFA challenge.
+#[derive(Debug, Eq, PartialEq)]
+pub enum Response {
+    /// A response to a code challenge, providing the code
+    /// that was sent to the user's device.
+    Code(String)
+}
+
 impl<'a, P: Product> Decodable for User<P> {
 
     fn decode<D: Decoder>(decoder: &mut D) -> Result<User<P>, D::Error> {
