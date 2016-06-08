@@ -109,7 +109,7 @@ impl<'a> Client<'a> {
     ///
     /// assert_eq!(user.access_token, "test".to_string());
     /// match response {
-    ///     Response::Success(ref data) => {
+    ///     Response::ProductData(ref data) => {
     ///         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
     ///         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
     ///         assert_eq!(data.transactions[0].amount, -700 as Amount);
@@ -165,7 +165,7 @@ impl<'a> Client<'a> {
                 let mut buffer_copy = buffer.clone();
                 let user: User = try!(json::decode(&mut buffer));
                 let data: P::Data = try!(json::decode(&mut buffer_copy));
-                Ok((user, Response::Success(data)))
+                Ok((user, Response::ProductData(data)))
             },
             // By default, we assume a bad response
             ref s => return Err(Error::UnsuccessfulResponse(*s))

@@ -21,7 +21,7 @@ pub enum Response<P: Product> {
     /// access to the `Product`.
     ProductNotEnabled(P),
     /// User is authenticated successfully and we have data available
-    Success(P::Data),
+    ProductData(P::Data),
     /// Nothing is known about the user and no requests have been made
     Unknown
 }
