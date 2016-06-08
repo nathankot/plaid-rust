@@ -1,7 +1,7 @@
 //! User module
 
 use api::product::*;
-use api::client::{ Status };
+use api::client::{ Response };
 use api::types::*;
 
 use rustc_serialize::{Decodable, Decoder };
@@ -11,7 +11,7 @@ use rustc_serialize::{Decodable, Decoder };
 #[derive(Debug)]
 pub struct User<P: Product> {
     /// The result of the previous api request that returned this `Struct`
-    pub status: Status<P>,
+    pub status: Response<P>,
     /// The access token for this user
     pub access_token: AccessToken
 }
@@ -23,7 +23,7 @@ impl<'a, P: Product> Decodable for User<P> {
             let access_token = try!(decoder.read_struct_field("access_token", 0, |d| Decodable::decode(d)));
             Ok(User {
                 access_token: access_token,
-                status: Status::Unknown
+                status: Response::Unknown
             })
         })
     }

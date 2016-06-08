@@ -17,6 +17,9 @@ use hyper::status::StatusCode;
 
 mod payloads;
 
+pub use self::response::Response;
+mod response;
+
 /// # Client
 ///
 /// Represents a Plaid API consumer. Encapsulates the `endpoint`,
@@ -88,7 +91,7 @@ impl<'a> Client<'a> {
     /// #
     /// # let hyper = hyper::Client::with_connector(StubPolicy::default());
     /// #
-    /// use plaid::api::client::{ Client, Status};
+    /// use plaid::api::client::{ Client, Response};
     /// use plaid::api::product;
     /// use plaid::api::types::*;
     /// use plaid::api::user::{ User };
@@ -106,7 +109,7 @@ impl<'a> Client<'a> {
     ///
     /// assert_eq!(user.access_token, "test".to_string());
     /// match user.status {
-    ///     Status::Success(ref data) => {
+    ///     Response::Success(ref data) => {
     ///         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
     ///         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
     ///         assert_eq!(data.transactions[0].amount, -700 as Amount);
@@ -161,7 +164,7 @@ impl<'a> Client<'a> {
                 let mut buffer_copy = buffer.clone();
                 let user: User<P> = try!(json::decode(&mut buffer));
                 let data: P::Data = try!(json::decode(&mut buffer_copy));
-                Ok(User { status: Status::Success(data), .. user })
+                Ok(User { status: Response::Success(data), .. user })
             },
             // By default, we assume a bad response
             ref s => return Err(Error::BadResponse(*s))
@@ -169,7 +172,7 @@ impl<'a> Client<'a> {
 
     }
 
-    /// Given a `User` that has received an `Status::MFA`, you
+    /// Given a `User` that has received an `Response::MFA`, you
     /// can use this method to complete the `mfa::Challege`.
     pub fn step<P: Product>(
         &self,
@@ -180,25 +183,4 @@ impl<'a> Client<'a> {
     }
 
 }
-
-/// # Status
-/// Represents the status of the last API request for this user.
-/// This does not encapsulate any errors, rather it indicates different
-/// stages of the user lifecycle.
-#[derive(Debug)]
-pub enum Status<P: Product> {
-    /// Nothing is known about the user and no requests have been made
-    Unknown,
-    /// Waiting on MFA authentication code from the user
-    MFA(mfa::Challenge),
-    /// Returned when a request is made for a `Product` that is not
-    /// currently enabled for the given `User`.
-    ///
-    /// If this occurs, you should upgrade the `User` so that they have
-    /// access to the `Product`.
-    ProductNotEnabled(P),
-    /// User is authenticated successfully and we have data available
-    Success(P::Data)
-}
-
 
