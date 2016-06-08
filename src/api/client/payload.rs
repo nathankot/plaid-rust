@@ -12,14 +12,13 @@ use hyper::method::Method;
 
 /// Use this enum to tell the client what you want to do
 /// with the associated product.
-/// Todo: allow options and passing webhooks
 pub enum Payload<'a> {
     /// Authenticate a user.
-    Authenticate(Client<'a>, Institution, Username, Password),
+    Authenticate(Client<'a>, Institution, Username, Password, Option<AuthenticateOptions>),
     /// Send multifactor authentication response.
     StepMFA(Client<'a>, User, mfa::Response),
     /// Retrieve data from the product
-    FetchData(Client<'a>, User)
+    FetchData(Client<'a>, User, Option<FetchDataOptions>)
 }
 
 impl<'a> Payload<'a> {
@@ -44,13 +43,14 @@ impl<'a> Encodable for Payload<'a> {
 
     fn encode<S: Encoder>(&self, encoder: &mut S) -> Result<(), S::Error> {
         match *self {
-            Payload::Authenticate(ref client, ref institution, ref username, ref password) => {
-                encoder.emit_struct("Request", 5, |encoder| {
+            Payload::Authenticate(ref client, ref institution, ref username, ref password, ref options) => {
+                encoder.emit_struct("Request", 6, |encoder| {
                     try!(encoder.emit_struct_field("client_id", 0, |e| client.client_id.encode(e)));
                     try!(encoder.emit_struct_field("secret", 1, |e| client.secret.encode(e)));
                     try!(encoder.emit_struct_field("username", 2, |e| username.encode(e)));
                     try!(encoder.emit_struct_field("password", 3, |e| password.encode(e)));
                     try!(encoder.emit_struct_field("type", 4, |e| institution.encode(e)));
+                    try!(encoder.emit_struct_field("options", 5, |e| options.encode(e)));
                     Ok(())
                 })
             },
@@ -67,7 +67,12 @@ impl<'a> Encodable for Payload<'a> {
                     Ok(())
                 })
             },
-            _ => unimplemented!()
+            Payload::FetchData(_, _, ref options) => {
+                encoder.emit_struct("Request", 1, |encoder| {
+                    try!(encoder.emit_struct_field("options", 0, |e| options.encode(e)));
+                    Ok(())
+                })
+            }
         }
     }
 
