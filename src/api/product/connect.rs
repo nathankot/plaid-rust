@@ -23,6 +23,7 @@ impl Product for Connect {
         match *payload {
             Payload::StepMFA(..) => "/connect/step",
             Payload::FetchData(..) => "/connect/get",
+            Payload::Upgrade(..) => "/upgrade?upgrade_to=connect",
             _ => "/connect"
         }
     }

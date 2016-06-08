@@ -17,6 +17,8 @@ pub enum Payload<'a> {
     Authenticate(Client<'a>, Institution, Username, Password, Option<PIN>, Option<AuthenticateOptions>),
     /// Re-euthenticate an existing user.
     Reauthenticate(Client<'a>, Institution, Username, Password, Option<PIN>, Option<AuthenticateOptions>),
+    /// Upgrade the user for access to the given product.
+    Upgrade(Client<'a>, User, Option<AuthenticateOptions>),
     /// Delete a user from Plaid.
     RemoveUser(Client<'a>, User),
     /// Send multifactor authentication response.
@@ -37,6 +39,7 @@ impl<'a> Payload<'a> {
         match *self {
             Payload::Authenticate(..) => Method::Post,
             Payload::Reauthenticate(..) => Method::Patch,
+            Payload::Upgrade(..) => Method::Post,
             Payload::RemoveUser(..) => Method::Delete,
             Payload::StepMFA(..) => Method::Patch,
             Payload::FetchData(..) => Method::Get,
@@ -61,6 +64,15 @@ impl<'a> Encodable for Payload<'a> {
                     try!(encoder.emit_struct_field("options", 5, |e| options.encode(e)));
                     if pin.is_some() { try!(encoder.emit_struct_field("pin", 6, |e| pin.encode(e))); }
 
+                    Ok(())
+                })
+            },
+            Payload::Upgrade(ref client, ref user, ref options) => {
+                encoder.emit_struct("Request", 1, |encoder| {
+                    try!(encoder.emit_struct_field("client_id", 0, |e| client.client_id.encode(e)));
+                    try!(encoder.emit_struct_field("secret", 1, |e| client.secret.encode(e)));
+                    try!(encoder.emit_struct_field("access_token", 2, |e| user.access_token.encode(e)));
+                    try!(encoder.emit_struct_field("options", 0, |e| options.encode(e)));
                     Ok(())
                 })
             },
