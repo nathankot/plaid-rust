@@ -15,11 +15,13 @@ use hyper::method::Method;
 pub enum Payload<'a> {
     /// Authenticate a user.
     Authenticate(Client<'a>, Institution, Username, Password, Option<PIN>, Option<AuthenticateOptions>),
-    /// Delete a user from Plaid
+    /// Re-euthenticate an existing user.
+    Reauthenticate(Client<'a>, Institution, Username, Password, Option<PIN>, Option<AuthenticateOptions>),
+    /// Delete a user from Plaid.
     RemoveUser(Client<'a>, User),
     /// Send multifactor authentication response.
     StepMFA(Client<'a>, User, mfa::Response),
-    /// Retrieve data from the product
+    /// Retrieve data from the product.
     FetchData(Client<'a>, User, Option<FetchDataOptions>)
 }
 
@@ -34,6 +36,7 @@ impl<'a> Payload<'a> {
     pub fn method(&self) -> Method {
         match *self {
             Payload::Authenticate(..) => Method::Post,
+            Payload::Reauthenticate(..) => Method::Patch,
             Payload::RemoveUser(..) => Method::Delete,
             Payload::StepMFA(..) => Method::Patch,
             Payload::FetchData(..) => Method::Get,
@@ -46,7 +49,8 @@ impl<'a> Encodable for Payload<'a> {
 
     fn encode<S: Encoder>(&self, encoder: &mut S) -> Result<(), S::Error> {
         match *self {
-            Payload::Authenticate(ref client, ref institution, ref username, ref password, ref pin, ref options) => {
+            Payload::Authenticate(ref client, ref institution, ref username, ref password, ref pin, ref options) |
+            Payload::Reauthenticate(ref client, ref institution, ref username, ref password, ref pin, ref options) => {
                 let fields = if pin.is_some() { 7 } else { 6 };
                 encoder.emit_struct("Request", fields, |encoder| {
                     try!(encoder.emit_struct_field("client_id", 0, |e| client.client_id.encode(e)));
