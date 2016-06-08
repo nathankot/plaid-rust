@@ -22,6 +22,10 @@ impl Product for Connect {
     type Data = ConnectData;
     fn description<'a>(&self) -> &'a str { "Connect" }
     fn endpoint<'a, 'b>(&self, payload: &'b Payload) -> &'a str {
-        "/connect"
+        match *payload {
+            Payload::StepMFA(..) => "/connect/step",
+            Payload::FetchData(..) => "/connect/get",
+            _ => "/connect"
+        }
     }
 }
