@@ -60,7 +60,7 @@
     }
   }, {
     "_account": "testaccount",
-    "_id": "testaccountid",
+    "_id": "testtransactionid2",
     "amount": 12.74,
     "date": "2016-03-12",
     "name": "Golden Crepes",
