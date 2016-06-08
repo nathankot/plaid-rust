@@ -1,6 +1,6 @@
 //! A transaction represents a single entry in a user's account.
 
-use super::types::*;
+use api::types::*;
 use rustc_serialize::{ Decodable, Decoder };
 
 /// # Transaction
@@ -83,8 +83,8 @@ impl Decodable for TransactionContext {
 #[cfg(test)]
 mod tests {
 
-    use super::*;
-    use super::super::types::*;
+    use api::transaction::*;
+    use api::types::*;
     use rustc_serialize::json;
 
     #[test]

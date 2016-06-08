@@ -1,9 +1,9 @@
 //! This module contains data structures and implementations
 //! related to multi-factor-authentication.
 
-use super::user;
-use super::user::{ Status };
-use super::product::*;
+use api::user;
+use api::client::{ Status };
+use api::product::*;
 
 use rustc_serialize::{Decodable, Decoder};
 

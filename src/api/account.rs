@@ -1,6 +1,6 @@
 //! An account represents a user's specific bank account.
 
-use super::types::*;
+use api::types::*;
 use rustc_serialize::{ Decodable, Decoder };
 
 /// # Account
@@ -59,8 +59,8 @@ impl Decodable for Account {
 #[cfg(test)]
 mod tests {
 
-    use super::*;
-    use super::super::types::*;
+    use api::account::*;
+    use api::types::*;
     use rustc_serialize::json;
 
     #[test]

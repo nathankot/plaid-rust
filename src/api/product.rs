@@ -4,8 +4,8 @@ use std::fmt::Debug;
 use std::any::Any;
 use rustc_serialize::Decodable;
 
-use super::account::Account;
-use super::transaction::Transaction;
+use api::account::Account;
+use api::transaction::Transaction;
 
 /// Anything that implements `Product` can be used as a product.
 pub trait Product : Any + Sync + Debug {
