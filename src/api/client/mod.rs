@@ -139,48 +139,6 @@ impl<'a> Client<'a> {
     /// };
     /// # }
     /// ```
-    ///
-    /// ## A successful product data retrieval
-    ///
-    /// ```
-    /// # #[macro_use(http_stub)] extern crate plaid;
-    /// # #[macro_use] extern crate yup_hyper_mock as hyper_mock;
-    /// # extern crate hyper;
-    /// #
-    /// # fn main() {
-    /// #
-    /// # http_stub!(StubPolicy, 200, include_str!("fixtures/post_connect_success.json"));
-    /// #
-    /// # let hyper = hyper::Client::with_connector(StubPolicy::default());
-    /// #
-    /// use plaid::api::client::{ Client, Response, Payload };
-    /// use plaid::api::product;
-    /// use plaid::api::types::*;
-    /// use plaid::api::user::{ User };
-    ///
-    /// let client = Client { endpoint:  "https://tartan.plaid.com",
-    ///                       client_id: "testclient",
-    ///                       secret:    "testsecret",
-    ///                       hyper:     &hyper };
-    ///
-    /// let user = User { access_token: "testaccesstoken".to_string() };
-    ///
-    /// let response = client.request(
-    ///   product::Connect,
-    ///   Payload::FetchData(client, user, None))
-    ///   .unwrap();
-    ///
-    /// match response {
-    ///     Response::ProductData(ref data) => {
-    ///         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
-    ///         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
-    ///         assert_eq!(data.transactions[0].amount, -700 as Amount);
-    ///         assert_eq!(data.transactions[1].id, "testtransactionid2".to_string());
-    ///     },
-    ///     _ => panic!("Expected product data")
-    /// };
-    /// # }
-    /// ```
     pub fn request<P: Product>(&self, product: P, payload: Payload) -> Result<Response<P>, Error> {
 
         let body = try!(json::encode(&payload));
