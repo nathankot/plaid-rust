@@ -16,8 +16,11 @@ pub trait Product : Any + Sync + Debug {
     fn description<'a>(&self) -> &'a str;
 }
 
-pub use self::connect::{ Connect, ConnectData };
+pub use self::connect::*;
+pub use self::auth::*;
+
 mod connect;
+mod auth;
 
 // /// Use `Auth` to authorize ACH payments
 // #[derive(Debug)]
