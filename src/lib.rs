@@ -1,7 +1,7 @@
 #![deny(missing_docs)]
 
 //! [Plaid][Plaid] is the technology layer for financial services.
-//! This library makes it easier to interface with Plaid.
+//! This library makes it easy to interface with Plaid.
 //!
 //! In order to make calls to the API, you'll be using
 //! [`Client`][Client] as the dispatcher.
