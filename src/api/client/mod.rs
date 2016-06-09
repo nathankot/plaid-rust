@@ -66,7 +66,8 @@ impl<'a> Client<'a> {
         match (res.status, payload) {
             // A `201` indicates that the `User` has been created but
             // is missing the multi-factor authentication step.
-            (StatusCode::Created, _) => {
+            (StatusCode::Created, Payload::Authenticate( .. )) |
+            (StatusCode::Created, Payload::Reauthenticate( .. )) => {
                 try!(res.read_to_string(&mut buffer));
                 let user: User = try!(json::decode(&mut buffer));
                 let mfa_challenge: mfa::Challenge = try!(json::decode(&mut buffer));

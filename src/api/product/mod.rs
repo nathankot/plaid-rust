@@ -21,8 +21,10 @@ pub use self::connect::*;
 pub use self::auth::*;
 pub use self::balance::*;
 pub use self::info::*;
+pub use self::income::*;
 
 pub mod connect;
 pub mod auth;
 pub mod info;
 pub mod balance;
+pub mod income;

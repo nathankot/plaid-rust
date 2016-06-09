@@ -1,0 +1,52 @@
+{
+  "accounts": [{
+    "_id": "testaccountid",
+    "_item": "testitemid",
+    "_user": "testuserid",
+    "balance": {
+      "available": 742.93,
+      "current": 742.93
+    },
+    "institution_type": "chase",
+    "meta": {
+      "name": "Total Checking",
+      "number": "0655"
+    },
+    "subtype": "checking",
+    "type": "depository"
+  }, {
+    "_id": "testaccount2id",
+    "_item": "testitem2id",
+    "_user": "testuserid",
+    "balance": {
+      "available": 9999.99,
+      "current": 100030.32
+    },
+    "institution_type": "chase",
+    "meta": {},
+    "type": "depository"
+  }],
+  "income": {
+    "income_streams": [
+      {
+        "monthly_income": 5250,
+        "confidence": 1.0,
+        "days": 284,
+        "name": "PLAID"
+      },
+      {
+        "monthly_income": 2400,
+        "confidence": 0.95,
+        "days": 415,
+        "name": "BAGUETTES INC"
+      }
+    ],
+    "last_year_income": 56000,
+    "last_year_income_before_tax": 87500,
+    "projected_yearly_income": 63000,
+    "projected_yearly_income_before_tax": 97520,
+    "max_number_of_overlapping_income_streams": 1,
+    "number_of_income_streams": 2
+  },
+  "access_token": "xxxxx"
+}
