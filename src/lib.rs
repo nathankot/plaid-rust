@@ -15,7 +15,8 @@
 //!
 //! The following provides a high-level outline of the core components in this library:
 //!
-//! + **[`Client`][Client]** represents the configuration of your API credentials and
+//! + **[`Client`][Client]** represents the configuration of your API credentials, endpoint
+//!   and HTTP client.
 //!
 //! + **[`User`][User]** represents an end-user that has authenticated their bank account,
 //!   and of which you have a Plaid access token for.
