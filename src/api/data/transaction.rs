@@ -19,7 +19,7 @@ pub struct Transaction {
     /// [A list can be found here](https://plaid.com/docs/api/#all-categories).
     pub category_id: CategoryID,
     /// The context in which the transaction occurred.
-    pub context: TransactionContext,
+    pub context: Context,
     /// An hierarchical list of the categories in which
     /// this transaction belongs to.
     pub categories: Vec<String>,
@@ -52,7 +52,7 @@ impl Decodable for Transaction {
 
 /// The context in which a transaction took place
 #[derive(Debug)]
-pub enum TransactionContext {
+pub enum Context {
     /// A phyical place
     Place,
     /// An online transaction
@@ -63,18 +63,18 @@ pub enum TransactionContext {
     Unresolved
 }
 
-impl Decodable for TransactionContext {
+impl Decodable for Context {
 
-    fn decode<D: Decoder>(decoder: &mut D) -> Result<TransactionContext, D::Error> {
+    fn decode<D: Decoder>(decoder: &mut D) -> Result<Context, D::Error> {
         let s: String = try!(decoder.read_struct("root", 1, |d| {
             d.read_struct_field("primary", 0, |d| Decodable::decode(d))
         }));
 
         Ok(match s.as_ref() {
-            "place" => TransactionContext::Place,
-            "digital" => TransactionContext::Digital,
-            "special" => TransactionContext::Special,
-            _ => TransactionContext::Unresolved
+            "place" => Context::Place,
+            "digital" => Context::Digital,
+            "special" => Context::Special,
+            _ => Context::Unresolved
         })
     }
 
