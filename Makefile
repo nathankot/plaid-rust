@@ -1,3 +1,5 @@
+SRC_FILES := $(shell find src -regex ".*\.rs\$$")
+
 default:
 
 .PHONY: gh-pages
@@ -10,6 +12,6 @@ gh-pages: target/doc/plaid
 	git commit --allow-empty -m "Update documentation"
 	git checkout master
 
-target/doc/plaid:
+target/doc/plaid: $(SRC_FILES)
 	@mkdir -p $(@D)
 	@cargo doc --no-deps --release
