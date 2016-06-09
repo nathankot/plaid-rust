@@ -31,15 +31,15 @@
 //!   product::Auth,
 //!   Payload::FetchData(client, user, None))
 //!   .unwrap();
-//!
-//! match response {
-//!     Response::ProductData(ref data) => {
-//!         assert_eq!(data.accounts[0].current_balance, 1274.93 as Amount);
-//!         assert_eq!(data.accounts[0].available_balance, Some(1203.42 as Amount));
-//!         assert_eq!(data.accounts[0].account_number, Some("9900009606".to_string()));
-//!     },
-//!     _ => panic!("Expected product data")
-//! };
+//! #
+//! # match response {
+//! #     Response::ProductData(ref data) => {
+//! #         assert_eq!(data.accounts[0].current_balance, 1274.93 as Amount);
+//! #         assert_eq!(data.accounts[0].available_balance, Some(1203.42 as Amount));
+//! #         assert_eq!(data.accounts[0].account_number, Some("9900009606".to_string()));
+//! #     },
+//! #     _ => panic!("Expected product data")
+//! # };
 //! # }
 //! ```
 

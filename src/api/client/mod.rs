@@ -2,7 +2,7 @@
 //!
 //! ## Examples
 //!
-//! ### A successful connect authorization that requires a MFA step
+//! ### A connect authorization that requires a MFA step
 //!
 //! ```
 //! # #[macro_use(http_stub)] extern crate plaid;
@@ -35,18 +35,18 @@
 //!      None,
 //!      None))
 //!   .unwrap();
-//!
-//! match response {
-//!     Response::MFA(ref user, ref challenge) => {
-//!         assert_eq!(user.access_token, "test".to_string());
-//!         assert_eq!(format!("{:?}", challenge), "Code");
-//!     },
-//!     _ => panic!("Unexpected response")
-//! };
+//! #
+//! # match response {
+//! #     Response::MFA(ref user, ref challenge) => {
+//! #         assert_eq!(user.access_token, "test".to_string());
+//! #         assert_eq!(format!("{:?}", challenge), "Code");
+//! #     },
+//! #     _ => panic!("Unexpected response")
+//! # };
 //! # }
 //! ```
 //!
-//! ### A successful connect authorization without an MFA step
+//! ### A connect authorization without an MFA step
 //!
 //! ```
 //! # #[macro_use(http_stub)] extern crate plaid;
@@ -78,21 +78,21 @@
 //!       None,
 //!       None))
 //!   .unwrap();
-//!
-//! match response {
-//!     Response::Authenticated(ref user, ref data) => {
-//!         assert_eq!(user.access_token, "test".to_string());
-//!         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
-//!         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
-//!         assert_eq!(data.transactions[0].amount, -700 as Amount);
-//!         assert_eq!(data.transactions[1].id, "testtransactionid2".to_string());
-//!     },
-//!     _ => panic!("Unexpected response")
-//! };
+//! #
+//! # match response {
+//! #     Response::Authenticated(ref user, ref data) => {
+//! #         assert_eq!(user.access_token, "test".to_string());
+//! #         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
+//! #         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
+//! #         assert_eq!(data.transactions[0].amount, -700 as Amount);
+//! #         assert_eq!(data.transactions[1].id, "testtransactionid2".to_string());
+//! #     },
+//! #     _ => panic!("Unexpected response")
+//! # };
 //! # }
 //! ```
 //!
-//! ### A successful connect data retrieval
+//! ### A connect data retrieval
 //!
 //! ```
 //! # #[macro_use(http_stub)] extern crate plaid;
@@ -121,16 +121,16 @@
 //!   product::Connect,
 //!   Payload::FetchData(client, user, None))
 //!   .unwrap();
-//!
-//! match response {
-//!     Response::ProductData(ref data) => {
-//!         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
-//!         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
-//!         assert_eq!(data.transactions[0].amount, -700 as Amount);
-//!         assert_eq!(data.transactions[1].id, "testtransactionid2".to_string());
-//!     },
-//!     _ => panic!("Unexpected response")
-//! };
+//! #
+//! # match response {
+//! #     Response::ProductData(ref data) => {
+//! #         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
+//! #         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
+//! #         assert_eq!(data.transactions[0].amount, -700 as Amount);
+//! #         assert_eq!(data.transactions[1].id, "testtransactionid2".to_string());
+//! #     },
+//! #     _ => panic!("Unexpected response")
+//! # };
 //! # }
 //! ```
 

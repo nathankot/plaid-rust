@@ -30,14 +30,14 @@
 //!   product::Balance,
 //!   Payload::FetchData(client, user, None))
 //!   .unwrap();
-//!
-//! match response {
-//!     Response::ProductData(ref data) => {
-//!         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
-//!         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
-//!     },
-//!     _ => panic!("Expected product data")
-//! };
+//! #
+//! # match response {
+//! #     Response::ProductData(ref data) => {
+//! #         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
+//! #         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
+//! #     },
+//! #     _ => panic!("Expected product data")
+//! # };
 //! # }
 //! ```
 
