@@ -19,8 +19,8 @@ pub trait Product : Any + Sync + Debug {
 pub use self::connect::*;
 pub use self::auth::*;
 
-mod connect;
-mod auth;
+pub mod connect;
+pub mod auth;
 
 // /// Use `Auth` to authorize ACH payments
 // #[derive(Debug)]

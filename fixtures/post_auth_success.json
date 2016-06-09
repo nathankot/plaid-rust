@@ -1,0 +1,24 @@
+{
+  "accounts": [
+    {
+      "_id": "mjj9jp92z2fD1mLlpQYZI1gAd4q4LwTKmBNLz",
+      "_item": "aWWVW4VqGqIdaP495QyOSVLN1nzjLwhXaPDJJ",
+      "_user": "bkkVkMVwQwfYmBMy9jzqHQob9O1KwpFaEyLOE",
+      "balance": {
+        "available": 1203.42,
+        "current": 1274.93
+      },
+      "meta": {
+        "name": "Plaid Savings",
+        "number": "9606"
+      },
+      "numbers": {
+        "routing": "021000021",
+        "account": "9900009606",
+        "wireRouting": "021000021"
+      },
+      "institution_type": "fake_institution",
+      "type": "depository"
+    } ],
+  "access_token": "xxxxx"
+}
