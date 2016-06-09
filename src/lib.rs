@@ -34,6 +34,7 @@
 //! + [Connect][connect]
 //! + [Auth][auth]
 //! + [Balance][balance]
+//! + [Info][info]
 //!
 //! # Quick Start
 //!
@@ -195,6 +196,7 @@
 //! [connect]: ./api/product/connect/index.html
 //! [auth]: ./api/product/auth/index.html
 //! [balance]: ./api/product/balance/index.html
+//! [info]: ./api/product/info/index.html
 
 extern crate rustc_serialize;
 extern crate hyper;

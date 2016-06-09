@@ -13,6 +13,9 @@ pub type Amount = f64;
 /// A user's bank account username.
 pub type Username = String;
 
+/// A user's real namee.
+pub type Name = String;
+
 /// A user's bank account password.
 pub type Password = String;
 
