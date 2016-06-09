@@ -102,13 +102,13 @@
 //! #
 //! # http_stub!(StubPolicy, 200, include_str!("fixtures/post_connect_success.json"));
 //! #
-//! let hyper = hyper::client::Client::new();
+//! # let hyper = hyper::client::Client::new();
 //! # let hyper = hyper::Client::with_connector(StubPolicy::default());
-//!
-//! use plaid::api::product;
-//! use plaid::api::user::User;
-//! use plaid::api::client::{ Client, Payload };
-//! use plaid::api::mfa;
+//! #
+//! # use plaid::api::product;
+//! # use plaid::api::user::User;
+//! # use plaid::api::client::{ Client, Payload };
+//! # use plaid::api::mfa;
 //! # use plaid::api::types::*;
 //! # use plaid::api::client::Response;
 //! #
@@ -118,7 +118,7 @@
 //! #     secret: "yourclientsecret",
 //! #     hyper: &hyper
 //! # };
-//!
+//! #
 //! let user = User { access_token: "useraccesstoken".to_string() };
 //! let response = client.request(
 //!     product::Connect,
@@ -148,13 +148,13 @@
 //! #
 //! # http_stub!(StubPolicy, 200, include_str!("fixtures/post_connect_success.json"));
 //! #
-//! let hyper = hyper::client::Client::new();
+//! # let hyper = hyper::client::Client::new();
 //! # let hyper = hyper::Client::with_connector(StubPolicy::default());
-//!
-//! use plaid::api::product;
-//! use plaid::api::user::User;
-//! use plaid::api::client::{ Client, Payload };
-//! use plaid::api::client::payload::FetchDataOptions;
+//! #
+//! # use plaid::api::product;
+//! # use plaid::api::user::User;
+//! # use plaid::api::client::{ Client, Payload };
+//! # use plaid::api::client::payload::FetchDataOptions;
 //! # use plaid::api::types::*;
 //! # use plaid::api::client::Response;
 //! #
@@ -164,7 +164,7 @@
 //! #     secret: "yourclientsecret",
 //! #     hyper: &hyper
 //! # };
-//!
+//! #
 //! let user = User { access_token: "useraccesstoken".to_string() };
 //! let response = client.request(
 //!     product::Connect,
