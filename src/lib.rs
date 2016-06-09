@@ -6,7 +6,7 @@
 //! In order to make calls to the API, you'll be using
 //! [`Client`][Client] as the dispatcher.
 //!
-//! Plaid's api is grouped into different products, which are represented types that
+//! Plaid's API is grouped into different products, which are represented types that
 //! implement the [`Product`][Product] trait.
 //! Most of these products have the same authentication mechanism and data retrieval style.
 //! Therefore an API request is built by combining a product with a [`Payload`][Payload].
