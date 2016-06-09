@@ -70,44 +70,6 @@
 <span id="26">26</span>
 <span id="27">27</span>
 <span id="28">28</span>
-<span id="29">29</span>
-<span id="30">30</span>
-<span id="31">31</span>
-<span id="32">32</span>
-<span id="33">33</span>
-<span id="34">34</span>
-<span id="35">35</span>
-<span id="36">36</span>
-<span id="37">37</span>
-<span id="38">38</span>
-<span id="39">39</span>
-<span id="40">40</span>
-<span id="41">41</span>
-<span id="42">42</span>
-<span id="43">43</span>
-<span id="44">44</span>
-<span id="45">45</span>
-<span id="46">46</span>
-<span id="47">47</span>
-<span id="48">48</span>
-<span id="49">49</span>
-<span id="50">50</span>
-<span id="51">51</span>
-<span id="52">52</span>
-<span id="53">53</span>
-<span id="54">54</span>
-<span id="55">55</span>
-<span id="56">56</span>
-<span id="57">57</span>
-<span id="58">58</span>
-<span id="59">59</span>
-<span id="60">60</span>
-<span id="61">61</span>
-<span id="62">62</span>
-<span id="63">63</span>
-<span id="64">64</span>
-<span id="65">65</span>
-<span id="66">66</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! Product definitions that provide endpoint and response deserialization</span>
 <span class='doccomment'>//! information.</span>
@@ -131,50 +93,12 @@
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>connect</span>::<span class='op'>*</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>auth</span>::<span class='op'>*</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>balance</span>::<span class='op'>*</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>info</span>::<span class='op'>*</span>;
 
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>connect</span>;
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>auth</span>;
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>info</span>;
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>balance</span>;
-
-<span class='comment'>// /// Use `Auth` to authorize ACH payments</span>
-<span class='comment'>// #[derive(Debug)]</span>
-<span class='comment'>// pub struct Auth;</span>
-
-<span class='comment'>// impl Product for Auth {</span>
-<span class='comment'>//     type Data = ();</span>
-<span class='comment'>//     fn endpoint_component&lt;&#39;a&gt;(&amp;self) -&gt; &amp;&#39;a str { &quot;/auth&quot; }</span>
-<span class='comment'>//     fn description&lt;&#39;a&gt;(&amp;self) -&gt; &amp;&#39;a str { &quot;Auth&quot; }</span>
-<span class='comment'>// }</span>
-
-<span class='comment'>// /// Use `Info` to get live account balances</span>
-<span class='comment'>// #[derive(Debug)]</span>
-<span class='comment'>// pub struct Info;</span>
-
-<span class='comment'>// impl Product for Info {</span>
-<span class='comment'>//     type Data = ();</span>
-<span class='comment'>//     fn endpoint_component&lt;&#39;a&gt;(&amp;self) -&gt; &amp;&#39;a str { &quot;/info&quot; }</span>
-<span class='comment'>//     fn description&lt;&#39;a&gt;(&amp;self) -&gt; &amp;&#39;a str { &quot;Info&quot; }</span>
-<span class='comment'>// }</span>
-
-<span class='comment'>// /// Use `Income` to determine the `User`&#39;s yearly income</span>
-<span class='comment'>// #[derive(Debug)]</span>
-<span class='comment'>// pub struct Income;</span>
-
-<span class='comment'>// impl Product for Income {</span>
-<span class='comment'>//     type Data = ();</span>
-<span class='comment'>//     fn endpoint_component&lt;&#39;a&gt;(&amp;self) -&gt; &amp;&#39;a str { &quot;/income&quot; }</span>
-<span class='comment'>//     fn description&lt;&#39;a&gt;(&amp;self) -&gt; &amp;&#39;a str { &quot;Income&quot; }</span>
-<span class='comment'>// }</span>
-
-<span class='comment'>// /// Use `Risk` to get a credit risk score computed by Plaid</span>
-<span class='comment'>// #[derive(Debug)]</span>
-<span class='comment'>// pub struct Risk;</span>
-
-<span class='comment'>// impl Product for Risk {</span>
-<span class='comment'>//     type Data = ();</span>
-<span class='comment'>//     fn endpoint_component&lt;&#39;a&gt;(&amp;self) -&gt; &amp;&#39;a str { &quot;/risk&quot; }</span>
-<span class='comment'>//     fn description&lt;&#39;a&gt;(&amp;self) -&gt; &amp;&#39;a str { &quot;Risk&quot; }</span>
-<span class='comment'>// }</span>
 </pre>
 </section>
     <section id='search' class="content hidden"></section>

@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `Auth` struct in crate `plaid`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, Auth">
+    <meta name="description" content="API documentation for the Rust `Info` struct in crate `plaid`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Info">
 
-    <title>plaid::api::product::auth::Auth - Rust</title>
+    <title>plaid::api::product::info::Info - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../../main.css">
@@ -28,7 +28,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='../../../index.html'>plaid</a>::<wbr><a href='../../index.html'>api</a>::<wbr><a href='../index.html'>product</a>::<wbr><a href='index.html'>auth</a></p><script>window.sidebarCurrent = {name: 'Auth', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'><a href='../../../index.html'>plaid</a>::<wbr><a href='../../index.html'>api</a>::<wbr><a href='../index.html'>product</a>::<wbr><a href='index.html'>info</a></p><script>window.sidebarCurrent = {name: 'Info', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -43,16 +43,16 @@
     </nav>
 
     <section id='main' class="content struct">
-<h1 class='fqn'><span class='in-band'>Struct <a href='../../../index.html'>plaid</a>::<wbr><a href='../../index.html'>api</a>::<wbr><a href='../index.html'>product</a>::<wbr><a href='index.html'>auth</a>::<wbr><a class='struct' href=''>Auth</a></span><span class='out-of-band'><span id='render-detail'>
+<h1 class='fqn'><span class='in-band'>Struct <a href='../../../index.html'>plaid</a>::<wbr><a href='../../index.html'>api</a>::<wbr><a href='../index.html'>product</a>::<wbr><a href='index.html'>info</a>::<wbr><a class='struct' href=''>Info</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-516' class='srclink' href='../../../../src/plaid/src/api/product/auth.rs.html#52' title='goto source code'>[src]</a></span></h1>
-<pre class='rust struct'>pub struct Auth;</pre><div class='docblock'><p><code>Auth</code> is the endpoint you need in order to check that the user owns their account.</p>
-</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='../../../../plaid/api/product/trait.Product.html' title='plaid::api::product::Product'>Product</a> for <a class='struct' href='../../../../plaid/api/product/auth/struct.Auth.html' title='plaid::api::product::auth::Auth'>Auth</a></code></h3><div class='impl-items'><h4 id='associatedtype.Data' class='type'><code>type <a href='../../../../plaid/api/product/trait.Product.html#associatedtype.Data' class='type'>Data</a> = <a class='struct' href='../../../../plaid/api/product/auth/struct.AuthData.html' title='plaid::api::product::auth::AuthData'>AuthData</a></code></h4>
+               </span><a id='src-555' class='srclink' href='../../../../src/plaid/src/api/product/info.rs.html#54' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Info;</pre><div class='docblock'><p>The definition of the Info Product.</p>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='../../../../plaid/api/product/trait.Product.html' title='plaid::api::product::Product'>Product</a> for <a class='struct' href='../../../../plaid/api/product/info/struct.Info.html' title='plaid::api::product::info::Info'>Info</a></code></h3><div class='impl-items'><h4 id='associatedtype.Data' class='type'><code>type <a href='../../../../plaid/api/product/trait.Product.html#associatedtype.Data' class='type'>Data</a> = <a class='struct' href='../../../../plaid/api/product/info/struct.InfoData.html' title='plaid::api::product::info::InfoData'>InfoData</a></code></h4>
 <h4 id='method.description' class='method'><code>fn <a href='../../../../plaid/api/product/trait.Product.html#tymethod.description' class='fnname'>description</a>&lt;'a&gt;(&amp;self) -&gt; &amp;'a <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></h4>
 <h4 id='method.endpoint' class='method'><code>fn <a href='../../../../plaid/api/product/trait.Product.html#tymethod.endpoint' class='fnname'>endpoint</a>&lt;'a, 'b&gt;(&amp;self, payload: &amp;'b <a class='enum' href='../../../../plaid/api/client/payload/enum.Payload.html' title='plaid::api::client::payload::Payload'>Payload</a>) -&gt; &amp;'a <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></h4>
-</div><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../../../../plaid/api/product/auth/struct.Auth.html' title='plaid::api::product::auth::Auth'>Auth</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+</div><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../../../../plaid/api/product/info/struct.Info.html' title='plaid::api::product::info::Info'>Info</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
 </div></section>
     <section id='search' class="content hidden"></section>
 
