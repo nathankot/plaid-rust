@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `info` mod in crate `plaid`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, info">
+    <meta name="description" content="API documentation for the Rust `income` mod in crate `plaid`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, income">
 
-    <title>plaid::api::product::info - Rust</title>
+    <title>plaid::api::product::income - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../../main.css">
@@ -28,7 +28,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='../../../index.html'>plaid</a>::<wbr><a href='../../index.html'>api</a>::<wbr><a href='../index.html'>product</a></p><script>window.sidebarCurrent = {name: 'info', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+        <p class='location'><a href='../../../index.html'>plaid</a>::<wbr><a href='../../index.html'>api</a>::<wbr><a href='../index.html'>product</a></p><script>window.sidebarCurrent = {name: 'income', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -43,14 +43,12 @@
     </nav>
 
     <section id='main' class="content mod">
-<h1 class='fqn'><span class='in-band'>Module <a href='../../../index.html'>plaid</a>::<wbr><a href='../../index.html'>api</a>::<wbr><a href='../index.html'>product</a>::<wbr><a class='mod' href=''>info</a></span><span class='out-of-band'><span id='render-detail'>
+<h1 class='fqn'><span class='in-band'>Module <a href='../../../index.html'>plaid</a>::<wbr><a href='../../index.html'>api</a>::<wbr><a href='../index.html'>product</a>::<wbr><a class='mod' href=''>income</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-550' class='srclink' href='../../../../src/plaid/src/api/product/info.rs.html#1-230' title='goto source code'>[src]</a></span></h1>
-<div class='docblock'><p>The Info endpoint allows you to retrieve various account holder
-information on file with the financial institution, including names, emails,
-phone numbers, and addresses.</p>
+               </span><a id='src-762' class='srclink' href='../../../../src/plaid/src/api/product/income.rs.html#1-115' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p>The Income endpoint allows you to retrieve various information pertaining to a user&#39;s income.</p>
 
 <h2 id='endpoint-example' class='section-header'><a href='#endpoint-example'>Endpoint example</a></h2>
 <pre class='rust rust-example-rendered'>
@@ -67,51 +65,38 @@ phone numbers, and addresses.</p>
 <span class='kw'>let</span> <span class='ident'>user</span> <span class='op'>=</span> <span class='ident'>User</span> { <span class='ident'>access_token</span>: <span class='string'>&quot;testaccesstoken&quot;</span>.<span class='ident'>to_string</span>() };
 
 <span class='kw'>let</span> <span class='ident'>response</span> <span class='op'>=</span> <span class='ident'>client</span>.<span class='ident'>request</span>(
-  <span class='ident'>product</span>::<span class='ident'>Info</span>,
+  <span class='ident'>product</span>::<span class='ident'>Income</span>,
   <span class='ident'>Payload</span>::<span class='ident'>FetchData</span>(<span class='ident'>client</span>, <span class='ident'>user</span>, <span class='prelude-val'>None</span>))
   .<span class='ident'>unwrap</span>();</pre>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class='struct' href='struct.Address.html'
-                                  title='plaid::api::product::info::Address'>Address</a></td>
+                           <td><a class='struct' href='struct.Income.html'
+                                  title='plaid::api::product::income::Income'>Income</a></td>
                            <td class='docblock short'>
-                                <p>A user&#39;s address, as returned by Plaid.</p>
+                                <p>The Income endpoint.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='struct' href='struct.Email.html'
-                                  title='plaid::api::product::info::Email'>Email</a></td>
+                           <td><a class='struct' href='struct.IncomeData.html'
+                                  title='plaid::api::product::income::IncomeData'>IncomeData</a></td>
                            <td class='docblock short'>
-                                <p>A user&#39;s email, including meta data returned by Plaid.</p>
+                                <p>The underlying data representation of Income.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='struct' href='struct.Info.html'
-                                  title='plaid::api::product::info::Info'>Info</a></td>
+                           <td><a class='struct' href='struct.IncomeInternalData.html'
+                                  title='plaid::api::product::income::IncomeInternalData'>IncomeInternalData</a></td>
                            <td class='docblock short'>
-                                <p>The definition of the Info Product.</p>
+                                <p>Internal data representation of the income response</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='struct' href='struct.InfoData.html'
-                                  title='plaid::api::product::info::InfoData'>InfoData</a></td>
+                           <td><a class='struct' href='struct.IncomeStream.html'
+                                  title='plaid::api::product::income::IncomeStream'>IncomeStream</a></td>
                            <td class='docblock short'>
-                                <p>Representation of data that is retrieved from the <code>Info</code> product.</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class='struct' href='struct.InfoInternalData.html'
-                                  title='plaid::api::product::info::InfoInternalData'>InfoInternalData</a></td>
-                           <td class='docblock short'>
-                                <p>Represents the <em>actual</em> info data from an info response.</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class='struct' href='struct.PhoneNumber.html'
-                                  title='plaid::api::product::info::PhoneNumber'>PhoneNumber</a></td>
-                           <td class='docblock short'>
-                                <p>A user&#39;s phone number, as returned by Plaid.</p>
+                                <p>An income stream represents a stream of income that Plaid
+has detected from their transactions.</p>
                            </td>
                        </tr></table></section>
     <section id='search' class="content hidden"></section>

@@ -140,6 +140,7 @@
 <span id="96">96</span>
 <span id="97">97</span>
 <span id="98">98</span>
+<span id="99">99</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! Data structures and methods that interact with Plaid via HTTP.</span>
 
@@ -209,7 +210,8 @@
         <span class='kw'>match</span> (<span class='ident'>res</span>.<span class='ident'>status</span>, <span class='ident'>payload</span>) {
             <span class='comment'>// A `201` indicates that the `User` has been created but</span>
             <span class='comment'>// is missing the multi-factor authentication step.</span>
-            (<span class='ident'>StatusCode</span>::<span class='ident'>Created</span>, _) <span class='op'>=&gt;</span> {
+            (<span class='ident'>StatusCode</span>::<span class='ident'>Created</span>, <span class='ident'>Payload</span>::<span class='ident'>Authenticate</span>( .. )) <span class='op'>|</span>
+            (<span class='ident'>StatusCode</span>::<span class='ident'>Created</span>, <span class='ident'>Payload</span>::<span class='ident'>Reauthenticate</span>( .. )) <span class='op'>=&gt;</span> {
                 <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>res</span>.<span class='ident'>read_to_string</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>buffer</span>));
                 <span class='kw'>let</span> <span class='ident'>user</span>: <span class='ident'>User</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>json</span>::<span class='ident'>decode</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>buffer</span>));
                 <span class='kw'>let</span> <span class='ident'>mfa_challenge</span>: <span class='ident'>mfa</span>::<span class='ident'>Challenge</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>json</span>::<span class='ident'>decode</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>buffer</span>));
