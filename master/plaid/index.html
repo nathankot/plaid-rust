@@ -120,13 +120,6 @@ plaid = &quot;0.1&quot;
 <p>Respond to multifactor authentication challenges:</p>
 
 <pre class='rust rust-example-rendered'>
-<span class='kw'>let</span> <span class='ident'>hyper</span> <span class='op'>=</span> <span class='ident'>hyper</span>::<span class='ident'>client</span>::<span class='ident'>Client</span>::<span class='ident'>new</span>();
-
-<span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>product</span>;
-<span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>user</span>::<span class='ident'>User</span>;
-<span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>client</span>::{ <span class='ident'>Client</span>, <span class='ident'>Payload</span> };
-<span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>mfa</span>;
-
 <span class='kw'>let</span> <span class='ident'>user</span> <span class='op'>=</span> <span class='ident'>User</span> { <span class='ident'>access_token</span>: <span class='string'>&quot;useraccesstoken&quot;</span>.<span class='ident'>to_string</span>() };
 <span class='kw'>let</span> <span class='ident'>response</span> <span class='op'>=</span> <span class='ident'>client</span>.<span class='ident'>request</span>(
     <span class='ident'>product</span>::<span class='ident'>Connect</span>,
@@ -135,13 +128,6 @@ plaid = &quot;0.1&quot;
 <p>Fetch data from the product:</p>
 
 <pre class='rust rust-example-rendered'>
-<span class='kw'>let</span> <span class='ident'>hyper</span> <span class='op'>=</span> <span class='ident'>hyper</span>::<span class='ident'>client</span>::<span class='ident'>Client</span>::<span class='ident'>new</span>();
-
-<span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>product</span>;
-<span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>user</span>::<span class='ident'>User</span>;
-<span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>client</span>::{ <span class='ident'>Client</span>, <span class='ident'>Payload</span> };
-<span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>client</span>::<span class='ident'>payload</span>::<span class='ident'>FetchDataOptions</span>;
-
 <span class='kw'>let</span> <span class='ident'>user</span> <span class='op'>=</span> <span class='ident'>User</span> { <span class='ident'>access_token</span>: <span class='string'>&quot;useraccesstoken&quot;</span>.<span class='ident'>to_string</span>() };
 <span class='kw'>let</span> <span class='ident'>response</span> <span class='op'>=</span> <span class='ident'>client</span>.<span class='ident'>request</span>(
     <span class='ident'>product</span>::<span class='ident'>Connect</span>,

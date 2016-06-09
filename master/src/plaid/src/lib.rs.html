@@ -375,13 +375,13 @@
 <span class='doccomment'>//! #</span>
 <span class='doccomment'>//! # http_stub!(StubPolicy, 200, include_str!(&quot;fixtures/post_connect_success.json&quot;));</span>
 <span class='doccomment'>//! #</span>
-<span class='doccomment'>//! let hyper = hyper::client::Client::new();</span>
+<span class='doccomment'>//! # let hyper = hyper::client::Client::new();</span>
 <span class='doccomment'>//! # let hyper = hyper::Client::with_connector(StubPolicy::default());</span>
-<span class='doccomment'>//!</span>
-<span class='doccomment'>//! use plaid::api::product;</span>
-<span class='doccomment'>//! use plaid::api::user::User;</span>
-<span class='doccomment'>//! use plaid::api::client::{ Client, Payload };</span>
-<span class='doccomment'>//! use plaid::api::mfa;</span>
+<span class='doccomment'>//! #</span>
+<span class='doccomment'>//! # use plaid::api::product;</span>
+<span class='doccomment'>//! # use plaid::api::user::User;</span>
+<span class='doccomment'>//! # use plaid::api::client::{ Client, Payload };</span>
+<span class='doccomment'>//! # use plaid::api::mfa;</span>
 <span class='doccomment'>//! # use plaid::api::types::*;</span>
 <span class='doccomment'>//! # use plaid::api::client::Response;</span>
 <span class='doccomment'>//! #</span>
@@ -391,7 +391,7 @@
 <span class='doccomment'>//! #     secret: &quot;yourclientsecret&quot;,</span>
 <span class='doccomment'>//! #     hyper: &amp;hyper</span>
 <span class='doccomment'>//! # };</span>
-<span class='doccomment'>//!</span>
+<span class='doccomment'>//! #</span>
 <span class='doccomment'>//! let user = User { access_token: &quot;useraccesstoken&quot;.to_string() };</span>
 <span class='doccomment'>//! let response = client.request(</span>
 <span class='doccomment'>//!     product::Connect,</span>
@@ -421,13 +421,13 @@
 <span class='doccomment'>//! #</span>
 <span class='doccomment'>//! # http_stub!(StubPolicy, 200, include_str!(&quot;fixtures/post_connect_success.json&quot;));</span>
 <span class='doccomment'>//! #</span>
-<span class='doccomment'>//! let hyper = hyper::client::Client::new();</span>
+<span class='doccomment'>//! # let hyper = hyper::client::Client::new();</span>
 <span class='doccomment'>//! # let hyper = hyper::Client::with_connector(StubPolicy::default());</span>
-<span class='doccomment'>//!</span>
-<span class='doccomment'>//! use plaid::api::product;</span>
-<span class='doccomment'>//! use plaid::api::user::User;</span>
-<span class='doccomment'>//! use plaid::api::client::{ Client, Payload };</span>
-<span class='doccomment'>//! use plaid::api::client::payload::FetchDataOptions;</span>
+<span class='doccomment'>//! #</span>
+<span class='doccomment'>//! # use plaid::api::product;</span>
+<span class='doccomment'>//! # use plaid::api::user::User;</span>
+<span class='doccomment'>//! # use plaid::api::client::{ Client, Payload };</span>
+<span class='doccomment'>//! # use plaid::api::client::payload::FetchDataOptions;</span>
 <span class='doccomment'>//! # use plaid::api::types::*;</span>
 <span class='doccomment'>//! # use plaid::api::client::Response;</span>
 <span class='doccomment'>//! #</span>
@@ -437,7 +437,7 @@
 <span class='doccomment'>//! #     secret: &quot;yourclientsecret&quot;,</span>
 <span class='doccomment'>//! #     hyper: &amp;hyper</span>
 <span class='doccomment'>//! # };</span>
-<span class='doccomment'>//!</span>
+<span class='doccomment'>//! #</span>
 <span class='doccomment'>//! let user = User { access_token: &quot;useraccesstoken&quot;.to_string() };</span>
 <span class='doccomment'>//! let response = client.request(</span>
 <span class='doccomment'>//!     product::Connect,</span>
