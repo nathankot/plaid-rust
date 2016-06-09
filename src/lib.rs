@@ -11,8 +11,6 @@
 //! Most of these products have the same authentication mechanism and data retrieval style.
 //! Therefore an API request is built by combining a product with a [`Payload`][Payload].
 //!
-//! *The documentation for the [client][client] module includes usage examples*.
-//!
 //! # Overview
 //!
 //! The following provides a high-level outline of the core components in this library:
@@ -61,6 +59,8 @@
 //!
 //! use plaid::api::product;
 //! use plaid::api::client::{ Client, Payload };
+//! # use plaid::api::types::*;
+//! # use plaid::api::client::Response;
 //!
 //! // Build a client given your current credentials.
 //! let client = Client {
@@ -79,6 +79,14 @@
 //!                           "password".to_string(),
 //!                           None,
 //!                           None));
+//! #
+//! # match response.unwrap() {
+//! #     Response::MFA(ref user, ref challenge) => {
+//! #         assert_eq!(user.access_token, "test".to_string());
+//! #         assert_eq!(format!("{:?}", challenge), "Code");
+//! #     },
+//! #     _ => panic!("Unexpected response")
+//! # };
 //! # }
 //! ```
 //!
@@ -100,6 +108,8 @@
 //! use plaid::api::user::User;
 //! use plaid::api::client::{ Client, Payload };
 //! use plaid::api::mfa;
+//! # use plaid::api::types::*;
+//! # use plaid::api::client::Response;
 //! #
 //! # let client = Client {
 //! #     endpoint: "https://tartan.plaid.com",
@@ -112,6 +122,17 @@
 //! let response = client.request(
 //!     product::Connect,
 //!     Payload::StepMFA(client, user, mfa::Response::Code("1234".to_string())));
+//! #
+//! # match response.unwrap() {
+//! #     Response::Authenticated(ref user, ref data) => {
+//! #         assert_eq!(user.access_token, "test".to_string());
+//! #         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
+//! #         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
+//! #         assert_eq!(data.transactions[0].amount, -700 as Amount);
+//! #         assert_eq!(data.transactions[1].id, "testtransactionid2".to_string());
+//! #     },
+//! #     _ => panic!("Unexpected response")
+//! # };
 //! # }
 //! ```
 //!
@@ -133,6 +154,8 @@
 //! use plaid::api::user::User;
 //! use plaid::api::client::{ Client, Payload };
 //! use plaid::api::client::payload::FetchDataOptions;
+//! # use plaid::api::types::*;
+//! # use plaid::api::client::Response;
 //! #
 //! # let client = Client {
 //! #     endpoint: "https://tartan.plaid.com",
@@ -145,6 +168,16 @@
 //! let response = client.request(
 //!     product::Connect,
 //!     Payload::FetchData(client, user, Some(FetchDataOptions::default())));
+//! #
+//! # match response.unwrap() {
+//! #     Response::ProductData(ref data) => {
+//! #         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
+//! #         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
+//! #         assert_eq!(data.transactions[0].amount, -700 as Amount);
+//! #         assert_eq!(data.transactions[1].id, "testtransactionid2".to_string());
+//! #     },
+//! #     _ => panic!("Unexpected response")
+//! # };
 //! # }
 //! ```
 //!
