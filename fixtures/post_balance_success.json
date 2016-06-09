@@ -1,0 +1,30 @@
+{
+  "access_token": "test",
+  "accounts": [{
+    "_id": "testaccountid",
+    "_item": "testitemid",
+    "_user": "testuserid",
+    "balance": {
+      "available": 742.93,
+      "current": 742.93
+    },
+    "institution_type": "chase",
+    "meta": {
+      "name": "Total Checking",
+      "number": "0655"
+    },
+    "subtype": "checking",
+    "type": "depository"
+  }, {
+    "_id": "testaccount2id",
+    "_item": "testitem2id",
+    "_user": "testuserid",
+    "balance": {
+      "available": 9999.99,
+      "current": 100030.32
+    },
+    "institution_type": "chase",
+    "meta": {},
+    "type": "depository"
+  }]
+}
