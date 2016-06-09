@@ -15,7 +15,9 @@ pub enum Challenge {
     /// A list of possible challenge devices, in which the user should
     /// choose one and then pass along the selection using `api::client::payload::AuthenticateOptions`.
     /// It is in the form of `(device_type, device_mask)`.
-    DeviceList(Vec<(Device, String)>)
+    DeviceList(Vec<(Device, String)>),
+    /// A list of questions that need to be answered.
+    Questions(Vec<String>)
 }
 
 /// Represents a response to a previously given MFA challenge.
@@ -23,22 +25,23 @@ pub enum Challenge {
 pub enum Response {
     /// A response to a code challenge, providing the code
     /// that was sent to the user's device.
-    Code(String)
+    Code(String),
+    /// Responses to a previously given list of questions.
+    Questions(Vec<String>)
 }
 
 impl Encodable for Response {
 
     fn encode<E: Encoder>(&self, e: &mut E) -> Result<(), E::Error> {
         match *self {
-            Response::Code(ref str) => e.emit_str(str)
+            Response::Code(ref str) => e.emit_str(str),
+            Response::Questions(ref answers) => answers.encode(e)
         }
     }
 
 }
 
-/// An internal `newtype` over `(Device, String)` to help with de-serialization
 struct DeviceAndMask(Device, String);
-
 impl Decodable for DeviceAndMask {
 
     fn decode<D: Decoder>(decoder: &mut D) -> Result<DeviceAndMask, D::Error> {
@@ -51,6 +54,18 @@ impl Decodable for DeviceAndMask {
 
 }
 
+struct Question(String);
+impl Decodable for Question {
+
+    fn decode<D: Decoder>(d: &mut D) -> Result<Question, D::Error> {
+        d.read_struct("root", 1, |d| {
+            let s = try!(d.read_struct_field("question", 0, |d| Decodable::decode(d)));
+            Ok(Question(s))
+        })
+    }
+
+}
+
 impl Decodable for Challenge {
 
     fn decode<D: Decoder>(d: &mut D) -> Result<Challenge, D::Error> {
@@ -58,9 +73,14 @@ impl Decodable for Challenge {
             let t: String = try!(d.read_struct_field("type", 0, |d| Decodable::decode(d)));
             match t.as_ref() {
                 "device" => Ok(Challenge::Code),
+                "questions" => {
+                    let list: Vec<Question> = try!(d.read_struct_field("mfa", 1, |d| Decodable::decode(d)));
+                    let list = list.iter().map(|&Question(ref s)| s.clone()).collect();
+                    Ok(Challenge::Questions(list))
+                },
                 "list" => {
-                    let list: Vec<DeviceAndMask> = try!(d.read_struct_field("mfa", 0, |d| Decodable::decode(d)));
-                    let list = list.iter().map(|&DeviceAndMask(ref device, ref mask)| { (*device, mask.clone()) }).collect();
+                    let list: Vec<DeviceAndMask> = try!(d.read_struct_field("mfa", 1, |d| Decodable::decode(d)));
+                    let list = list.iter().map(|&DeviceAndMask(ref device, ref mask)| (*device, mask.clone())).collect();
                     Ok(Challenge::DeviceList(list))
                 },
                 p => Err(d.error(format!("Un-supported MFA preference: {}", p).as_ref()))
@@ -122,6 +142,20 @@ mod tests {
               "access_token": "xxxxx" }
         "##).unwrap();
         assert_eq!(format!("{:?}", r), "Code");
+    }
+
+    #[test]
+    fn test_decoding_question_challenges() {
+        let r: mfa::Challenge = json::decode(r##"
+            { "type": "questions",
+              "mfa": [{"question": "What was the name of your first pet?"}, {"question": "Whats your name?"}],
+              "access_token": "xxxxx" }
+        "##).unwrap();
+
+        assert_eq!(format!("{:?}", r), format!("{:?}", Challenge::Questions(vec![
+            "What was the name of your first pet?".to_string(),
+            "Whats your name?".to_string()
+        ])));
     }
 
     #[test]
