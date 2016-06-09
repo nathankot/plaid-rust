@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Auth","`Auth` is the endpoint you need in order to check that the user owns their account."],["AuthData","Representation of data that is retrieved from the `Auth` product."]]});

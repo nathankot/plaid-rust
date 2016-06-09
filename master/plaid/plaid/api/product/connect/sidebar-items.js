@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Connect","`Connect` is the endpoint you need to fetch transaction for a `User`"],["ConnectData","Representation of data that is retrieved from the `Connect` product."]]});

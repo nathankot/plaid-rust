@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `plaid` crate.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, plaid">
+
+    <title>plaid - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'></p><script>window.sidebarCurrent = {name: 'plaid', ty: 'mod', relpath: '../'};</script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>plaid</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-0' class='srclink' href='../src/plaid/src/lib.rs.html#1-194' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p><a href="https://www.plaid.com">Plaid</a> is the technology layer for financial services.
+This library makes it easier to interface with Plaid.</p>
+
+<p>In order to make calls to the API, you&#39;ll be using
+<a href="./api/client/index.html"><code>Client</code></a> as the dispatcher.</p>
+
+<p>Plaid&#39;s api is grouped into different products, which are represented types that
+implement the <a href="./api/product/trait.Product.html"><code>Product</code></a> trait.
+Most of these products have the same authentication mechanism and data retrieval style.
+Therefore an API request is built by combining a product with a <a href="./api/client/payload/enum.Payload.html"><code>Payload</code></a>.</p>
+
+<p><em>The documentation for the <a href="./api/client/index.html">client</a> module includes usage examples</em>.</p>
+
+<h1 id='overview' class='section-header'><a href='#overview'>Overview</a></h1>
+<p>The following provides a high-level outline of the core components in this library:</p>
+
+<ul>
+<li><p><strong><a href="./api/client/index.html"><code>Client</code></a></strong> represents the configuration of your API credentials and</p></li>
+<li><p><strong><a href="./api/user/struct.User.html"><code>User</code></a></strong> represents an end-user that has authenticated their bank account,
+and of which you have a Plaid access token for.</p></li>
+<li><p><strong><a href="./api/product/trait.Product.html"><code>Product</code></a></strong> is a trait that provides the bare minimum definition of a product
+(e.g Connect, Auth, Income) required in order for the <a href="./api/client/index.html"><code>Client</code></a> to infer
+request/response behavior with.</p></li>
+</ul>
+
+<p><em>See the <a href="./api/data/index.html">data</a> module for a complete list.</em></p>
+
+<h1 id='products' class='section-header'><a href='#products'>Products</a></h1>
+<p>Below are the currently supported Plaid products. Each product has its own
+module, and is documented with usage examples.</p>
+
+<ul>
+<li><a href="./api/product/connect/index.html">Connect</a></li>
+<li><a href="./api/product/auth/index.html">Auth</a></li>
+<li><a href="./api/product/balance/index.html">Balance</a></li>
+</ul>
+
+<h1 id='quick-start' class='section-header'><a href='#quick-start'>Quick Start</a></h1>
+<p>Add <code>plaid</code> as a dependency to <code>Cargo.toml</code>:</p>
+
+<pre><code class="language-toml">[dependencies]
+plaid = &quot;0.1&quot;
+</code></pre>
+
+<p>Write some code, notice that it uses <a href="http://hyper.rs"><code>Hyper</code></a> under the hood:</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>let</span> <span class='ident'>hyper</span> <span class='op'>=</span> <span class='ident'>hyper</span>::<span class='ident'>client</span>::<span class='ident'>Client</span>::<span class='ident'>new</span>();
+
+<span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>product</span>;
+<span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>client</span>::{ <span class='ident'>Client</span>, <span class='ident'>Payload</span> };
+
+<span class='comment'>// Build a client given your current credentials.</span>
+<span class='kw'>let</span> <span class='ident'>client</span> <span class='op'>=</span> <span class='ident'>Client</span> {
+    <span class='ident'>endpoint</span>: <span class='string'>&quot;https://tartan.plaid.com&quot;</span>,
+    <span class='ident'>client_id</span>: <span class='string'>&quot;yourclientid&quot;</span>,
+    <span class='ident'>secret</span>: <span class='string'>&quot;yourclientsecret&quot;</span>,
+    <span class='ident'>hyper</span>: <span class='kw-2'>&amp;</span><span class='ident'>hyper</span>
+};
+
+<span class='comment'>// Authenticate the user for Plaid Connect.</span>
+<span class='comment'>// `response` will be `Authenticated(..)` if successful, which includes a `User`</span>
+<span class='kw'>let</span> <span class='ident'>response</span> <span class='op'>=</span> <span class='ident'>client</span>.<span class='ident'>request</span>(<span class='ident'>product</span>::<span class='ident'>Connect</span>,
+    <span class='ident'>Payload</span>::<span class='ident'>Authenticate</span>(<span class='ident'>client</span>,
+                          <span class='string'>&quot;Chase&quot;</span>.<span class='ident'>to_string</span>(),
+                          <span class='string'>&quot;username&quot;</span>.<span class='ident'>to_string</span>(),
+                          <span class='string'>&quot;password&quot;</span>.<span class='ident'>to_string</span>(),
+                          <span class='prelude-val'>None</span>,
+                          <span class='prelude-val'>None</span>));</pre>
+
+<p>Respond to multifactor authentication challenges:</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>let</span> <span class='ident'>hyper</span> <span class='op'>=</span> <span class='ident'>hyper</span>::<span class='ident'>client</span>::<span class='ident'>Client</span>::<span class='ident'>new</span>();
+
+<span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>product</span>;
+<span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>user</span>::<span class='ident'>User</span>;
+<span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>client</span>::{ <span class='ident'>Client</span>, <span class='ident'>Payload</span> };
+<span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>mfa</span>;
+
+<span class='kw'>let</span> <span class='ident'>user</span> <span class='op'>=</span> <span class='ident'>User</span> { <span class='ident'>access_token</span>: <span class='string'>&quot;useraccesstoken&quot;</span>.<span class='ident'>to_string</span>() };
+<span class='kw'>let</span> <span class='ident'>response</span> <span class='op'>=</span> <span class='ident'>client</span>.<span class='ident'>request</span>(
+    <span class='ident'>product</span>::<span class='ident'>Connect</span>,
+    <span class='ident'>Payload</span>::<span class='ident'>StepMFA</span>(<span class='ident'>client</span>, <span class='ident'>user</span>, <span class='ident'>mfa</span>::<span class='ident'>Response</span>::<span class='ident'>Code</span>(<span class='string'>&quot;1234&quot;</span>.<span class='ident'>to_string</span>())));</pre>
+
+<p>Fetch data from the product:</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>let</span> <span class='ident'>hyper</span> <span class='op'>=</span> <span class='ident'>hyper</span>::<span class='ident'>client</span>::<span class='ident'>Client</span>::<span class='ident'>new</span>();
+
+<span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>product</span>;
+<span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>user</span>::<span class='ident'>User</span>;
+<span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>client</span>::{ <span class='ident'>Client</span>, <span class='ident'>Payload</span> };
+<span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>client</span>::<span class='ident'>payload</span>::<span class='ident'>FetchDataOptions</span>;
+
+<span class='kw'>let</span> <span class='ident'>user</span> <span class='op'>=</span> <span class='ident'>User</span> { <span class='ident'>access_token</span>: <span class='string'>&quot;useraccesstoken&quot;</span>.<span class='ident'>to_string</span>() };
+<span class='kw'>let</span> <span class='ident'>response</span> <span class='op'>=</span> <span class='ident'>client</span>.<span class='ident'>request</span>(
+    <span class='ident'>product</span>::<span class='ident'>Connect</span>,
+    <span class='ident'>Payload</span>::<span class='ident'>FetchData</span>(<span class='ident'>client</span>, <span class='ident'>user</span>, <span class='prelude-val'>Some</span>(<span class='ident'>FetchDataOptions</span>::<span class='ident'>default</span>())));</pre>
+</div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='api/index.html'
+                                  title='plaid::api'>api</a></td>
+                           <td class='docblock short'>
+                                <p>The namespace that everything in this library falls under.</p>
+                           </td>
+                       </tr></table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "plaid";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

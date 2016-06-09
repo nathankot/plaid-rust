@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["User","User Represents an authorized user for a given product."]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["account","Representations of a user's bank account."],["transaction","Representations of banking transactions."],["types","Type aliases that map to common types."]]});

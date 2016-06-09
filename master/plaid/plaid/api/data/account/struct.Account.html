@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Account` struct in crate `plaid`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Account">
+
+    <title>plaid::api::data::account::Account - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../../../index.html'>plaid</a>::<wbr><a href='../../index.html'>api</a>::<wbr><a href='../index.html'>data</a>::<wbr><a href='index.html'>account</a></p><script>window.sidebarCurrent = {name: 'Account', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../../../index.html'>plaid</a>::<wbr><a href='../../index.html'>api</a>::<wbr><a href='../index.html'>data</a>::<wbr><a href='index.html'>account</a>::<wbr><a class='struct' href=''>Account</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-827' class='srclink' href='../../../../src/plaid/src/api/data/account.rs.html#9-38' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Account {
+    pub id: <a class='type' href='../../../../plaid/api/data/types/type.UID.html' title='plaid::api::data::types::UID'>UID</a>,
+    pub item_id: <a class='type' href='../../../../plaid/api/data/types/type.UID.html' title='plaid::api::data::types::UID'>UID</a>,
+    pub current_balance: <a class='type' href='../../../../plaid/api/data/types/type.Amount.html' title='plaid::api::data::types::Amount'>Amount</a>,
+    pub available_balance: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='type' href='../../../../plaid/api/data/types/type.Amount.html' title='plaid::api::data::types::Amount'>Amount</a>&gt;,
+    pub institution: <a class='type' href='../../../../plaid/api/data/types/type.Institution.html' title='plaid::api::data::types::Institution'>Institution</a>,
+    pub account_type: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,
+    pub account_subtype: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;,
+    pub account_number: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;,
+    pub routing_number: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;,
+    pub wire_routing_number: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;,
+}</pre><div class='docblock'>
+<h1 id='account' class='section-header'><a href='#account'>Account</a></h1>
+<p>Represents one account associated with the given <code>User</code>.</p>
+</div><h2 class='fields'>Fields</h2>
+<table><tr class='stab '>
+                             <td id='structfield.id'><code>id</code></td><td><div class='docblock'><p>The unique id of the account.</p>
+</div></td></tr><tr class='stab '>
+                             <td id='structfield.item_id'><code>item_id</code></td><td><div class='docblock'><p>An id unique to the accounts of a particular access token</p>
+</div></td></tr><tr class='stab '>
+                             <td id='structfield.current_balance'><code>current_balance</code></td><td><div class='docblock'><p>The total amount of funds in the account</p>
+</div></td></tr><tr class='stab '>
+                             <td id='structfield.available_balance'><code>available_balance</code></td><td><div class='docblock'><p>The Current Balance less any outstanding holds or debits that
+have not yet posted to the account. May sometimes not be available.</p>
+</div></td></tr><tr class='stab '>
+                             <td id='structfield.institution'><code>institution</code></td><td><div class='docblock'><p>The financial institution associated with the account.</p>
+</div></td></tr><tr class='stab '>
+                             <td id='structfield.account_type'><code>account_type</code></td><td><div class='docblock'><p>The classification of this account.
+<a href="https://plaid.com/docs/api/#connect-account-types">See here for more info</a>.</p>
+</div></td></tr><tr class='stab '>
+                             <td id='structfield.account_subtype'><code>account_subtype</code></td><td><div class='docblock'><p>A more detailed classification of the account.
+This is not always available.
+<a href="https://plaid.com/docs/api/#connect-account-subtypes">See here for a list of possible types</a>.</p>
+</div></td></tr><tr class='stab '>
+                             <td id='structfield.account_number'><code>account_number</code></td><td><div class='docblock'><p>The user&#39;s bank account number.
+Only available when using <code>api::product::Auth</code>.</p>
+</div></td></tr><tr class='stab '>
+                             <td id='structfield.routing_number'><code>routing_number</code></td><td><div class='docblock'><p>The user&#39;s routing number.
+Only available when using <code>api::product::Auth</code>.</p>
+</div></td></tr><tr class='stab '>
+                             <td id='structfield.wire_routing_number'><code>wire_routing_number</code></td><td><div class='docblock'><p>The user&#39;s wire routing number.
+Only available when using <code>api::product::Auth</code>.</p>
+</div></td></tr></table><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='../../../../rustc_serialize/serialize/trait.Decodable.html' title='rustc_serialize::serialize::Decodable'>Decodable</a> for <a class='struct' href='../../../../plaid/api/data/account/struct.Account.html' title='plaid::api::data::account::Account'>Account</a></code></h3><div class='docblock'><p>Accounts are decodable from JSON.</p>
+</div><div class='impl-items'><h4 id='method.decode' class='method'><code>fn <a href='../../../../rustc_serialize/serialize/trait.Decodable.html#tymethod.decode' class='fnname'>decode</a>&lt;D: <a class='trait' href='../../../../rustc_serialize/serialize/trait.Decoder.html' title='rustc_serialize::serialize::Decoder'>Decoder</a>&gt;(decoder: &amp;mut D) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../../../../plaid/api/data/account/struct.Account.html' title='plaid::api::data::account::Account'>Account</a>, D::Error&gt;</code></h4>
+</div><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../../../../plaid/api/data/account/struct.Account.html' title='plaid::api::data::account::Account'>Account</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../../";
+        window.currentCrate = "plaid";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../../../jquery.js"></script>
+    <script src="../../../../main.js"></script>
+    
+    <script defer src="../../../../search-index.js"></script>
+</body>
+</html>

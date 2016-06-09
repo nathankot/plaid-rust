@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Context","The context in which a transaction took place"]],"struct":[["Transaction","Transaction Represents a single transaction associated with a given `Account`."]]});
