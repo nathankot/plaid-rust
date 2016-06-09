@@ -51,7 +51,7 @@
 <div class='docblock'><p>Data structures and methods that interact with Plaid via HTTP.</p>
 
 <h2 id='examples' class='section-header'><a href='#examples'>Examples</a></h2>
-<h3 id='a-successful-connect-authorization-that-requires-a-mfa-step' class='section-header'><a href='#a-successful-connect-authorization-that-requires-a-mfa-step'>A successful connect authorization that requires a MFA step</a></h3>
+<h3 id='a-connect-authorization-that-requires-a-mfa-step' class='section-header'><a href='#a-connect-authorization-that-requires-a-mfa-step'>A connect authorization that requires a MFA step</a></h3>
 <pre class='rust rust-example-rendered'>
 <span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>client</span>;
 <span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>product</span>;
@@ -72,17 +72,9 @@
      <span class='string'>&quot;password&quot;</span>.<span class='ident'>to_string</span>(),
      <span class='prelude-val'>None</span>,
      <span class='prelude-val'>None</span>))
-  .<span class='ident'>unwrap</span>();
+  .<span class='ident'>unwrap</span>();</pre>
 
-<span class='kw'>match</span> <span class='ident'>response</span> {
-    <span class='ident'>Response</span>::<span class='ident'>MFA</span>(<span class='kw-2'>ref</span> <span class='ident'>user</span>, <span class='kw-2'>ref</span> <span class='ident'>challenge</span>) <span class='op'>=&gt;</span> {
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>user</span>.<span class='ident'>access_token</span>, <span class='string'>&quot;test&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{:?}&quot;</span>, <span class='ident'>challenge</span>), <span class='string'>&quot;Code&quot;</span>);
-    },
-    _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>(<span class='string'>&quot;Unexpected response&quot;</span>)
-};</pre>
-
-<h3 id='a-successful-connect-authorization-without-an-mfa-step' class='section-header'><a href='#a-successful-connect-authorization-without-an-mfa-step'>A successful connect authorization without an MFA step</a></h3>
+<h3 id='a-connect-authorization-without-an-mfa-step' class='section-header'><a href='#a-connect-authorization-without-an-mfa-step'>A connect authorization without an MFA step</a></h3>
 <pre class='rust rust-example-rendered'>
 <span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>client</span>::{ <span class='ident'>Client</span>, <span class='ident'>Response</span>, <span class='ident'>Payload</span> };
 <span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>product</span>;
@@ -102,20 +94,9 @@
       <span class='string'>&quot;password&quot;</span>.<span class='ident'>to_string</span>(),
       <span class='prelude-val'>None</span>,
       <span class='prelude-val'>None</span>))
-  .<span class='ident'>unwrap</span>();
+  .<span class='ident'>unwrap</span>();</pre>
 
-<span class='kw'>match</span> <span class='ident'>response</span> {
-    <span class='ident'>Response</span>::<span class='ident'>Authenticated</span>(<span class='kw-2'>ref</span> <span class='ident'>user</span>, <span class='kw-2'>ref</span> <span class='ident'>data</span>) <span class='op'>=&gt;</span> {
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>user</span>.<span class='ident'>access_token</span>, <span class='string'>&quot;test&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>data</span>.<span class='ident'>accounts</span>[<span class='number'>0</span>].<span class='ident'>current_balance</span>, <span class='number'>742.93</span> <span class='kw'>as</span> <span class='ident'>Amount</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>data</span>.<span class='ident'>accounts</span>[<span class='number'>1</span>].<span class='ident'>current_balance</span>, <span class='number'>100030.32</span> <span class='kw'>as</span> <span class='ident'>Amount</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>data</span>.<span class='ident'>transactions</span>[<span class='number'>0</span>].<span class='ident'>amount</span>, <span class='op'>-</span><span class='number'>700</span> <span class='kw'>as</span> <span class='ident'>Amount</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>data</span>.<span class='ident'>transactions</span>[<span class='number'>1</span>].<span class='ident'>id</span>, <span class='string'>&quot;testtransactionid2&quot;</span>.<span class='ident'>to_string</span>());
-    },
-    _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>(<span class='string'>&quot;Unexpected response&quot;</span>)
-};</pre>
-
-<h3 id='a-successful-connect-data-retrieval' class='section-header'><a href='#a-successful-connect-data-retrieval'>A successful connect data retrieval</a></h3>
+<h3 id='a-connect-data-retrieval' class='section-header'><a href='#a-connect-data-retrieval'>A connect data retrieval</a></h3>
 <pre class='rust rust-example-rendered'>
 <span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>client</span>::{ <span class='ident'>Client</span>, <span class='ident'>Response</span>, <span class='ident'>Payload</span> };
 <span class='kw'>use</span> <span class='ident'>plaid</span>::<span class='ident'>api</span>::<span class='ident'>product</span>;
@@ -132,17 +113,7 @@
 <span class='kw'>let</span> <span class='ident'>response</span> <span class='op'>=</span> <span class='ident'>client</span>.<span class='ident'>request</span>(
   <span class='ident'>product</span>::<span class='ident'>Connect</span>,
   <span class='ident'>Payload</span>::<span class='ident'>FetchData</span>(<span class='ident'>client</span>, <span class='ident'>user</span>, <span class='prelude-val'>None</span>))
-  .<span class='ident'>unwrap</span>();
-
-<span class='kw'>match</span> <span class='ident'>response</span> {
-    <span class='ident'>Response</span>::<span class='ident'>ProductData</span>(<span class='kw-2'>ref</span> <span class='ident'>data</span>) <span class='op'>=&gt;</span> {
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>data</span>.<span class='ident'>accounts</span>[<span class='number'>0</span>].<span class='ident'>current_balance</span>, <span class='number'>742.93</span> <span class='kw'>as</span> <span class='ident'>Amount</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>data</span>.<span class='ident'>accounts</span>[<span class='number'>1</span>].<span class='ident'>current_balance</span>, <span class='number'>100030.32</span> <span class='kw'>as</span> <span class='ident'>Amount</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>data</span>.<span class='ident'>transactions</span>[<span class='number'>0</span>].<span class='ident'>amount</span>, <span class='op'>-</span><span class='number'>700</span> <span class='kw'>as</span> <span class='ident'>Amount</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>data</span>.<span class='ident'>transactions</span>[<span class='number'>1</span>].<span class='ident'>id</span>, <span class='string'>&quot;testtransactionid2&quot;</span>.<span class='ident'>to_string</span>());
-    },
-    _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>(<span class='string'>&quot;Unexpected response&quot;</span>)
-};</pre>
+  .<span class='ident'>unwrap</span>();</pre>
 </div><h2 id='reexports' class='section-header'><a href="#reexports">Reexports</a></h2>
 <table><tr><td><code>pub use self::<a class='mod'
                                        href='./payload/index.html'>payload</a>::<a class='enum' href='../../../plaid/api/client/payload/enum.Payload.html' title='plaid::api::client::payload::Payload'>Payload</a>;</code></td></tr><tr><td><code>pub use self::<a class='mod'

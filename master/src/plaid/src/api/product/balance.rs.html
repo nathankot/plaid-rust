@@ -145,14 +145,14 @@
 <span class='doccomment'>//!   product::Balance,</span>
 <span class='doccomment'>//!   Payload::FetchData(client, user, None))</span>
 <span class='doccomment'>//!   .unwrap();</span>
-<span class='doccomment'>//!</span>
-<span class='doccomment'>//! match response {</span>
-<span class='doccomment'>//!     Response::ProductData(ref data) =&gt; {</span>
-<span class='doccomment'>//!         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);</span>
-<span class='doccomment'>//!         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);</span>
-<span class='doccomment'>//!     },</span>
-<span class='doccomment'>//!     _ =&gt; panic!(&quot;Expected product data&quot;)</span>
-<span class='doccomment'>//! };</span>
+<span class='doccomment'>//! #</span>
+<span class='doccomment'>//! # match response {</span>
+<span class='doccomment'>//! #     Response::ProductData(ref data) =&gt; {</span>
+<span class='doccomment'>//! #         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);</span>
+<span class='doccomment'>//! #         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);</span>
+<span class='doccomment'>//! #     },</span>
+<span class='doccomment'>//! #     _ =&gt; panic!(&quot;Expected product data&quot;)</span>
+<span class='doccomment'>//! # };</span>
 <span class='doccomment'>//! # }</span>
 <span class='doccomment'>//! ```</span>
 

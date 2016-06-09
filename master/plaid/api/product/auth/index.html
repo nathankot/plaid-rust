@@ -69,16 +69,7 @@ and routing numbers if authorization is successful.</p>
 <span class='kw'>let</span> <span class='ident'>response</span> <span class='op'>=</span> <span class='ident'>client</span>.<span class='ident'>request</span>(
   <span class='ident'>product</span>::<span class='ident'>Auth</span>,
   <span class='ident'>Payload</span>::<span class='ident'>FetchData</span>(<span class='ident'>client</span>, <span class='ident'>user</span>, <span class='prelude-val'>None</span>))
-  .<span class='ident'>unwrap</span>();
-
-<span class='kw'>match</span> <span class='ident'>response</span> {
-    <span class='ident'>Response</span>::<span class='ident'>ProductData</span>(<span class='kw-2'>ref</span> <span class='ident'>data</span>) <span class='op'>=&gt;</span> {
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>data</span>.<span class='ident'>accounts</span>[<span class='number'>0</span>].<span class='ident'>current_balance</span>, <span class='number'>1274.93</span> <span class='kw'>as</span> <span class='ident'>Amount</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>data</span>.<span class='ident'>accounts</span>[<span class='number'>0</span>].<span class='ident'>available_balance</span>, <span class='prelude-val'>Some</span>(<span class='number'>1203.42</span> <span class='kw'>as</span> <span class='ident'>Amount</span>));
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>data</span>.<span class='ident'>accounts</span>[<span class='number'>0</span>].<span class='ident'>account_number</span>, <span class='prelude-val'>Some</span>(<span class='string'>&quot;9900009606&quot;</span>.<span class='ident'>to_string</span>()));
-    },
-    _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>(<span class='string'>&quot;Expected product data&quot;</span>)
-};</pre>
+  .<span class='ident'>unwrap</span>();</pre>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                        <tr class=' module-item'>

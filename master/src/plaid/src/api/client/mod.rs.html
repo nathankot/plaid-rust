@@ -279,7 +279,7 @@
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ## Examples</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! ### A successful connect authorization that requires a MFA step</span>
+<span class='doccomment'>//! ### A connect authorization that requires a MFA step</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ```</span>
 <span class='doccomment'>//! # #[macro_use(http_stub)] extern crate plaid;</span>
@@ -312,18 +312,18 @@
 <span class='doccomment'>//!      None,</span>
 <span class='doccomment'>//!      None))</span>
 <span class='doccomment'>//!   .unwrap();</span>
-<span class='doccomment'>//!</span>
-<span class='doccomment'>//! match response {</span>
-<span class='doccomment'>//!     Response::MFA(ref user, ref challenge) =&gt; {</span>
-<span class='doccomment'>//!         assert_eq!(user.access_token, &quot;test&quot;.to_string());</span>
-<span class='doccomment'>//!         assert_eq!(format!(&quot;{:?}&quot;, challenge), &quot;Code&quot;);</span>
-<span class='doccomment'>//!     },</span>
-<span class='doccomment'>//!     _ =&gt; panic!(&quot;Unexpected response&quot;)</span>
-<span class='doccomment'>//! };</span>
+<span class='doccomment'>//! #</span>
+<span class='doccomment'>//! # match response {</span>
+<span class='doccomment'>//! #     Response::MFA(ref user, ref challenge) =&gt; {</span>
+<span class='doccomment'>//! #         assert_eq!(user.access_token, &quot;test&quot;.to_string());</span>
+<span class='doccomment'>//! #         assert_eq!(format!(&quot;{:?}&quot;, challenge), &quot;Code&quot;);</span>
+<span class='doccomment'>//! #     },</span>
+<span class='doccomment'>//! #     _ =&gt; panic!(&quot;Unexpected response&quot;)</span>
+<span class='doccomment'>//! # };</span>
 <span class='doccomment'>//! # }</span>
 <span class='doccomment'>//! ```</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! ### A successful connect authorization without an MFA step</span>
+<span class='doccomment'>//! ### A connect authorization without an MFA step</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ```</span>
 <span class='doccomment'>//! # #[macro_use(http_stub)] extern crate plaid;</span>
@@ -355,21 +355,21 @@
 <span class='doccomment'>//!       None,</span>
 <span class='doccomment'>//!       None))</span>
 <span class='doccomment'>//!   .unwrap();</span>
-<span class='doccomment'>//!</span>
-<span class='doccomment'>//! match response {</span>
-<span class='doccomment'>//!     Response::Authenticated(ref user, ref data) =&gt; {</span>
-<span class='doccomment'>//!         assert_eq!(user.access_token, &quot;test&quot;.to_string());</span>
-<span class='doccomment'>//!         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);</span>
-<span class='doccomment'>//!         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);</span>
-<span class='doccomment'>//!         assert_eq!(data.transactions[0].amount, -700 as Amount);</span>
-<span class='doccomment'>//!         assert_eq!(data.transactions[1].id, &quot;testtransactionid2&quot;.to_string());</span>
-<span class='doccomment'>//!     },</span>
-<span class='doccomment'>//!     _ =&gt; panic!(&quot;Unexpected response&quot;)</span>
-<span class='doccomment'>//! };</span>
+<span class='doccomment'>//! #</span>
+<span class='doccomment'>//! # match response {</span>
+<span class='doccomment'>//! #     Response::Authenticated(ref user, ref data) =&gt; {</span>
+<span class='doccomment'>//! #         assert_eq!(user.access_token, &quot;test&quot;.to_string());</span>
+<span class='doccomment'>//! #         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);</span>
+<span class='doccomment'>//! #         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);</span>
+<span class='doccomment'>//! #         assert_eq!(data.transactions[0].amount, -700 as Amount);</span>
+<span class='doccomment'>//! #         assert_eq!(data.transactions[1].id, &quot;testtransactionid2&quot;.to_string());</span>
+<span class='doccomment'>//! #     },</span>
+<span class='doccomment'>//! #     _ =&gt; panic!(&quot;Unexpected response&quot;)</span>
+<span class='doccomment'>//! # };</span>
 <span class='doccomment'>//! # }</span>
 <span class='doccomment'>//! ```</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! ### A successful connect data retrieval</span>
+<span class='doccomment'>//! ### A connect data retrieval</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ```</span>
 <span class='doccomment'>//! # #[macro_use(http_stub)] extern crate plaid;</span>
@@ -398,16 +398,16 @@
 <span class='doccomment'>//!   product::Connect,</span>
 <span class='doccomment'>//!   Payload::FetchData(client, user, None))</span>
 <span class='doccomment'>//!   .unwrap();</span>
-<span class='doccomment'>//!</span>
-<span class='doccomment'>//! match response {</span>
-<span class='doccomment'>//!     Response::ProductData(ref data) =&gt; {</span>
-<span class='doccomment'>//!         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);</span>
-<span class='doccomment'>//!         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);</span>
-<span class='doccomment'>//!         assert_eq!(data.transactions[0].amount, -700 as Amount);</span>
-<span class='doccomment'>//!         assert_eq!(data.transactions[1].id, &quot;testtransactionid2&quot;.to_string());</span>
-<span class='doccomment'>//!     },</span>
-<span class='doccomment'>//!     _ =&gt; panic!(&quot;Unexpected response&quot;)</span>
-<span class='doccomment'>//! };</span>
+<span class='doccomment'>//! #</span>
+<span class='doccomment'>//! # match response {</span>
+<span class='doccomment'>//! #     Response::ProductData(ref data) =&gt; {</span>
+<span class='doccomment'>//! #         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);</span>
+<span class='doccomment'>//! #         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);</span>
+<span class='doccomment'>//! #         assert_eq!(data.transactions[0].amount, -700 as Amount);</span>
+<span class='doccomment'>//! #         assert_eq!(data.transactions[1].id, &quot;testtransactionid2&quot;.to_string());</span>
+<span class='doccomment'>//! #     },</span>
+<span class='doccomment'>//! #     _ =&gt; panic!(&quot;Unexpected response&quot;)</span>
+<span class='doccomment'>//! # };</span>
 <span class='doccomment'>//! # }</span>
 <span class='doccomment'>//! ```</span>
 
