@@ -1,7 +1,7 @@
 # plaid-rust
 
-*[Plaid][Plaid] is the technology layer for financial services. This library makes it
-easy to interface with Plaid.*
+[Plaid][Plaid] is the technology layer for financial services. This library makes it
+easy to interface with Plaid.
 
 ## Documentation
 
