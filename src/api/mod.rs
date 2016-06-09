@@ -1,4 +1,4 @@
-//! # The Plaid API
+//! The namespace that everything in this library falls under.
 
 pub mod user;
 pub mod client;
@@ -6,7 +6,7 @@ pub mod error;
 pub mod product;
 pub mod mfa;
 
-mod data;
+pub mod data;
 
 pub use self::data::account;
 pub use self::data::transaction;

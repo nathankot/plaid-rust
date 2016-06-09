@@ -1,4 +1,4 @@
-//! User module
+//! User-related data structures.
 
 use api::types::*;
 

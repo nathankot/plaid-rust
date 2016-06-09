@@ -1,4 +1,5 @@
-//! The product module
+//! Product definitions that provide endpoint and response deserialization
+//! information.
 
 use std::fmt::Debug;
 use std::any::Any;

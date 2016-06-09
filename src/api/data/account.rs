@@ -1,4 +1,4 @@
-//! An account represents a user's specific bank account.
+//! Representations of a user's bank account.
 
 use api::types::*;
 use rustc_serialize::{ Decodable, Decoder };

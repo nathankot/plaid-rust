@@ -1,4 +1,4 @@
-//! A transaction represents a single entry in a user's account.
+//! Representations of banking transactions.
 
 use api::types::*;
 use rustc_serialize::{ Decodable, Decoder };

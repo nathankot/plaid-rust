@@ -2,7 +2,7 @@
 //! end-users account. It will return account data including account numbers
 //! and routing numbers if authorization is successful.
 //!
-//! ## Example of data retrieval
+//! ## Endpoint example
 //!
 //! ```
 //! # #[macro_use(http_stub)] extern crate plaid;

@@ -1,5 +1,4 @@
-//! This module contains data structures and implementations
-//! related to multi-factor-authentication.
+//! Data structures and implementations related to multi-factor-authentication.
 
 use rustc_serialize::{Decodable, Decoder, Encodable, Encoder};
 

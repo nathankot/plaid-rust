@@ -1,5 +1,4 @@
-//! Defines a set of type alias that map common Plaid API values to
-//! standard types.
+//! Type aliases that map to common types.
 
 /// Unique identifiers in Plaid are represented as a globally unique hash.
 pub type UID = String;

@@ -1,7 +1,7 @@
 //! Balance is a product that allows users to query the account balance
 //! of a given user.
 //!
-//! ## Example of data retrieval
+//! ## Endpoint example
 //!
 //! ```
 //! # #[macro_use(http_stub)] extern crate plaid;

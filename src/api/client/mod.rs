@@ -1,4 +1,138 @@
-//! Client
+//! Data structures and methods that interact with Plaid via HTTP.
+//!
+//! ## Examples
+//!
+//! ### A successful connect authorization that requires a MFA step
+//!
+//! ```
+//! # #[macro_use(http_stub)] extern crate plaid;
+//! # #[macro_use] extern crate yup_hyper_mock as hyper_mock;
+//! # extern crate hyper;
+//! #
+//! # fn main() {
+//! #
+//! # http_stub!(StubPolicy, 201, include_str!("fixtures/post_connect_mfa_code.json"));
+//! #
+//! # let hyper = hyper::Client::with_connector(StubPolicy::default());
+//! #
+//! use plaid::api::client;
+//! use plaid::api::product;
+//! use plaid::api::client::payload::Payload;
+//! use plaid::api::client::response::Response;
+//!
+//! let client = client::Client { endpoint:  "https://tartan.plaid.com",
+//!                               client_id: "testclient",
+//!                               secret:    "testsecret",
+//!                               hyper:     &hyper };
+//!
+//! let response = client.request(
+//!   product::Connect,
+//!   Payload::Authenticate(
+//!      client,
+//!      "case".to_string(),
+//!      "username".to_string(),
+//!      "password".to_string(),
+//!      None,
+//!      None))
+//!   .unwrap();
+//!
+//! match response {
+//!     Response::MFA(ref user, ref challenge) => {
+//!         assert_eq!(user.access_token, "test".to_string());
+//!         assert_eq!(format!("{:?}", challenge), "Code");
+//!     },
+//!     _ => panic!("Unexpected response")
+//! };
+//! # }
+//! ```
+//!
+//! ### A successful connect authorization without an MFA step
+//!
+//! ```
+//! # #[macro_use(http_stub)] extern crate plaid;
+//! # #[macro_use] extern crate yup_hyper_mock as hyper_mock;
+//! # extern crate hyper;
+//! #
+//! # fn main() {
+//! #
+//! # http_stub!(StubPolicy, 200, include_str!("fixtures/post_connect_success.json"));
+//! #
+//! # let hyper = hyper::Client::with_connector(StubPolicy::default());
+//! #
+//! use plaid::api::client::{ Client, Response, Payload };
+//! use plaid::api::product;
+//! use plaid::api::types::*;
+//!
+//! let client = Client { endpoint:  "https://tartan.plaid.com",
+//!                       client_id: "testclient",
+//!                       secret:    "testsecret",
+//!                       hyper:     &hyper };
+//!
+//! let response = client.request(
+//!   product::Connect,
+//!   Payload::Authenticate(
+//!       client,
+//!       "chase".to_string(),
+//!       "username".to_string(),
+//!       "password".to_string(),
+//!       None,
+//!       None))
+//!   .unwrap();
+//!
+//! match response {
+//!     Response::Authenticated(ref user, ref data) => {
+//!         assert_eq!(user.access_token, "test".to_string());
+//!         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
+//!         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
+//!         assert_eq!(data.transactions[0].amount, -700 as Amount);
+//!         assert_eq!(data.transactions[1].id, "testtransactionid2".to_string());
+//!     },
+//!     _ => panic!("Unexpected response")
+//! };
+//! # }
+//! ```
+//!
+//! ### A successful connect data retrieval
+//!
+//! ```
+//! # #[macro_use(http_stub)] extern crate plaid;
+//! # #[macro_use] extern crate yup_hyper_mock as hyper_mock;
+//! # extern crate hyper;
+//! #
+//! # fn main() {
+//! #
+//! # http_stub!(StubPolicy, 200, include_str!("fixtures/post_connect_success.json"));
+//! #
+//! # let hyper = hyper::Client::with_connector(StubPolicy::default());
+//! #
+//! use plaid::api::client::{ Client, Response, Payload };
+//! use plaid::api::product;
+//! use plaid::api::types::*;
+//! use plaid::api::user::{ User };
+//!
+//! let client = Client { endpoint:  "https://tartan.plaid.com",
+//!                       client_id: "testclient",
+//!                       secret:    "testsecret",
+//!                       hyper:     &hyper };
+//!
+//! let user = User { access_token: "testaccesstoken".to_string() };
+//!
+//! let response = client.request(
+//!   product::Connect,
+//!   Payload::FetchData(client, user, None))
+//!   .unwrap();
+//!
+//! match response {
+//!     Response::ProductData(ref data) => {
+//!         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
+//!         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
+//!         assert_eq!(data.transactions[0].amount, -700 as Amount);
+//!         assert_eq!(data.transactions[1].id, "testtransactionid2".to_string());
+//!     },
+//!     _ => panic!("Unexpected response")
+//! };
+//! # }
+//! ```
 
 use std::io::Read;
 
@@ -28,11 +162,11 @@ pub mod response;
 /// This is where all requests to the API start.
 #[derive(Copy, Clone)]
 pub struct Client<'a> {
-    /// E.g `https://api.plaid.com`
+    /// E.g `https://api.plaid.com`.
     pub endpoint: &'a str,
-    /// Your application's `client_id`
+    /// Your application's `client_id`.
     pub client_id: &'a str,
-    /// Your application's `secret`
+    /// Your application's `secret`.
     pub secret: &'a str,
     /// The instance of `hyper::Client` to use.
     /// *In most cases* you simply need `hyper::Client::new()`.
@@ -43,102 +177,8 @@ pub struct Client<'a> {
 
 impl<'a> Client<'a> {
 
-    /// Create a new `User` using their provided credentials and institution.
-    /// You only need to call this once for a given user. There-after you should
-    /// store the provided `access_token` and the authenticated `Product` for future
-    /// reference.
-    ///
-    /// # Examples
-    ///
-    /// ## A successful authorization that requires a MFA step
-    ///
-    /// ```
-    /// # #[macro_use(http_stub)] extern crate plaid;
-    /// # #[macro_use] extern crate yup_hyper_mock as hyper_mock;
-    /// # extern crate hyper;
-    /// #
-    /// # fn main() {
-    /// #
-    /// # http_stub!(StubPolicy, 201, include_str!("fixtures/post_connect_mfa_code.json"));
-    /// #
-    /// # let hyper = hyper::Client::with_connector(StubPolicy::default());
-    /// #
-    /// use plaid::api::client;
-    /// use plaid::api::product;
-    /// use plaid::api::client::payload::Payload;
-    /// use plaid::api::client::response::Response;
-    ///
-    /// let client = client::Client { endpoint:  "https://tartan.plaid.com",
-    ///                               client_id: "testclient",
-    ///                               secret:    "testsecret",
-    ///                               hyper:     &hyper };
-    ///
-    /// let response = client.request(
-    ///   product::Connect,
-    ///   Payload::Authenticate(
-    ///      client,
-    ///      "case".to_string(),
-    ///      "username".to_string(),
-    ///      "password".to_string(),
-    ///      None,
-    ///      None))
-    ///   .unwrap();
-    ///
-    /// match response {
-    ///     Response::MFA(ref user, ref challenge) => {
-    ///         assert_eq!(user.access_token, "test".to_string());
-    ///         assert_eq!(format!("{:?}", challenge), "Code");
-    ///     },
-    ///     _ => panic!("Unexpected response")
-    /// };
-    /// # }
-    /// ```
-    ///
-    /// ## A successful authorization without an MFA step
-    ///
-    /// ```
-    /// # #[macro_use(http_stub)] extern crate plaid;
-    /// # #[macro_use] extern crate yup_hyper_mock as hyper_mock;
-    /// # extern crate hyper;
-    /// #
-    /// # fn main() {
-    /// #
-    /// # http_stub!(StubPolicy, 200, include_str!("fixtures/post_connect_success.json"));
-    /// #
-    /// # let hyper = hyper::Client::with_connector(StubPolicy::default());
-    /// #
-    /// use plaid::api::client::{ Client, Response, Payload };
-    /// use plaid::api::product;
-    /// use plaid::api::types::*;
-    ///
-    /// let client = Client { endpoint:  "https://tartan.plaid.com",
-    ///                       client_id: "testclient",
-    ///                       secret:    "testsecret",
-    ///                       hyper:     &hyper };
-    ///
-    /// let response = client.request(
-    ///   product::Connect,
-    ///   Payload::Authenticate(
-    ///       client,
-    ///       "chase".to_string(),
-    ///       "username".to_string(),
-    ///       "password".to_string(),
-    ///       None,
-    ///       None))
-    ///   .unwrap();
-    ///
-    /// match response {
-    ///     Response::Authenticated(ref user, ref data) => {
-    ///         assert_eq!(user.access_token, "test".to_string());
-    ///         assert_eq!(data.accounts[0].current_balance, 742.93 as Amount);
-    ///         assert_eq!(data.accounts[1].current_balance, 100030.32 as Amount);
-    ///         assert_eq!(data.transactions[0].amount, -700 as Amount);
-    ///         assert_eq!(data.transactions[1].id, "testtransactionid2".to_string());
-    ///     },
-    ///     _ => panic!("Expected product data")
-    /// };
-    /// # }
-    /// ```
+    /// Make a request to the given [Product](../product/struct.Product.html), using a
+    /// [Payload](./payload/struct.Payload.html) describing the intention of the operation.
     pub fn request<P: Product>(&self, product: P, payload: Payload) -> Result<Response<P>, Error> {
 
         let body = try!(json::encode(&payload));

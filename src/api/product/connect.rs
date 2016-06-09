@@ -1,7 +1,7 @@
 //! Connect is a product that Plaid offers. It allows you to retrieve account balance
 //! and transaction history data.
 //!
-//! ## Example of data retrieval
+//! ## Endpoint example
 //!
 //! ```
 //! # #[macro_use(http_stub)] extern crate plaid;
