@@ -31,9 +31,13 @@
 //! #
 //! # match response {
 //! #     Response::ProductData(ref data) => {
-//! #         assert_eq!("kelly.walters30@example.com".to_string(), data.info.emails[0].email);
-//! #         assert_eq!("94114".to_string(), data.info.addresses[0].address.zip);
 //! #         assert_eq!("4673956022".to_string(), data.info.phone_numbers[0].phone_number);
+//! #         assert_eq!("kelly.walters30@example.com".to_string(), data.info.emails[0].email);
+//! #         let ref address = data.info.addresses[0].address;
+//! #         let ref street = address.street;
+//! #         let ref zip = address.zip;
+//! #         assert_eq!(&Some("3819 Greenhaven Ln".to_string()), street);
+//! #         assert_eq!(&Some("94114".to_string()), zip);
 //! #     },
 //! #     _ => panic!("Expected product data")
 //! # };

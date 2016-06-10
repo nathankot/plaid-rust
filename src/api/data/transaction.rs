@@ -3,7 +3,6 @@
 use api::data as t;
 use rustc_serialize::{ Decodable, Decoder };
 
-/// # Transaction
 /// Represents a single transaction associated with a given `Account`.
 #[derive(Debug)]
 pub struct Transaction {
@@ -28,13 +27,22 @@ pub struct Transaction {
     pub pending: bool,
     /// The date on which the transaction took place.
     /// Plaid standardizes using the ISO 8601 format.
-    pub date: t::Date
+    pub date: t::Date,
+    /// Transaction meta data
+    pub meta: Option<Meta>
+}
+
+/// Represents meta data associated with the transaction
+#[derive(RustcDecodable, Debug)]
+pub struct Meta {
+    /// The location in which the transaction most likely occured.
+    pub location: t::Address
 }
 
 impl Decodable for Transaction {
 
     fn decode<D: Decoder>(decoder: &mut D) -> Result<Transaction, D::Error> {
-        decoder.read_struct("root", 8, |d| {
+        decoder.read_struct("root", 9, |d| {
             Ok(Transaction {
                 id: try!(d.read_struct_field("_id", 0, |d| Decodable::decode(d))),
                 account_id: try!(d.read_struct_field("_account", 1, |d| Decodable::decode(d))),
@@ -43,7 +51,8 @@ impl Decodable for Transaction {
                 context: try!(d.read_struct_field("type", 4, |d| Decodable::decode(d))),
                 categories: try!(d.read_struct_field("category", 5, |d| Decodable::decode(d))),
                 pending: try!(d.read_struct_field("pending", 6, |d| Decodable::decode(d))),
-                date: try!(d.read_struct_field("date", 7, |d| Decodable::decode(d)))
+                date: try!(d.read_struct_field("date", 7, |d| Decodable::decode(d))),
+                meta: try!(d.read_struct_field("meta", 8, |d| Decodable::decode(d)))
             })
         })
     }
@@ -96,16 +105,16 @@ mod tests {
                 "date": "2016-03-12",
                 "name": "Golden Crepes",
                 "meta": {
-                "location": {
-                    "address": "262 W 15th St",
-                    "city": "New York",
-                    "state": "NY",
-                    "zip": "10011",
-                    "coordinates": {
-                    "lat": 40.740352,
-                    "lon": -74.001761
+                    "location": {
+                        "address": "262 W 15th St",
+                        "city": "New York",
+                        "state": "NY",
+                        "zip": "10011",
+                        "coordinates": {
+                            "lat": 40.740352,
+                            "lon": -74.001761
+                        }
                     }
-                }
                 },
                 "pending": false,
                 "type": {
@@ -117,11 +126,11 @@ mod tests {
                 ],
                 "category_id": "13005000",
                 "score": {
-                "location": {
-                    "address": 1,
-                    "city": 1,
-                    "state": 1
-                },
+                    "location": {
+                        "address": 1,
+                        "city": 1,
+                        "state": 1
+                    },
                 "name": 0.9
                 }
             }
@@ -131,6 +140,7 @@ mod tests {
         assert_eq!(transaction.account_id, "testaccount".to_string());
         assert_eq!(transaction.amount, 12.70 as Amount);
         assert_eq!(transaction.category_id, 13005000 as CategoryID);
+        assert_eq!(transaction.meta.unwrap().location.street.unwrap(), "262 W 15th St".to_string());
     }
 
 }
