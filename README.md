@@ -1,5 +1,7 @@
 # plaid-rust
 
+[![](http://meritbadge.herokuapp.com/plaid)](https://crates.io/crates/plaid)
+
 [Plaid][Plaid] is the technology layer for financial services. This library makes it
 easy to interface with Plaid.
 
