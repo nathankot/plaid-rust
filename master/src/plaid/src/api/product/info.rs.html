@@ -157,121 +157,6 @@
 <span id="113">113</span>
 <span id="114">114</span>
 <span id="115">115</span>
-<span id="116">116</span>
-<span id="117">117</span>
-<span id="118">118</span>
-<span id="119">119</span>
-<span id="120">120</span>
-<span id="121">121</span>
-<span id="122">122</span>
-<span id="123">123</span>
-<span id="124">124</span>
-<span id="125">125</span>
-<span id="126">126</span>
-<span id="127">127</span>
-<span id="128">128</span>
-<span id="129">129</span>
-<span id="130">130</span>
-<span id="131">131</span>
-<span id="132">132</span>
-<span id="133">133</span>
-<span id="134">134</span>
-<span id="135">135</span>
-<span id="136">136</span>
-<span id="137">137</span>
-<span id="138">138</span>
-<span id="139">139</span>
-<span id="140">140</span>
-<span id="141">141</span>
-<span id="142">142</span>
-<span id="143">143</span>
-<span id="144">144</span>
-<span id="145">145</span>
-<span id="146">146</span>
-<span id="147">147</span>
-<span id="148">148</span>
-<span id="149">149</span>
-<span id="150">150</span>
-<span id="151">151</span>
-<span id="152">152</span>
-<span id="153">153</span>
-<span id="154">154</span>
-<span id="155">155</span>
-<span id="156">156</span>
-<span id="157">157</span>
-<span id="158">158</span>
-<span id="159">159</span>
-<span id="160">160</span>
-<span id="161">161</span>
-<span id="162">162</span>
-<span id="163">163</span>
-<span id="164">164</span>
-<span id="165">165</span>
-<span id="166">166</span>
-<span id="167">167</span>
-<span id="168">168</span>
-<span id="169">169</span>
-<span id="170">170</span>
-<span id="171">171</span>
-<span id="172">172</span>
-<span id="173">173</span>
-<span id="174">174</span>
-<span id="175">175</span>
-<span id="176">176</span>
-<span id="177">177</span>
-<span id="178">178</span>
-<span id="179">179</span>
-<span id="180">180</span>
-<span id="181">181</span>
-<span id="182">182</span>
-<span id="183">183</span>
-<span id="184">184</span>
-<span id="185">185</span>
-<span id="186">186</span>
-<span id="187">187</span>
-<span id="188">188</span>
-<span id="189">189</span>
-<span id="190">190</span>
-<span id="191">191</span>
-<span id="192">192</span>
-<span id="193">193</span>
-<span id="194">194</span>
-<span id="195">195</span>
-<span id="196">196</span>
-<span id="197">197</span>
-<span id="198">198</span>
-<span id="199">199</span>
-<span id="200">200</span>
-<span id="201">201</span>
-<span id="202">202</span>
-<span id="203">203</span>
-<span id="204">204</span>
-<span id="205">205</span>
-<span id="206">206</span>
-<span id="207">207</span>
-<span id="208">208</span>
-<span id="209">209</span>
-<span id="210">210</span>
-<span id="211">211</span>
-<span id="212">212</span>
-<span id="213">213</span>
-<span id="214">214</span>
-<span id="215">215</span>
-<span id="216">216</span>
-<span id="217">217</span>
-<span id="218">218</span>
-<span id="219">219</span>
-<span id="220">220</span>
-<span id="221">221</span>
-<span id="222">222</span>
-<span id="223">223</span>
-<span id="224">224</span>
-<span id="225">225</span>
-<span id="226">226</span>
-<span id="227">227</span>
-<span id="228">228</span>
-<span id="229">229</span>
-<span id="230">230</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! The Info endpoint allows you to retrieve various account holder</span>
 <span class='doccomment'>//! information on file with the financial institution, including names, emails,</span>
@@ -287,12 +172,10 @@
 <span class='doccomment'>//! # fn main() {</span>
 <span class='doccomment'>//! #</span>
 <span class='doccomment'>//! # http_stub!(StubPolicy, 200, include_str!(&quot;fixtures/post_info_success.json&quot;));</span>
-<span class='doccomment'>//! #</span>
 <span class='doccomment'>//! # let hyper = hyper::Client::with_connector(StubPolicy::default());</span>
 <span class='doccomment'>//! #</span>
 <span class='doccomment'>//! use plaid::api::client::{ Client, Response, Payload };</span>
 <span class='doccomment'>//! use plaid::api::product;</span>
-<span class='doccomment'>//! use plaid::api::types::*;</span>
 <span class='doccomment'>//! use plaid::api::user::{ User };</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! let client = Client { endpoint:  &quot;https://tartan.plaid.com&quot;,</span>
@@ -304,14 +187,17 @@
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! let response = client.request(</span>
 <span class='doccomment'>//!   product::Info,</span>
-<span class='doccomment'>//!   Payload::FetchData(client, user, None))</span>
-<span class='doccomment'>//!   .unwrap();</span>
+<span class='doccomment'>//!   Payload::FetchData(client, user, None)).unwrap();</span>
 <span class='doccomment'>//! #</span>
 <span class='doccomment'>//! # match response {</span>
 <span class='doccomment'>//! #     Response::ProductData(ref data) =&gt; {</span>
-<span class='doccomment'>//! #         assert_eq!(&quot;kelly.walters30@example.com&quot;.to_string(), data.info.emails[0].email);</span>
-<span class='doccomment'>//! #         assert_eq!(&quot;94114&quot;.to_string(), data.info.addresses[0].zip);</span>
 <span class='doccomment'>//! #         assert_eq!(&quot;4673956022&quot;.to_string(), data.info.phone_numbers[0].phone_number);</span>
+<span class='doccomment'>//! #         assert_eq!(&quot;kelly.walters30@example.com&quot;.to_string(), data.info.emails[0].email);</span>
+<span class='doccomment'>//! #         let ref address = data.info.addresses[0].address;</span>
+<span class='doccomment'>//! #         let ref street = address.street;</span>
+<span class='doccomment'>//! #         let ref zip = address.zip;</span>
+<span class='doccomment'>//! #         assert_eq!(&amp;Some(&quot;3819 Greenhaven Ln&quot;.to_string()), street);</span>
+<span class='doccomment'>//! #         assert_eq!(&amp;Some(&quot;94114&quot;.to_string()), zip);</span>
 <span class='doccomment'>//! #     },</span>
 <span class='doccomment'>//! #     _ =&gt; panic!(&quot;Expected product data&quot;)</span>
 <span class='doccomment'>//! # };</span>
@@ -321,6 +207,7 @@
 <span class='kw'>use</span> <span class='ident'>api</span>::<span class='ident'>product</span>::<span class='ident'>Product</span>;
 <span class='kw'>use</span> <span class='ident'>api</span>::<span class='ident'>account</span>::<span class='ident'>Account</span>;
 <span class='kw'>use</span> <span class='ident'>api</span>::<span class='ident'>client</span>::<span class='ident'>Payload</span>;
+<span class='kw'>use</span> <span class='ident'>api</span>::<span class='ident'>data</span>::{ <span class='ident'>Address</span>, <span class='ident'>PhoneNumber</span>, <span class='ident'>Email</span> };
 
 <span class='kw'>use</span> <span class='ident'>rustc_serialize</span>::{ <span class='ident'>Decodable</span>, <span class='ident'>Decoder</span> };
 
@@ -344,9 +231,34 @@
     <span class='doccomment'>/// Emails associated with the user.</span>
     <span class='kw'>pub</span> <span class='ident'>emails</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Email</span><span class='op'>&gt;</span>,
     <span class='doccomment'>/// Addresses associated with the user.</span>
-    <span class='kw'>pub</span> <span class='ident'>addresses</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Address</span><span class='op'>&gt;</span>,
+    <span class='kw'>pub</span> <span class='ident'>addresses</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>InfoAddress</span><span class='op'>&gt;</span>,
     <span class='doccomment'>/// Phone numbers associated with the user.</span>
     <span class='kw'>pub</span> <span class='ident'>phone_numbers</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>PhoneNumber</span><span class='op'>&gt;</span>
+}
+
+<span class='doccomment'>/// Representation of an address entry returned by info.</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>)]</span>
+<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>InfoAddress</span> {
+    <span class='doccomment'>/// Whether or not this is the user&#39;s primary address</span>
+    <span class='kw'>pub</span> <span class='ident'>primary</span>: <span class='ident'>bool</span>,
+    <span class='doccomment'>/// The underlying address</span>
+    <span class='kw'>pub</span> <span class='ident'>address</span>: <span class='ident'>Address</span>
+}
+
+<span class='kw'>impl</span> <span class='ident'>Decodable</span> <span class='kw'>for</span> <span class='ident'>InfoAddress</span> {
+
+    <span class='kw'>fn</span> <span class='ident'>decode</span><span class='op'>&lt;</span><span class='ident'>D</span>: <span class='ident'>Decoder</span><span class='op'>&gt;</span>(<span class='ident'>d</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>D</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>InfoAddress</span>, <span class='ident'>D</span>::<span class='ident'>Error</span><span class='op'>&gt;</span> {
+        <span class='ident'>d</span>.<span class='ident'>read_struct</span>(<span class='string'>&quot;root&quot;</span>, <span class='number'>2</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> {
+            <span class='kw'>let</span> <span class='ident'>primary</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>d</span>.<span class='ident'>read_struct_field</span>(<span class='string'>&quot;primary&quot;</span>, <span class='number'>0</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> <span class='ident'>Decodable</span>::<span class='ident'>decode</span>(<span class='ident'>d</span>)));
+            <span class='ident'>d</span>.<span class='ident'>read_struct_field</span>(<span class='string'>&quot;data&quot;</span>, <span class='number'>1</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> {
+                <span class='prelude-val'>Ok</span>(<span class='ident'>InfoAddress</span> {
+                    <span class='ident'>primary</span>: <span class='ident'>primary</span>,
+                    <span class='ident'>address</span>: <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>Decodable</span>::<span class='ident'>decode</span>(<span class='ident'>d</span>))
+                })
+            })
+        })
+    }
+
 }
 
 <span class='kw'>impl</span> <span class='ident'>Product</span> <span class='kw'>for</span> <span class='ident'>Info</span> {
@@ -360,148 +272,6 @@
             _ <span class='op'>=&gt;</span> <span class='string'>&quot;/info&quot;</span>
         }
     }
-}
-
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>)]</span>
-<span class='doccomment'>/// A user&#39;s email, including meta data returned by Plaid.</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Email</span> {
-    <span class='doccomment'>/// Whether or not the user has chosen this as their primary email.</span>
-    <span class='kw'>pub</span> <span class='ident'>primary</span>: <span class='ident'>bool</span>,
-    <span class='doccomment'>/// The designated type for this email (e.g personal, home).</span>
-    <span class='kw'>pub</span> <span class='ident'>email_type</span>: <span class='ident'>String</span>,
-    <span class='doccomment'>/// The actual email address.</span>
-    <span class='kw'>pub</span> <span class='ident'>email</span>: <span class='ident'>String</span>
-}
-
-<span class='kw'>impl</span> <span class='ident'>Decodable</span> <span class='kw'>for</span> <span class='ident'>Email</span> {
-
-    <span class='kw'>fn</span> <span class='ident'>decode</span><span class='op'>&lt;</span><span class='ident'>D</span>: <span class='ident'>Decoder</span><span class='op'>&gt;</span>(<span class='ident'>d</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>D</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Email</span>, <span class='ident'>D</span>::<span class='ident'>Error</span><span class='op'>&gt;</span> {
-        <span class='ident'>d</span>.<span class='ident'>read_struct</span>(<span class='string'>&quot;root&quot;</span>, <span class='number'>3</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> {
-            <span class='prelude-val'>Ok</span>(<span class='ident'>Email</span> {
-                <span class='ident'>primary</span>: <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>d</span>.<span class='ident'>read_struct_field</span>(<span class='string'>&quot;primary&quot;</span>, <span class='number'>0</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> <span class='ident'>d</span>.<span class='ident'>read_bool</span>())),
-                <span class='ident'>email_type</span>: <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>d</span>.<span class='ident'>read_struct_field</span>(<span class='string'>&quot;type&quot;</span>, <span class='number'>1</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> <span class='ident'>d</span>.<span class='ident'>read_str</span>())),
-                <span class='ident'>email</span>: <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>d</span>.<span class='ident'>read_struct_field</span>(<span class='string'>&quot;data&quot;</span>, <span class='number'>2</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> <span class='ident'>d</span>.<span class='ident'>read_str</span>()))
-            })
-        })
-    }
-
-}
-
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>)]</span>
-<span class='doccomment'>/// A user&#39;s address, as returned by Plaid.</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Address</span> {
-    <span class='doccomment'>/// Whether or not the user has chosen this as their primary address</span>
-    <span class='kw'>pub</span> <span class='ident'>primary</span>: <span class='ident'>bool</span>,
-    <span class='doccomment'>/// The address zip code part.</span>
-    <span class='kw'>pub</span> <span class='ident'>zip</span>: <span class='ident'>String</span>,
-    <span class='doccomment'>/// The address state part.</span>
-    <span class='kw'>pub</span> <span class='ident'>state</span>: <span class='ident'>String</span>,
-    <span class='doccomment'>/// The address city part.</span>
-    <span class='kw'>pub</span> <span class='ident'>city</span>: <span class='ident'>String</span>,
-    <span class='doccomment'>/// The address street part.</span>
-    <span class='kw'>pub</span> <span class='ident'>street</span>: <span class='ident'>String</span>
-}
-
-<span class='kw'>impl</span> <span class='ident'>Decodable</span> <span class='kw'>for</span> <span class='ident'>Address</span> {
-
-    <span class='kw'>fn</span> <span class='ident'>decode</span><span class='op'>&lt;</span><span class='ident'>D</span>: <span class='ident'>Decoder</span><span class='op'>&gt;</span>(<span class='ident'>d</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>D</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Address</span>, <span class='ident'>D</span>::<span class='ident'>Error</span><span class='op'>&gt;</span> {
-        <span class='ident'>d</span>.<span class='ident'>read_struct</span>(<span class='string'>&quot;root&quot;</span>, <span class='number'>2</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> {
-            <span class='kw'>let</span> <span class='ident'>primary</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>d</span>.<span class='ident'>read_struct_field</span>(<span class='string'>&quot;primary&quot;</span>, <span class='number'>0</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> <span class='ident'>d</span>.<span class='ident'>read_bool</span>()));
-            <span class='ident'>d</span>.<span class='ident'>read_struct_field</span>(<span class='string'>&quot;data&quot;</span>, <span class='number'>1</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> {
-                <span class='ident'>d</span>.<span class='ident'>read_struct</span>(<span class='string'>&quot;address&quot;</span>, <span class='number'>4</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> {
-                    <span class='prelude-val'>Ok</span>(<span class='ident'>Address</span> {
-                        <span class='ident'>primary</span>: <span class='ident'>primary</span>,
-                        <span class='ident'>zip</span>: <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>d</span>.<span class='ident'>read_struct_field</span>(<span class='string'>&quot;zip&quot;</span>, <span class='number'>0</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> <span class='ident'>d</span>.<span class='ident'>read_str</span>())),
-                        <span class='ident'>state</span>: <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>d</span>.<span class='ident'>read_struct_field</span>(<span class='string'>&quot;state&quot;</span>, <span class='number'>0</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> <span class='ident'>d</span>.<span class='ident'>read_str</span>())),
-                        <span class='ident'>city</span>: <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>d</span>.<span class='ident'>read_struct_field</span>(<span class='string'>&quot;city&quot;</span>, <span class='number'>0</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> <span class='ident'>d</span>.<span class='ident'>read_str</span>())),
-                        <span class='ident'>street</span>: <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>d</span>.<span class='ident'>read_struct_field</span>(<span class='string'>&quot;street&quot;</span>, <span class='number'>0</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> <span class='ident'>d</span>.<span class='ident'>read_str</span>()))
-                    })
-                })
-            })
-        })
-    }
-
-}
-
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>)]</span>
-<span class='doccomment'>/// A user&#39;s phone number, as returned by Plaid.</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>PhoneNumber</span> {
-    <span class='doccomment'>/// Whether or not the user has chosen this as their primary phone number.</span>
-    <span class='kw'>pub</span> <span class='ident'>primary</span>: <span class='ident'>bool</span>,
-    <span class='doccomment'>/// The type of the phone number (e.g personal, home).</span>
-    <span class='kw'>pub</span> <span class='ident'>phone_number_type</span>: <span class='ident'>String</span>,
-    <span class='doccomment'>/// The actual phone number.</span>
-    <span class='kw'>pub</span> <span class='ident'>phone_number</span>: <span class='ident'>String</span>
-}
-
-<span class='kw'>impl</span> <span class='ident'>Decodable</span> <span class='kw'>for</span> <span class='ident'>PhoneNumber</span> {
-
-    <span class='kw'>fn</span> <span class='ident'>decode</span><span class='op'>&lt;</span><span class='ident'>D</span>: <span class='ident'>Decoder</span><span class='op'>&gt;</span>(<span class='ident'>d</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>D</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>PhoneNumber</span>, <span class='ident'>D</span>::<span class='ident'>Error</span><span class='op'>&gt;</span> {
-        <span class='ident'>d</span>.<span class='ident'>read_struct</span>(<span class='string'>&quot;root&quot;</span>, <span class='number'>3</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> {
-            <span class='prelude-val'>Ok</span>(<span class='ident'>PhoneNumber</span> {
-                <span class='ident'>primary</span>: <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>d</span>.<span class='ident'>read_struct_field</span>(<span class='string'>&quot;primary&quot;</span>, <span class='number'>0</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> <span class='ident'>d</span>.<span class='ident'>read_bool</span>())),
-                <span class='ident'>phone_number_type</span>: <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>d</span>.<span class='ident'>read_struct_field</span>(<span class='string'>&quot;type&quot;</span>, <span class='number'>1</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> <span class='ident'>d</span>.<span class='ident'>read_str</span>())),
-                <span class='ident'>phone_number</span>: <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>d</span>.<span class='ident'>read_struct_field</span>(<span class='string'>&quot;data&quot;</span>, <span class='number'>2</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> <span class='ident'>d</span>.<span class='ident'>read_str</span>()))
-            })
-        })
-    }
-
-}
-
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
-<span class='kw'>mod</span> <span class='ident'>tests</span> {
-
-    <span class='kw'>use</span> <span class='ident'>api</span>::<span class='ident'>product</span>::<span class='ident'>info</span>::<span class='op'>*</span>;
-    <span class='kw'>use</span> <span class='ident'>rustc_serialize</span>::<span class='ident'>json</span>;
-
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>decode_email_works</span>() {
-        <span class='kw'>let</span> <span class='ident'>x</span>: <span class='ident'>Email</span> <span class='op'>=</span> <span class='ident'>json</span>::<span class='ident'>decode</span>(<span class='string'>r##&quot;
-            { &quot;primary&quot;: true,
-              &quot;type&quot;: &quot;personal&quot;,
-              &quot;data&quot;: &quot;kelly.walters30@example.com&quot; }
-        &quot;##</span>).<span class='ident'>unwrap</span>();
-
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='boolval'>true</span>, <span class='ident'>x</span>.<span class='ident'>primary</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='string'>&quot;personal&quot;</span>.<span class='ident'>to_string</span>(), <span class='ident'>x</span>.<span class='ident'>email_type</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='string'>&quot;kelly.walters30@example.com&quot;</span>.<span class='ident'>to_string</span>(), <span class='ident'>x</span>.<span class='ident'>email</span>);
-    }
-
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>decode_address_works</span>() {
-        <span class='kw'>let</span> <span class='ident'>x</span>: <span class='ident'>Address</span> <span class='op'>=</span> <span class='ident'>json</span>::<span class='ident'>decode</span>(<span class='string'>r##&quot;
-            { &quot;primary&quot;: true,
-               &quot;data&quot;: {
-                 &quot;zip&quot;: &quot;94114&quot;,
-                 &quot;state&quot;: &quot;CA&quot;,
-                 &quot;city&quot;: &quot;San Francisco&quot;,
-                 &quot;street&quot;: &quot;3819 Greenhaven Ln&quot;
-               }
-            }
-        &quot;##</span>).<span class='ident'>unwrap</span>();
-
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='boolval'>true</span>, <span class='ident'>x</span>.<span class='ident'>primary</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='string'>&quot;94114&quot;</span>.<span class='ident'>to_string</span>(), <span class='ident'>x</span>.<span class='ident'>zip</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='string'>&quot;CA&quot;</span>.<span class='ident'>to_string</span>(), <span class='ident'>x</span>.<span class='ident'>state</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='string'>&quot;San Francisco&quot;</span>.<span class='ident'>to_string</span>(), <span class='ident'>x</span>.<span class='ident'>city</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='string'>&quot;3819 Greenhaven Ln&quot;</span>.<span class='ident'>to_string</span>(), <span class='ident'>x</span>.<span class='ident'>street</span>);
-    }
-
-    <span class='attribute'>#[<span class='ident'>test</span>]</span>
-    <span class='kw'>fn</span> <span class='ident'>decode_phone_number_works</span>() {
-        <span class='kw'>let</span> <span class='ident'>x</span>: <span class='ident'>PhoneNumber</span> <span class='op'>=</span> <span class='ident'>json</span>::<span class='ident'>decode</span>(<span class='string'>r##&quot;
-            {
-                &quot;primary&quot;: true,
-                &quot;type&quot;: &quot;home&quot;,
-                &quot;data&quot;: &quot;4673956022&quot;
-            }
-        &quot;##</span>).<span class='ident'>unwrap</span>();
-
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='boolval'>true</span>, <span class='ident'>x</span>.<span class='ident'>primary</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='string'>&quot;home&quot;</span>.<span class='ident'>to_string</span>(), <span class='ident'>x</span>.<span class='ident'>phone_number_type</span>);
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='string'>&quot;4673956022&quot;</span>.<span class='ident'>to_string</span>(), <span class='ident'>x</span>.<span class='ident'>phone_number</span>);
-    }
-
 }
 </pre>
 </section>

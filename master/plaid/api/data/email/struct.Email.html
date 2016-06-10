@@ -7,7 +7,7 @@
     <meta name="description" content="API documentation for the Rust `Email` struct in crate `plaid`.">
     <meta name="keywords" content="rust, rustlang, rust-lang, Email">
 
-    <title>plaid::api::product::info::Email - Rust</title>
+    <title>plaid::api::data::email::Email - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../../../main.css">
@@ -28,7 +28,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='../../../index.html'>plaid</a>::<wbr><a href='../../index.html'>api</a>::<wbr><a href='../index.html'>product</a>::<wbr><a href='index.html'>info</a></p><script>window.sidebarCurrent = {name: 'Email', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'><a href='../../../index.html'>plaid</a>::<wbr><a href='../../index.html'>api</a>::<wbr><a href='../index.html'>data</a>::<wbr><a href='index.html'>email</a></p><script>window.sidebarCurrent = {name: 'Email', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -43,11 +43,11 @@
     </nav>
 
     <section id='main' class="content struct">
-<h1 class='fqn'><span class='in-band'>Struct <a href='../../../index.html'>plaid</a>::<wbr><a href='../../index.html'>api</a>::<wbr><a href='../index.html'>product</a>::<wbr><a href='index.html'>info</a>::<wbr><a class='struct' href=''>Email</a></span><span class='out-of-band'><span id='render-detail'>
+<h1 class='fqn'><span class='in-band'>Struct <a href='../../../index.html'>plaid</a>::<wbr><a href='../../index.html'>api</a>::<wbr><a href='../index.html'>data</a>::<wbr><a href='index.html'>email</a>::<wbr><a class='struct' href=''>Email</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-617' class='srclink' href='../../../../src/plaid/src/api/product/info.rs.html#92-99' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-1375' class='srclink' href='../../../../src/plaid/src/api/data/email.rs.html#7-14' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct Email {
     pub primary: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
     pub email_type: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>,
@@ -60,8 +60,8 @@
                              <td id='structfield.email_type'><code>email_type</code></td><td><div class='docblock'><p>The designated type for this email (e.g personal, home).</p>
 </div></td></tr><tr class='stab '>
                              <td id='structfield.email'><code>email</code></td><td><div class='docblock'><p>The actual email address.</p>
-</div></td></tr></table><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decodable.html' title='rustc_serialize::serialize::Decodable'>Decodable</a> for <a class='struct' href='../../../../plaid/api/product/info/struct.Email.html' title='plaid::api::product::info::Email'>Email</a></code></h3><div class='impl-items'><h4 id='method.decode' class='method'><code>fn <a href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decodable.html#tymethod.decode' class='fnname'>decode</a>&lt;D: <a class='trait' href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decoder.html' title='rustc_serialize::serialize::Decoder'>Decoder</a>&gt;(d: &amp;mut D) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../../../../plaid/api/product/info/struct.Email.html' title='plaid::api::product::info::Email'>Email</a>, D::Error&gt;</code></h4>
-</div><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../../../../plaid/api/product/info/struct.Email.html' title='plaid::api::product::info::Email'>Email</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+</div></td></tr></table><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decodable.html' title='rustc_serialize::serialize::Decodable'>Decodable</a> for <a class='struct' href='../../../../plaid/api/data/email/struct.Email.html' title='plaid::api::data::email::Email'>Email</a></code></h3><div class='impl-items'><h4 id='method.decode' class='method'><code>fn <a href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decodable.html#tymethod.decode' class='fnname'>decode</a>&lt;D: <a class='trait' href='https://doc.rust-lang.org/rustc-serialize/rustc_serialize/serialize/trait.Decoder.html' title='rustc_serialize::serialize::Decoder'>Decoder</a>&gt;(d: &amp;mut D) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../../../../plaid/api/data/email/struct.Email.html' title='plaid::api::data::email::Email'>Email</a>, D::Error&gt;</code></h4>
+</div><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../../../../plaid/api/data/email/struct.Email.html' title='plaid::api::data::email::Email'>Email</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
 </div></section>
     <section id='search' class="content hidden"></section>
 

@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["PhoneNumber","A user's phone number, as returned by Plaid."]]});

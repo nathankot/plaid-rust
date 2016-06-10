@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Email","A user's email, including meta data returned by Plaid."]]});

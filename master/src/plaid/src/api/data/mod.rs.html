@@ -55,6 +55,51 @@
 <span id="11">11</span>
 <span id="12">12</span>
 <span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! Types that define data structures that are returned from the API.</span>
 <span class='doccomment'>//!</span>
@@ -64,11 +109,56 @@
 
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>account</span>;
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>transaction</span>;
-<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>types</span>;
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>address</span>;
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>phone_number</span>;
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>email</span>;
 
-<span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>account</span>::<span class='op'>*</span>;
-<span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>transaction</span>::<span class='op'>*</span>;
-<span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>types</span>::<span class='op'>*</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>account</span>::<span class='ident'>Account</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>transaction</span>::<span class='ident'>Transaction</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>address</span>::<span class='ident'>Address</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>phone_number</span>::<span class='ident'>PhoneNumber</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>email</span>::<span class='ident'>Email</span>;
+
+<span class='doccomment'>/// Unique identifiers in Plaid are represented as a globally unique hash.</span>
+<span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>UID</span> <span class='op'>=</span> <span class='ident'>String</span>;
+
+<span class='doccomment'>/// Category identifiers are represented by an unsigned integer.</span>
+<span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>CategoryID</span> <span class='op'>=</span> <span class='ident'>u32</span>;
+
+<span class='doccomment'>/// All amounts are represented in a 64-bit floating-point type.</span>
+<span class='doccomment'>/// This is for legacy reasons and may change in the future.</span>
+<span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>Amount</span> <span class='op'>=</span> <span class='ident'>f64</span>;
+
+<span class='doccomment'>/// A user&#39;s bank account username.</span>
+<span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>Username</span> <span class='op'>=</span> <span class='ident'>String</span>;
+
+<span class='doccomment'>/// A user&#39;s real namee.</span>
+<span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>Name</span> <span class='op'>=</span> <span class='ident'>String</span>;
+
+<span class='doccomment'>/// A user&#39;s bank account password.</span>
+<span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>Password</span> <span class='op'>=</span> <span class='ident'>String</span>;
+
+<span class='doccomment'>/// A user&#39;s multi-factor authentication code.</span>
+<span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>MFACode</span> <span class='op'>=</span> <span class='ident'>String</span>;
+
+<span class='doccomment'>/// A user&#39;s secret access token</span>
+<span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>AccessToken</span> <span class='op'>=</span> <span class='ident'>String</span>;
+
+<span class='doccomment'>/// Your client id from the Plaid dashboard.</span>
+<span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>ClientID</span> <span class='op'>=</span> <span class='ident'>String</span>;
+
+<span class='doccomment'>/// Your client secret from the Plaid dashboard.</span>
+<span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>ClientSecret</span> <span class='op'>=</span> <span class='ident'>String</span>;
+
+<span class='doccomment'>/// A user&#39;s institution. See [here for a list](https://plaid.com/docs/api/#institutions).</span>
+<span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>Institution</span> <span class='op'>=</span> <span class='ident'>String</span>;
+
+<span class='doccomment'>/// A PIN number</span>
+<span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>PIN</span> <span class='op'>=</span> <span class='ident'>String</span>;
+
+<span class='doccomment'>/// Dates are simply stored as their original `String` representation.</span>
+<span class='doccomment'>/// It is up to you to parse it with your favorite date/time library.</span>
+<span class='kw'>pub</span> <span class='kw'>type</span> <span class='ident'>Date</span> <span class='op'>=</span> <span class='ident'>String</span>;
 </pre>
 </section>
     <section id='search' class="content hidden"></section>

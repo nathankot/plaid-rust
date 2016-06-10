@@ -83,7 +83,7 @@
 
 <span class='doccomment'>/// Anything that implements `Product` can be used as a product.</span>
 <span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>Product</span> : <span class='ident'>Any</span> <span class='op'>+</span> <span class='ident'>Sync</span> <span class='op'>+</span> <span class='ident'>Debug</span> {
-    <span class='doccomment'>/// The response data that is associated with this product</span>
+    <span class='doccomment'>/// The response data that is associated with this product.</span>
     <span class='kw'>type</span> <span class='ident'>Data</span>: <span class='ident'>Debug</span> <span class='op'>+</span> <span class='ident'>Any</span> <span class='op'>+</span> <span class='ident'>Decodable</span>;
     <span class='doccomment'>/// The endpoint of the product for the given payload.</span>
     <span class='doccomment'>/// With leading slash, e.g `/connect/get`</span>

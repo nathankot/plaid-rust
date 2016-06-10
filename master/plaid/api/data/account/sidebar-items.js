@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Account","Account Represents one account associated with the given `User`."]]});
+initSidebarItems({"struct":[["Account","Account Represents one account associated with the given `User`."],["Meta","Any meta-data associated with the account."]]});

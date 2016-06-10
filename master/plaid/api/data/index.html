@@ -47,12 +47,17 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-1108' class='srclink' href='../../../src/plaid/src/api/data/mod.rs.html#1-13' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-1027' class='srclink' href='../../../src/plaid/src/api/data/mod.rs.html#1-58' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Types that define data structures that are returned from the API.</p>
 
 <p>Most of these types will implement <a href="https://doc.rust-lang.org/rustc-serialize/rustc_serialize/trait.Decodable.html"><code>rustc_serialize::Decodable</code></a>.</p>
 </div><h2 id='reexports' class='section-header'><a href="#reexports">Reexports</a></h2>
-<table><tr><td><code>pub use self::<a class='mod' href='../../../plaid/api/data/account/index.html' title='plaid::api::data::account'>account</a>::*;</code></td></tr><tr><td><code>pub use self::<a class='mod' href='../../../plaid/api/data/transaction/index.html' title='plaid::api::data::transaction'>transaction</a>::*;</code></td></tr><tr><td><code>pub use self::<a class='mod' href='../../../plaid/api/data/types/index.html' title='plaid::api::data::types'>types</a>::*;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table><tr><td><code>pub use self::<a class='mod'
+                                       href='./account/index.html'>account</a>::<a class='struct' href='../../../plaid/api/data/account/struct.Account.html' title='plaid::api::data::account::Account'>Account</a>;</code></td></tr><tr><td><code>pub use self::<a class='mod'
+                                       href='./transaction/index.html'>transaction</a>::<a class='struct' href='../../../plaid/api/data/transaction/struct.Transaction.html' title='plaid::api::data::transaction::Transaction'>Transaction</a>;</code></td></tr><tr><td><code>pub use self::<a class='mod'
+                                       href='./address/index.html'>address</a>::<a class='struct' href='../../../plaid/api/data/address/struct.Address.html' title='plaid::api::data::address::Address'>Address</a>;</code></td></tr><tr><td><code>pub use self::<a class='mod'
+                                       href='./phone_number/index.html'>phone_number</a>::<a class='struct' href='../../../plaid/api/data/phone_number/struct.PhoneNumber.html' title='plaid::api::data::phone_number::PhoneNumber'>PhoneNumber</a>;</code></td></tr><tr><td><code>pub use self::<a class='mod'
+                                       href='./email/index.html'>email</a>::<a class='struct' href='../../../plaid/api/data/email/struct.Email.html' title='plaid::api::data::email::Email'>Email</a>;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
                        <tr class=' module-item'>
                            <td><a class='mod' href='account/index.html'
@@ -62,17 +67,126 @@
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class='mod' href='address/index.html'
+                                  title='plaid::api::data::address'>address</a></td>
+                           <td class='docblock short'>
+                                <p>Stores types that represent addresses</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='email/index.html'
+                                  title='plaid::api::data::email'>email</a></td>
+                           <td class='docblock short'>
+                                <p>Strucutres to encapsulate an email as returned by the Plaid API</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='phone_number/index.html'
+                                  title='plaid::api::data::phone_number'>phone_number</a></td>
+                           <td class='docblock short'>
+                                <p>Types to encapsulate a phone number, as represented by
+the Plaid API.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class='mod' href='transaction/index.html'
                                   title='plaid::api::data::transaction'>transaction</a></td>
                            <td class='docblock short'>
                                 <p>Representations of banking transactions.</p>
                            </td>
+                       </tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.AccessToken.html'
+                                  title='plaid::api::data::AccessToken'>AccessToken</a></td>
+                           <td class='docblock short'>
+                                <p>A user&#39;s secret access token</p>
+                           </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='mod' href='types/index.html'
-                                  title='plaid::api::data::types'>types</a></td>
+                           <td><a class='type' href='type.Amount.html'
+                                  title='plaid::api::data::Amount'>Amount</a></td>
                            <td class='docblock short'>
-                                <p>Type aliases that map to common types.</p>
+                                <p>All amounts are represented in a 64-bit floating-point type.
+This is for legacy reasons and may change in the future.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.CategoryID.html'
+                                  title='plaid::api::data::CategoryID'>CategoryID</a></td>
+                           <td class='docblock short'>
+                                <p>Category identifiers are represented by an unsigned integer.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.ClientID.html'
+                                  title='plaid::api::data::ClientID'>ClientID</a></td>
+                           <td class='docblock short'>
+                                <p>Your client id from the Plaid dashboard.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.ClientSecret.html'
+                                  title='plaid::api::data::ClientSecret'>ClientSecret</a></td>
+                           <td class='docblock short'>
+                                <p>Your client secret from the Plaid dashboard.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Date.html'
+                                  title='plaid::api::data::Date'>Date</a></td>
+                           <td class='docblock short'>
+                                <p>Dates are simply stored as their original <code>String</code> representation.
+It is up to you to parse it with your favorite date/time library.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Institution.html'
+                                  title='plaid::api::data::Institution'>Institution</a></td>
+                           <td class='docblock short'>
+                                <p>A user&#39;s institution. See <a href="https://plaid.com/docs/api/#institutions">here for a list</a>.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MFACode.html'
+                                  title='plaid::api::data::MFACode'>MFACode</a></td>
+                           <td class='docblock short'>
+                                <p>A user&#39;s multi-factor authentication code.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Name.html'
+                                  title='plaid::api::data::Name'>Name</a></td>
+                           <td class='docblock short'>
+                                <p>A user&#39;s real namee.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.PIN.html'
+                                  title='plaid::api::data::PIN'>PIN</a></td>
+                           <td class='docblock short'>
+                                <p>A PIN number</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Password.html'
+                                  title='plaid::api::data::Password'>Password</a></td>
+                           <td class='docblock short'>
+                                <p>A user&#39;s bank account password.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.UID.html'
+                                  title='plaid::api::data::UID'>UID</a></td>
+                           <td class='docblock short'>
+                                <p>Unique identifiers in Plaid are represented as a globally unique hash.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Username.html'
+                                  title='plaid::api::data::Username'>Username</a></td>
+                           <td class='docblock short'>
+                                <p>A user&#39;s bank account username.</p>
                            </td>
                        </tr></table></section>
     <section id='search' class="content hidden"></section>

@@ -199,6 +199,20 @@
 <span id="155">155</span>
 <span id="156">156</span>
 <span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! Representations of a user&#39;s bank account.</span>
 
@@ -236,14 +250,27 @@
     <span class='kw'>pub</span> <span class='ident'>routing_number</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>,
     <span class='doccomment'>/// The user&#39;s wire routing number.</span>
     <span class='doccomment'>/// Only available when using `api::product::Auth`.</span>
-    <span class='kw'>pub</span> <span class='ident'>wire_routing_number</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>
+    <span class='kw'>pub</span> <span class='ident'>wire_routing_number</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>,
+    <span class='doccomment'>/// Meta-data associated with this account</span>
+    <span class='kw'>pub</span> <span class='ident'>meta</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Meta</span><span class='op'>&gt;</span>
+}
+
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>RustcDecodable</span>)]</span>
+<span class='doccomment'>/// Any meta-data associated with the account.</span>
+<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Meta</span> {
+    <span class='doccomment'>/// Name of the account (e.g &quot;Plaid credit card&quot;.)</span>
+    <span class='kw'>pub</span> <span class='ident'>name</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Name</span><span class='op'>&gt;</span>,
+    <span class='doccomment'>/// Number associated with the name.</span>
+    <span class='kw'>pub</span> <span class='ident'>number</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>,
+    <span class='doccomment'>/// Any limit associated with the account, if it&#39;s a credit card.</span>
+    <span class='kw'>pub</span> <span class='ident'>limit</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>Amount</span><span class='op'>&gt;</span>
 }
 
 <span class='doccomment'>/// Accounts are decodable from JSON.</span>
 <span class='kw'>impl</span> <span class='ident'>Decodable</span> <span class='kw'>for</span> <span class='ident'>Account</span> {
 
     <span class='kw'>fn</span> <span class='ident'>decode</span><span class='op'>&lt;</span><span class='ident'>D</span>: <span class='ident'>Decoder</span><span class='op'>&gt;</span>(<span class='ident'>decoder</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>D</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Account</span>, <span class='ident'>D</span>::<span class='ident'>Error</span><span class='op'>&gt;</span> {
-        <span class='ident'>decoder</span>.<span class='ident'>read_struct</span>(<span class='string'>&quot;root&quot;</span>, <span class='number'>7</span>, <span class='op'>|</span><span class='ident'>decoder</span><span class='op'>|</span> {
+        <span class='ident'>decoder</span>.<span class='ident'>read_struct</span>(<span class='string'>&quot;root&quot;</span>, <span class='number'>8</span>, <span class='op'>|</span><span class='ident'>decoder</span><span class='op'>|</span> {
             <span class='kw'>let</span> (<span class='ident'>current_balance</span>, <span class='ident'>available_balance</span>) <span class='op'>=</span>
                 <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>decoder</span>.<span class='ident'>read_struct_field</span>(<span class='string'>&quot;balance&quot;</span>, <span class='number'>0</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> {
                     <span class='ident'>d</span>.<span class='ident'>read_struct</span>(<span class='string'>&quot;balance&quot;</span>, <span class='number'>2</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> {
@@ -278,7 +305,8 @@
                 <span class='ident'>account_subtype</span>: <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>decoder</span>.<span class='ident'>read_struct_field</span>(<span class='string'>&quot;subtype&quot;</span>, <span class='number'>6</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> <span class='ident'>Decodable</span>::<span class='ident'>decode</span>(<span class='ident'>d</span>))),
                 <span class='ident'>account_number</span>: <span class='ident'>account_number</span>,
                 <span class='ident'>routing_number</span>: <span class='ident'>routing_number</span>,
-                <span class='ident'>wire_routing_number</span>: <span class='ident'>wire_routing_number</span>
+                <span class='ident'>wire_routing_number</span>: <span class='ident'>wire_routing_number</span>,
+                <span class='ident'>meta</span>: <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>decoder</span>.<span class='ident'>read_struct_field</span>(<span class='string'>&quot;meta&quot;</span>, <span class='number'>7</span>, <span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> <span class='ident'>Decodable</span>::<span class='ident'>decode</span>(<span class='ident'>d</span>)))
             })
         })
     }
@@ -288,7 +316,6 @@
 <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
 <span class='kw'>mod</span> <span class='ident'>tests</span> {
 
-    <span class='kw'>use</span> <span class='ident'>api</span>::<span class='ident'>account</span>::<span class='op'>*</span>;
     <span class='kw'>use</span> <span class='ident'>api</span>::<span class='ident'>types</span>::<span class='op'>*</span>;
     <span class='kw'>use</span> <span class='ident'>rustc_serialize</span>::<span class='ident'>json</span>;
 
@@ -328,6 +355,7 @@
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>acc</span>.<span class='ident'>account_number</span>, <span class='prelude-val'>Some</span>(<span class='string'>&quot;9900009606&quot;</span>.<span class='ident'>to_string</span>()));
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>acc</span>.<span class='ident'>routing_number</span>, <span class='prelude-val'>Some</span>(<span class='string'>&quot;021000021&quot;</span>.<span class='ident'>to_string</span>()));
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>acc</span>.<span class='ident'>wire_routing_number</span>, <span class='prelude-val'>Some</span>(<span class='string'>&quot;021000022&quot;</span>.<span class='ident'>to_string</span>()));
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>acc</span>.<span class='ident'>meta</span>.<span class='ident'>unwrap</span>().<span class='ident'>name</span>, <span class='prelude-val'>Some</span>(<span class='string'>&quot;Plaid Credit Card&quot;</span>.<span class='ident'>to_string</span>()));
     }
 
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
