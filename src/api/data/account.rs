@@ -34,14 +34,27 @@ pub struct Account {
     pub routing_number: Option<String>,
     /// The user's wire routing number.
     /// Only available when using `api::product::Auth`.
-    pub wire_routing_number: Option<String>
+    pub wire_routing_number: Option<String>,
+    /// Meta-data associated with this account
+    pub meta: Option<Meta>
+}
+
+#[derive(Debug, RustcDecodable)]
+/// Any meta-data associated with the account.
+pub struct Meta {
+    /// Name of the account (e.g "Plaid credit card".)
+    pub name: Option<Name>,
+    /// Number associated with the name.
+    pub number: Option<String>,
+    /// Any limit associated with the account, if it's a credit card.
+    pub limit: Option<Amount>
 }
 
 /// Accounts are decodable from JSON.
 impl Decodable for Account {
 
     fn decode<D: Decoder>(decoder: &mut D) -> Result<Account, D::Error> {
-        decoder.read_struct("root", 7, |decoder| {
+        decoder.read_struct("root", 8, |decoder| {
             let (current_balance, available_balance) =
                 try!(decoder.read_struct_field("balance", 0, |d| {
                     d.read_struct("balance", 2, |d| {
@@ -76,7 +89,8 @@ impl Decodable for Account {
                 account_subtype: try!(decoder.read_struct_field("subtype", 6, |d| Decodable::decode(d))),
                 account_number: account_number,
                 routing_number: routing_number,
-                wire_routing_number: wire_routing_number
+                wire_routing_number: wire_routing_number,
+                meta: try!(decoder.read_struct_field("meta", 7, |d| Decodable::decode(d)))
             })
         })
     }
@@ -126,6 +140,7 @@ mod tests {
         assert_eq!(acc.account_number, Some("9900009606".to_string()));
         assert_eq!(acc.routing_number, Some("021000021".to_string()));
         assert_eq!(acc.wire_routing_number, Some("021000022".to_string()));
+        assert_eq!(acc.meta.unwrap().name, Some("Plaid Credit Card".to_string()));
     }
 
     #[test]

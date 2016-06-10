@@ -8,7 +8,7 @@ use api::client::payload::Payload;
 
 /// Anything that implements `Product` can be used as a product.
 pub trait Product : Any + Sync + Debug {
-    /// The response data that is associated with this product
+    /// The response data that is associated with this product.
     type Data: Debug + Any + Decodable;
     /// The endpoint of the product for the given payload.
     /// With leading slash, e.g `/connect/get`
