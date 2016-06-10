@@ -12,12 +12,10 @@
 //! # fn main() {
 //! #
 //! # http_stub!(StubPolicy, 200, include_str!("fixtures/post_info_success.json"));
-//! #
 //! # let hyper = hyper::Client::with_connector(StubPolicy::default());
 //! #
 //! use plaid::api::client::{ Client, Response, Payload };
 //! use plaid::api::product;
-//! use plaid::api::types::*;
 //! use plaid::api::user::{ User };
 //!
 //! let client = Client { endpoint:  "https://tartan.plaid.com",
@@ -29,13 +27,12 @@
 //!
 //! let response = client.request(
 //!   product::Info,
-//!   Payload::FetchData(client, user, None))
-//!   .unwrap();
+//!   Payload::FetchData(client, user, None)).unwrap();
 //! #
 //! # match response {
 //! #     Response::ProductData(ref data) => {
 //! #         assert_eq!("kelly.walters30@example.com".to_string(), data.info.emails[0].email);
-//! #         assert_eq!("94114".to_string(), data.info.addresses[0].zip);
+//! #         assert_eq!("94114".to_string(), data.info.addresses[0].address.zip);
 //! #         assert_eq!("4673956022".to_string(), data.info.phone_numbers[0].phone_number);
 //! #     },
 //! #     _ => panic!("Expected product data")
@@ -46,8 +43,9 @@
 use api::product::Product;
 use api::account::Account;
 use api::client::Payload;
-
 use api::data::{ Address, PhoneNumber, Email };
+
+use rustc_serialize::{ Decodable, Decoder };
 
 /// The definition of the Info Product.
 #[derive(Debug)]
@@ -69,9 +67,34 @@ pub struct InfoInternalData {
     /// Emails associated with the user.
     pub emails: Vec<Email>,
     /// Addresses associated with the user.
-    pub addresses: Vec<Address>,
+    pub addresses: Vec<InfoAddress>,
     /// Phone numbers associated with the user.
     pub phone_numbers: Vec<PhoneNumber>
+}
+
+/// Representation of an address entry returned by info.
+#[derive(Debug)]
+pub struct InfoAddress {
+    /// Whether or not this is the user's primary address
+    pub primary: bool,
+    /// The underlying address
+    pub address: Address
+}
+
+impl Decodable for InfoAddress {
+
+    fn decode<D: Decoder>(d: &mut D) -> Result<InfoAddress, D::Error> {
+        d.read_struct("root", 2, |d| {
+            let primary = try!(d.read_struct_field("primary", 0, |d| Decodable::decode(d)));
+            d.read_struct_field("data", 1, |d| {
+                Ok(InfoAddress {
+                    primary: primary,
+                    address: try!(Decodable::decode(d))
+                })
+            })
+        })
+    }
+
 }
 
 impl Product for Info {
