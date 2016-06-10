@@ -14,7 +14,11 @@ pub struct Address {
     /// The address city part.
     pub city: String,
     /// The address street part.
-    pub street: String
+    pub street: String,
+    /// Longitude.
+    pub longitude: Option<f64>,
+    /// Latitude.
+    pub latitude: Option<f64>
 }
 
 impl Decodable for Address {
@@ -23,13 +27,23 @@ impl Decodable for Address {
         d.read_struct("root", 2, |d| {
             let primary = try!(d.read_struct_field("primary", 0, |d| d.read_bool()));
             d.read_struct_field("data", 1, |d| {
-                d.read_struct("address", 4, |d| {
+                d.read_struct("address", 5, |d| {
+                    let (lat, lon) = try!(d.read_struct_field("coordinates", 0, |d| {
+                        d.read_struct("coordinates", 2, |d| {
+                            let lat: Option<f64> = d.read_struct_field("lat", 0, |d| Decodable::decode(d)).ok();
+                            let lon: Option<f64> = d.read_struct_field("lon", 1, |d| Decodable::decode(d)).ok();
+                            Ok((lat, lon))
+                        })
+                    }));
+
                     Ok(Address {
                         primary: primary,
-                        zip: try!(d.read_struct_field("zip", 0, |d| d.read_str())),
-                        state: try!(d.read_struct_field("state", 0, |d| d.read_str())),
-                        city: try!(d.read_struct_field("city", 0, |d| d.read_str())),
-                        street: try!(d.read_struct_field("street", 0, |d| d.read_str()))
+                        zip: try!(d.read_struct_field("zip", 1, |d| d.read_str())),
+                        state: try!(d.read_struct_field("state", 2, |d| d.read_str())),
+                        city: try!(d.read_struct_field("city", 3, |d| d.read_str())),
+                        street: try!(d.read_struct_field("street", 4, |d| d.read_str())),
+                        latitude: lat,
+                        longitude: lon
                     })
                 })
             })
@@ -52,7 +66,11 @@ mod tests {
                  "zip": "94114",
                  "state": "CA",
                  "city": "San Francisco",
-                 "street": "3819 Greenhaven Ln"
+                 "street": "3819 Greenhaven Ln",
+                 "coordinates": {
+                     "lat": 40.74,
+                     "lon": -74.00
+                 }
                }
             }
         "##).unwrap();
@@ -62,6 +80,8 @@ mod tests {
         assert_eq!("CA".to_string(), x.state);
         assert_eq!("San Francisco".to_string(), x.city);
         assert_eq!("3819 Greenhaven Ln".to_string(), x.street);
+        assert_eq!(Some(40.74 as f64), x.latitude);
+        assert_eq!(Some(-74.00 as f64), x.longitude);
     }
 
 }
