@@ -2,6 +2,12 @@
 name = "plaid"
 version = "0.1.0"
 authors = ["Nathan Kot <me@nathankot.com>"]
+description = "Rust bindings for the Plaid API."
+readme = "README.md"
+documentation = "http://nathankot.com/plaid-rust/master/plaid/index.html"
+license = "MIT"
+repository = "https://github.com/nathankot/plaid-rust"
+keywords = ["api", "plaid"]
 
 [dependencies]
 rustc-serialize = "0.3"
