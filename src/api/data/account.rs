@@ -100,7 +100,6 @@ impl Decodable for Account {
 #[cfg(test)]
 mod tests {
 
-    use api::account::*;
     use api::types::*;
     use rustc_serialize::json;
 

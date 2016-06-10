@@ -1,6 +1,6 @@
 //! Representations of banking transactions.
 
-use api::types::*;
+use api::data as t;
 use rustc_serialize::{ Decodable, Decoder };
 
 /// # Transaction
@@ -8,16 +8,16 @@ use rustc_serialize::{ Decodable, Decoder };
 #[derive(Debug)]
 pub struct Transaction {
     /// The unique identifier of this transaction.
-    pub id: UID,
+    pub id: t::UID,
     /// The associated `Account`.
-    pub account_id: UID,
+    pub account_id: t::UID,
     /// Dollar value as as float. It is positive to indicate money
     /// moving out of the account, and negative to indicate that
     /// money is moving in.
-    pub amount: Amount,
+    pub amount: t::Amount,
     /// The category to which this account belongs.
     /// [A list can be found here](https://plaid.com/docs/api/#all-categories).
-    pub category_id: CategoryID,
+    pub category_id: t::CategoryID,
     /// The context in which the transaction occurred.
     pub context: Context,
     /// An hierarchical list of the categories in which
@@ -28,7 +28,7 @@ pub struct Transaction {
     pub pending: bool,
     /// The date on which the transaction took place.
     /// Plaid standardizes using the ISO 8601 format.
-    pub date: Date
+    pub date: t::Date
 }
 
 impl Decodable for Transaction {
@@ -83,7 +83,6 @@ impl Decodable for Context {
 #[cfg(test)]
 mod tests {
 
-    use api::transaction::*;
     use api::types::*;
     use rustc_serialize::json;
 
