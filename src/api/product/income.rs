@@ -45,8 +45,6 @@ use api::product::{ Product };
 use api::client::Payload;
 use api::data::{ Amount, Account };
 
-use rustc_serialize::{ Decoder };
-
 #[derive(Debug)]
 /// The Income endpoint.
 pub struct Income;

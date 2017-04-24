@@ -2,7 +2,6 @@
 //! be errors if they fall outside of the expected user flow. By that
 //! definition, all non 2XX HTTP response codes are considered an error.
 
-use api::product::{Product};
 use std::error::Error as StdError;
 use std::io::Error as IOError;
 use std::fmt;
