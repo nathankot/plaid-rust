@@ -1,6 +1,6 @@
 [package]
 name = "plaid"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Nathan Kot <me@nathankot.com>"]
 description = "Rust bindings for the Plaid API."
 readme = "README.md"
