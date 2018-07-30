@@ -5,6 +5,11 @@
 [Plaid][Plaid] is the technology layer for financial services. This library makes it
 easy to interface with Plaid.
 
+## DEPRECATED
+
+_This library was built against an old version of the Plaid API and will not longer work
+nor are there plans to maintain due to minimal use._
+
 ## Documentation
 
 Please see the [documentation website](http://nathankot.github.io/plaid-rust).
